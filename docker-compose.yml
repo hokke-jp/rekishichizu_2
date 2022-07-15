@@ -17,6 +17,7 @@ services:
       context: ./api/
       dockerfile: Dockerfile
     command: bash -c "rm -f /api/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    # command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle install --path=vendor/bundle && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - ./api:/api
       - ./api/vendor/bundle:/api/vendor/bundle
@@ -36,7 +37,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./frontend:/usr/src/frontend
-    command: sh -c "cd frontend && yarn && yarn start"
+    command: sh -c "yarn && yarn start"
     ports:
       - 4000:3000
 

@@ -1,2 +1,2 @@
 FROM node:16-alpine
-WORKDIR /usr/src/myapp
+WORKDIR /usr/src/frontend
