@@ -14,12 +14,12 @@ services:
 
   api:
     build:
-      context: ./backend/
+      context: ./api/
       dockerfile: Dockerfile
-    command: bash -c "rm -f /myapp/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "rm -f /api/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - ./backend:/myapp
-      - ./backend/vendor/bundle:/myapp/vendor/bundle
+      - ./api:/api
+      - ./api/vendor/bundle:/api/vendor/bundle
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
@@ -35,8 +35,8 @@ services:
       context: ./frontend/
       dockerfile: Dockerfile
     volumes:
-      - ./frontend:/usr/src/myapp
-    command: sh -c "cd myapp && yarn && yarn start"
+      - ./frontend:/usr/src/frontend
+    command: sh -c "cd frontend && yarn && yarn start"
     ports:
       - 4000:3000
 
