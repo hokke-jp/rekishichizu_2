@@ -4,14 +4,14 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+    <div className="">
+      <header className="">
+        <img src={logo} className="" alt="logo" />
+        <p className='bg-red-800'>
+          Edit ok<code>src/App.tsx</code> and save to reload.
         </p>
         <a
-          className="App-link"
+          className=""
           href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
