@@ -15,7 +15,6 @@ services:
   api:
     build:
       context: ./api/
-      dockerfile: Dockerfile
     command: bash -c "rm -f /api/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     # command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle install --path=vendor/bundle && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
@@ -34,12 +33,18 @@ services:
   front:
     build:
       context: ./frontend/
-      dockerfile: Dockerfile
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
+      - CI=true
     volumes:
       - ./frontend:/usr/src/frontend
+      - /usr/src/frontend/node_modules
     command: sh -c "yarn && yarn start"
     ports:
       - 4000:3000
+    # tty: true
+    # stdin_open: true
 
 volumes:
   mysql-data:
