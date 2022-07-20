@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   db:
@@ -7,22 +7,34 @@ services:
       MYSQL_ROOT_PASSWORD: password
     command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - mysql-data:/var/lib/mysql
-      - /tmp/dockerdir:/etc/mysql/conf.d/
+      # - mysql-data:/var/lib/mysql
+      - type: volume
+        source: mysql-data
+        target: /var/lib/mysql
+      # - /tmp/dockerdir:/etc/mysql/conf.d/
+      - type: bind
+        source: /tmp/dockerdir
+        target: /etc/mysql/conf.d/
     ports:
       - 3306:3306
 
   api:
     build:
       context: ./api/
-    command: bash -c "rm -f /api/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    # command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle install --path=vendor/bundle && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    volumes:
-      - ./api:/api
-      - ./api/vendor/bundle:/api/vendor/bundle
     environment:
       TZ: Asia/Tokyo
       RAILS_ENV: development
+    command: bash -c "rm -f /api/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    # command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle install --path=vendor/bundle && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      # - ./api:/api
+      - type: bind
+        source: ./api
+        target: /api
+      # - /usr/local/bundle
+      - type: volume
+        source: gem-data
+        target: /usr/local/bundle
     ports:
       - 3001:3000
     depends_on:
@@ -37,14 +49,22 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0
       - CI=true
-    volumes:
-      - ./frontend:/usr/src/frontend
-      - /usr/src/frontend/node_modules
     command: sh -c "yarn && yarn start"
+    volumes:
+      # - ./frontend:/frontend
+      - type: bind
+        source: ./frontend
+        target: /frontend
+      # - /frontend/node_modules
+      - type: volume
+        source: node-data
+        target: /frontend/node_modules
     ports:
       - 4000:3000
-    # tty: true
-    # stdin_open: true
+    tty: true
+    stdin_open: true
 
 volumes:
   mysql-data:
+  gem-data:
+  node-data:
