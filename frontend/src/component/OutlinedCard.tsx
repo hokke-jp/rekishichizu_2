@@ -14,7 +14,7 @@ interface Post {
 const MyCard = ({
   title,
   content,
-  createdAt,
+  createdAt
 }: {
   title: string
   content: string
