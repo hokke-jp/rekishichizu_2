@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
-export const axiosInstance = axios.create();
-axiosInstance.defaults.baseURL = process.env.REACT_APP_API_DOMEIN;
+export const axiosInstance = axios.create()
+axiosInstance.defaults.baseURL = process.env.REACT_APP_API_DOMEIN
