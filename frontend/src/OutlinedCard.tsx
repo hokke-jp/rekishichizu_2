@@ -1,9 +1,8 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-
+import * as React from 'react'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
 
 interface Post {
   id: number
@@ -13,7 +12,7 @@ interface Post {
   content: string
 }
 
-const MyCard = ({title, content, created_at}: {title: string, content: string, created_at: string})=> {
+const MyCard = ({ title, content, createdAt }: {title: string, content: string, createdAt: string}) => {
   return (
     <CardContent className=''>
       <div className='flex justify-center items-center'>
@@ -28,12 +27,13 @@ const MyCard = ({title, content, created_at}: {title: string, content: string, c
         {content}
       </Typography>
       <Typography variant="body2">
-        {created_at}
+        {createdAt}
       </Typography>
     </CardContent>
-)}
+  )
+}
 
-export const OutlinedCard= ({ posts }: { posts: Post[]; })=> {
+export const OutlinedCard = ({ posts }: { posts: Post[]; }) => {
   return (
     <Box sx={{ minWidth: 275 }}>
         <ul>
@@ -41,12 +41,13 @@ export const OutlinedCard= ({ posts }: { posts: Post[]; })=> {
           return (
             <li key={index}>
               <Card className='inline-block my-6 min-w-[600px]' variant="outlined">
-                <MyCard title={post.title} content={post.content} created_at={post.created_at.toString()} />
+                <MyCard title={post.title} content={post.content} createdAt={post.created_at.toString()} />
               </Card>
             </li>
-          )})
+          )
+        })
         }
       </ul>
     </Box>
-  );
+  )
 }
