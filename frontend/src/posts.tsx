@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { axiosInstance } from "./utils/axios.js";
+import { OutlinedCard } from "./OutlinedCard"
 
 interface Post {
   id: number
@@ -10,7 +11,7 @@ interface Post {
 }
 
 export const Posts = ()=> {
-  const [posts, setPosts] = useState<Post[]>();
+  const [posts, setPosts] = useState<Post[]>([]);
   useEffect(() => {
     const f = async () => {
       const res = await axiosInstance.get("/posts");
@@ -20,17 +21,8 @@ export const Posts = ()=> {
   }, []);
 
   return (
-    <div className="mt-12 border border-black">
-      <ul>
-        {posts?.map((post: Post, index: number) => {
-          return (
-            <li key={index}>
-              <div>{post.title}</div>
-              <div>{post.content}</div>
-            </li>
-          )})
-        }
-      </ul>
+    <div className="">
+      <OutlinedCard posts={posts}/>
     </div>
   );
 }

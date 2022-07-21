@@ -8,6 +8,7 @@ import {
   Route,
 } from "react-router-dom";
 import App from './App';
+import { Home } from './Home'
 import { Page1 } from './page1'
 import { Page2 } from './page2'
 import { Page3 } from './page3'
@@ -25,6 +26,7 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<App />}>
+          <Route index element={<Home />} />
           <Route path='posts' element={<Posts />} />
           <Route path='page1' element={<Layout />}>
             <Route index element={<Page1 />} />
