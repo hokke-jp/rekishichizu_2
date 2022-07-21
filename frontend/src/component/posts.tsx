@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { axiosInstance } from './utils/axios.js'
+import { axiosInstance } from '../utils/axios.js'
 import { OutlinedCard } from './OutlinedCard'
 
 interface Post {
@@ -22,7 +22,7 @@ export const Posts = () => {
 
   return (
     <div className="">
-      <OutlinedCard posts={posts}/>
+      <OutlinedCard posts={posts} />
     </div>
   )
 }
