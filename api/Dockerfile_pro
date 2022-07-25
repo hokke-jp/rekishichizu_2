@@ -1,0 +1,14 @@
+FROM ruby:3.1.2
+
+ENV APP_PATH /api
+
+WORKDIR $APP_PATH
+COPY Gemfile $APP_PATH/Gemfile
+COPY Gemfile.lock $APP_PATH/Gemfile.lock
+RUN gem install bundler
+RUN bundle install --without test development
+
+COPY . $APP_PATH
+EXPOSE 3000
+
+CMD ["/bin/sh", "-c", "bundle exec rails db:create && bundle exec rails db:migrate && bundle exec rails db:seed && bundle exec rails server -b localhost -p 3000 --environment production"]

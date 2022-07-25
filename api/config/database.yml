@@ -17,3 +17,5 @@ test:
 production:
   <<: *default
   database: rekishichizu_production
+  password: <%= ENV['RDS_DB_PASSWORD'] %>
+  host: <%= ENV['RDS_DB_HOST'] %>

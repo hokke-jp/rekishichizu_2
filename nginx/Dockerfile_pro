@@ -1,0 +1,12 @@
+FROM nginx:1.22.0
+
+# デフォルトで用意されている個別設定ファイルとhtmlファイルを削除
+RUN rm -f /etc/nginx/conf.d/*
+RUN rm -f /usr/share/nginx/html/*
+
+# Nginxの設定ファイルとReactでビルドしたファイルをコンテナにコピー
+COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY ./build /usr/share/nginx/html
+
+# Nginxをforeground起動
+CMD /usr/sbin/nginx -g 'daemon off;'

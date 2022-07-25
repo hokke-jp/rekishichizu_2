@@ -28,9 +28,8 @@ services:
     environment:
       RAILS_ENV: production
     command: bash -c "rm -f /api/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    # command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle install --path=vendor/bundle && bundle exec rails s -p 3000 -b '0.0.0.0'"
     ports:
-      - 3001:3000
+      - 3000:3000
     depends_on:
       - db
 
@@ -39,7 +38,7 @@ services:
       context: ./nginx/
     container_name: nginx_pro
     ports:
-      - 3000:3000
+      - 80:80
 
 volumes:
   mysql-data:
