@@ -1,13 +1,10 @@
 FROM nginx:1.22.0
 
-# デフォルトで用意されている個別設定ファイルとhtmlファイルを削除
-RUN rm -f /etc/nginx/conf.d/*
-RUN rm -f /usr/share/nginx/html/*
-
-# Nginxの設定ファイルとReactでビルドしたファイルをコンテナにコピー
-COPY ./nginx.conf /etc/nginx/conf.d/nginx.conf
-COPY ./build /usr/share/nginx/html
-
-# Nginxをforeground起動
-# CMD /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
-CMD /usr/sbin/nginx -g 'daemon off;'
+RUN apt-get update && \
+    apt-get install -y apt-utils locales && \
+    sed -i -e 's/# ja_JP.UTF-8/ja_JP.UTF-8/g' /etc/locale.gen && \
+    locale-gen ja_JP.UTF-8
+ENV LANG ja_JP.UTF-8
+COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./default.conf /etc/nginx/conf.d/default.conf
+CMD /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf

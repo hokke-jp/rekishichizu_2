@@ -3,7 +3,7 @@ version: '3.9'
 services:
   db:
     image: mysql:8.0.29
-    container_name: db_pro
+    container_name: pro_db
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: password
@@ -14,32 +14,34 @@ services:
       - type: volume
         source: mysql-data
         target: /var/lib/mysql
-      # - /tmp/dockerdir:/etc/mysql/conf.d/
-      - type: bind
-        source: /tmp/dockerdir
-        target: /etc/mysql/conf.d/
     ports:
       - 3306:3306
 
   api:
     build:
       context: ./api/
-    container_name: api_pro
+    image: rkscz_pro_api
+    container_name: pro_api
     environment:
       RAILS_ENV: production
-    command: bash -c "rm -f /api/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    # command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle install --path=vendor/bundle && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    # command: bash -c "rm -f /api/tmp/pids/server.pid && DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset && bundle exec rails db:seed && rm -f tmp/pids/unicorn.pid && bundle exec unicorn -p 3000 -c /api/config/unicorn.rb -E production"
+    command: bash -c "bundle exec rails db:create && DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset && bundle exec rails db:seed && rm -f tmp/pids/unicorn.pid && bundle exec unicorn -p 3000 -c /api/config/unicorn.rb -E production"
     ports:
-      - 3001:3000
+      - 3000:3000
     depends_on:
       - db
+    tty: true
+    stdin_open: true
 
   nginx:
     build:
       context: ./nginx/
-    container_name: nginx_pro
+    image: rkscz_pro_nginx
+    container_name: pro_nginx
     ports:
-      - 3000:3000
+      - 80:80
+    depends_on:
+      - api
 
 volumes:
   mysql-data:
