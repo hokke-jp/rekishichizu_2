@@ -7,6 +7,7 @@ WORKDIR $APP_PATH
 COPY Gemfile Gemfile.lock $APP_PATH
 RUN gem install bundler
 RUN bundle install
+# RUN bundle install --without test development
 
 COPY . $APP_PATH
 COPY entrypoint.sh /usr/bin/
