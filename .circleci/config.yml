@@ -17,20 +17,19 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "/home/circleci/project/api/Gemfile.lock" }}
+            - v1-dependencies-{{ checksum "api/Gemfile.lock" }}
             - v1-dependencies-
 
       - run:
           name: Install dependencies
           working_directory: api
           command: |
-            pwd
             gem install bundler -v 2.3.7
             bundle install --jobs=4 --retry=3 --path vendor/bundle
       - save_cache:
           paths:
-            - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "/home/circleci/project/api/Gemfile.lock" }}
+            - api/vendor/bundle
+          key: v1-dependencies-{{ checksum "api/Gemfile.lock" }}
 
 
       - run:
