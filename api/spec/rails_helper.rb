@@ -63,5 +63,5 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
   # ファクトリーボット用設定 bundle exec rails g factory_bot:model post で必要ファイル作成
-  config.include FactoryBot::Syntax::Methods
+  # config.include FactoryBot::Syntax::Methods
 end
