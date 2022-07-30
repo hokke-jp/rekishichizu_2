@@ -1,22 +1,62 @@
-version: 300.6
+version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/base:2021.04
+      - image: circleci/ruby:3.1.2-node-browsers
+        environment:
+          - BUNDLER_VERSION: 2.3.7
+          - RAILS_ENV: test
+      - image: circleci/mysql:8.0.29
+        command: mysqld --default-authentication-plugin=mysql_native_password
+        environment:
+          - MYSQL_ALLOW_EMPTY_PASSWORD: true
+          - MYSQL_ROOT_HOST: '%'
+
     steps:
       - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            - v1-dependencies-
+
       - run:
-          name: The First Step
+          name: install dependencies
           command: |
-            echo 'Hello World!'
-            echo 'This is the delivery pipeline'
-            ls -al
-            echo '^^^The files in your repo^^^'
-            ls
-            echo '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
-            ls api
-            echo '^^^^^^^^^^^^^^^^^^^^^^^^api^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
-            ls frontend
-            echo '^^^^^^^^^^^^^^^^^^^^^^^^frontend^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^'
-            ls nginx
-            env
+            gem install bundler -v 2.3.7
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+      - save_cache
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+
+      - run: mv config/database.yml.ci config/database.yml
+
+
+      - run: bundle exec rake db:create
+      - run: bundle exec rake db:schema:load
+
+
+      - run:
+          name: Rubocop
+          command: bundle exec rubocop
+
+
+      - run:
+          name: run tests
+          command: |
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+              circleci tests split --split-by=timings)"
+            bundle exec rspec \
+              --format progress \
+              --out /tmp/test-results/rspec.xml \
+              --format progress \
+              $TEST_FILES
+
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
