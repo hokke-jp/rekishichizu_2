@@ -4,13 +4,13 @@ jobs:
     docker:
       - image: cimg/ruby:3.1.2
         environment:
-          - BUNDLER_VERSION: 2.3.7
-          - RAILS_ENV: test
+          BUNDLER_VERSION: 2.3.7
+          RAILS_ENV: test
       - image: cimg/mysql:8.0.28
         command: mysqld --default-authentication-plugin=mysql_native_password
         environment:
-          - MYSQL_ALLOW_EMPTY_PASSWORD: true
-          - MYSQL_ROOT_HOST: '%'
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+          MYSQL_ROOT_HOST: '%'
 
     steps:
       - checkout
@@ -21,7 +21,7 @@ jobs:
             - v1-dependencies-
 
       - run:
-          name: install dependencies
+          name: Install dependencies
           working_directory: api
           command: |
             pwd
@@ -34,7 +34,7 @@ jobs:
 
 
       - run:
-          name: database set up
+          name: Database set up
           working_directory: api
           command: |
             mv config/database.yml.ci config/database.yml
@@ -49,7 +49,7 @@ jobs:
 
 
       - run:
-          name: run tests
+          name: Run tests
           working_directory: api
           command: |
             mkdir /tmp/test-results
