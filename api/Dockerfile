@@ -2,6 +2,7 @@ FROM ruby:3.1.2
 
 ENV APP_PATH /api
 ENV TZ Asia/Tokyo
+ENV LANG C.UTF-8
 
 WORKDIR $APP_PATH
 COPY Gemfile Gemfile.lock $APP_PATH
