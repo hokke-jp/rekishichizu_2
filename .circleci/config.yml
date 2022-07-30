@@ -10,7 +10,7 @@ jobs:
         command: mysqld --default-authentication-plugin=mysql_native_password
         environment:
           - MYSQL_ALLOW_EMPTY_PASSWORD: true
-          - MYSQL_ROOT_HOST: '%'
+          - MYSQL_ROOT_HOST: %
 
     steps:
       - checkout
@@ -25,6 +25,7 @@ jobs:
           name: install dependencies
           working_directory: api
           command: |
+            pwd
             gem install bundler -v 2.3.7
             bundle install --jobs=4 --retry=3 --path vendor/bundle
       - save_cache:
