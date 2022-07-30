@@ -26,25 +26,30 @@ jobs:
             echo '-----------------------------------------------------------------------------------'
             ls
             echo '-----------------------------------------------------------------------------------'
-            cd api
+            ls ..
+            echo '-----------------------------------------------------------------------------------'
             gem install bundler -v 2.3.7
             bundle install --jobs=4 --retry=3 --path vendor/bundle
+          working_directory: api
       - save_cache:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
 
-      - run: mv config/database.yml.ci config/database.yml
-
-
-      - run: bundle exec rake db:create
-      - run: bundle exec rake db:schema:load
+      - run:
+          name: database set up
+          command: |
+            mv config/database.yml.ci config/database.yml
+            bundle exec rake db:create
+            bundle exec rake db:schema:load
+          working_directory: api
 
 
       - run:
           name: Rubocop
           command: bundle exec rubocop
+          working_directory: api
 
 
       - run:
@@ -58,6 +63,7 @@ jobs:
               --out /tmp/test-results/rspec.xml \
               --format progress \
               $TEST_FILES
+          working_directory: api
 
       - store_test_results:
           path: /tmp/test-results
