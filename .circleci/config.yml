@@ -6,11 +6,13 @@ jobs:
         environment:
           BUNDLER_VERSION: 2.3.7
           RAILS_ENV: test
+          TZ: Asia/Tokyo
       - image: cimg/mysql:8.0.28
         command: mysqld --default-authentication-plugin=mysql_native_password
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
           MYSQL_ROOT_HOST: '%'
+          TZ: Asia/Tokyo
 
     steps:
       - checkout
@@ -36,7 +38,7 @@ jobs:
           name: Database set up
           working_directory: api
           command: |
-            mv config/database.yml.ci config/database.yml
+            mv config/database.ci.yml config/database.yml
             bundle exec rake db:create
             bundle exec rake db:schema:load
 
