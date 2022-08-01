@@ -28,7 +28,9 @@ jobs:
           name: Install dependencies
           working_directory: api
           command: |
+            echo "-----------------------AWS_REGION--------------------------"
             echo "${AWS_REGION}"
+            echo "-----------------------AWS_REGION--------------------------"
             gem install bundler -v 2.3.7
             bundle check || bundle install --jobs=4 --retry=3 --path vendor/bundle
       - save_cache:
@@ -67,12 +69,15 @@ jobs:
               --format progress \
               $TEST_FILES
 
+      - store_test_results:
+          path: api/test/reports
+
       - aws-s3/copy:
           arguments: |
             --recursive
             --profile kashiyama
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-region: AWS_REGION
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           from: frontend/build
           to: 's3:/rkscz-bucket/'
-
-      - store_test_results:
-          path: api/test/reports
