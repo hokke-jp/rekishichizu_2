@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@3.0.0
 jobs:
   build:
     docker:
@@ -26,13 +28,13 @@ jobs:
           name: Install dependencies
           working_directory: api
           command: |
+            echo "${AWS_REGION}"
             gem install bundler -v 2.3.7
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            bundle check || bundle install --jobs=4 --retry=3 --path vendor/bundle
       - save_cache:
           paths:
             - api/vendor/bundle
           key: v1-deps-{{ checksum "api/Gemfile.lock" }}
-
 
       - run:
           name: Wait for db
@@ -46,12 +48,11 @@ jobs:
             bundle exec rake db:create
             bundle exec rake db:schema:load
 
-
       - run:
           name: Rubocop
           working_directory: api
           command: bundle exec rubocop
-
+          when: always
 
       - run:
           name: Run tests
@@ -66,8 +67,12 @@ jobs:
               --format progress \
               $TEST_FILES
 
+      - aws-s3/copy:
+          arguments: |
+            --recursive
+            --profile kashiyama
+          from: frontend/build
+          to: 's3:/rkscz-bucket/'
+
       - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+          path: api/test/reports
