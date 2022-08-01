@@ -70,11 +70,9 @@ jobs:
           path: test/reports
 
       - aws-s3/copy:
-          arguments: |
-            --recursive
-            # --profile kashiyama
+          arguments: --recursive
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          from: frontend/build
+          from: ../frontend/build
           to: 's3://rkscz-bucket/'
