@@ -74,5 +74,5 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          from: ../frontend/build
+          from: ~/project/frontend/build
           to: 's3://rkscz-bucket/'
