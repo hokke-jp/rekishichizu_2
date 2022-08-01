@@ -66,9 +66,6 @@ jobs:
               --format progress \
               $TEST_FILES
 
-      - store_test_results:
-          path: test/reports
-
       - aws-s3/copy:
           arguments: --recursive
           aws-access-key-id: AWS_ACCESS_KEY_ID
