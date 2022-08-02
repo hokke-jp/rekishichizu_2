@@ -77,9 +77,6 @@ jobs:
       - checkout
       - aws-s3/copy:
           arguments: --recursive
-          aws-access-key-id: AWS_ACCESS_KEY_ID
-          aws-region: AWS_REGION
-          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           from: frontend/build
           to: 's3://rkscz-bucket/'
 
@@ -122,8 +119,10 @@ workflows:
       - aws-ecs/deploy-service-update:
           requires:
             - aws-ecr/build-and-push-image
-          family: "${MY_APP_PREFIX}-service"
+          aws-region: AWS_REGION
           cluster: "${MY_APP_PREFIX}-cluster"
+          service-name: "${MY_APP_PREFIX}-service"
+          family: "${MY_APP_PREFIX}-task-2"
           container-image-name-updates: "container=api,image-and-tag=${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}_pro_api:${CIRCLE_SHA1}"
 
       # - aws-ecr/build-and-push-image:
