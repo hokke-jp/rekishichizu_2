@@ -78,7 +78,7 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          from: project/frontend/build
+          from: frontend/build
           to: 's3://rkscz-bucket/'
 
 workflows:
@@ -108,7 +108,7 @@ workflows:
 
       - aws-ecr/build-and-push-image:
           requires:
-            - test
+            - aws-ecr/build-and-push-image-1
           # filters:
           #   branches:
           #     only:

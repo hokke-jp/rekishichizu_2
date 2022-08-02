@@ -6,7 +6,7 @@ ENV LANG C.UTF-8
 
 WORKDIR $APP_PATH
 COPY Gemfile Gemfile.lock $APP_PATH
-RUN gem install bundler
+RUN gem install bundler -v 2.3.7
 RUN bundle install
 # RUN bundle install --without test development
 
