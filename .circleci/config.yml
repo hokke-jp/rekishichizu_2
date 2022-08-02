@@ -68,7 +68,9 @@ jobs:
               --format progress \
               $TEST_FILES
 
-  deploy:
+  aws-s3-deploy:
+    docker:
+      - image: 'cimg/python:3.6'
     steps:
       - checkout
       - aws-s3/copy:
@@ -79,28 +81,40 @@ jobs:
           from: project/frontend/build
           to: 's3://rkscz-bucket/'
 
-      - aws-ecr/build-and-push-image:
-          dockerfile: Dockerfile_pro
-          path: api/
-          account-url: AWS_ECR_API_URL
-          repo: rkscz_pro_api
-          tag: "${CIRCLE_SHA1}"
-
-      - aws-ecr/build-and-push-image:
-          dockerfile: Dockerfile
-          path: nginx/
-          account-url: AWS_ECR_NGINX_URL
-          repo: rkscz_pro_nginx
-          tag: "${CIRCLE_SHA1}"
-
 workflows:
   Test-and-Deploy:
     jobs:
       - test
-      - deploy:
+      - aws-s3-deploy:
           requires:
             - test
           # filters:
           #   branches:
           #     only:
           #       - main
+
+      - aws-ecr/build-and-push-image:
+          requires:
+            - test
+          # filters:
+          #   branches:
+          #     only:
+          #       - main
+          dockerfile: Dockerfile_pro
+          path: api/
+          registry-id: AWS_ECR_API_URL
+          repo: rkscz_pro_api
+          tag: "${CIRCLE_SHA1}"
+
+      - aws-ecr/build-and-push-image:
+          requires:
+            - test
+          # filters:
+          #   branches:
+          #     only:
+          #       - main
+          dockerfile: Dockerfile
+          path: nginx/
+          registry-id: AWS_ECR_NGINX_URL
+          repo: rkscz_pro_nginx
+          tag: "${CIRCLE_SHA1}"
