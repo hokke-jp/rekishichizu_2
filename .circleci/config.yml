@@ -108,7 +108,7 @@ workflows:
 
       - aws-ecr/build-and-push-image:
           requires:
-            - aws-ecr/build-and-push-image-1
+            - aws-ecr/build-and-push-image
           # filters:
           #   branches:
           #     only:
