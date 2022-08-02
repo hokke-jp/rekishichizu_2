@@ -1,8 +1,10 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@3.0.0
+  aws-ecr: circleci/aws-ecr@8.1.2
+  aws-ecs: circleci/aws-ecs@3.0.0
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/ruby:3.1.2
         environment:
@@ -66,10 +68,39 @@ jobs:
               --format progress \
               $TEST_FILES
 
+  deploy:
+    steps:
+      - checkout
       - aws-s3/copy:
           arguments: --recursive
           aws-access-key-id: AWS_ACCESS_KEY_ID
           aws-region: AWS_REGION
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-          from: ~/project/frontend/build
+          from: project/frontend/build
           to: 's3://rkscz-bucket/'
+
+      - aws-ecr/build-and-push-image:
+          dockerfile: Dockerfile_pro
+          path: api/
+          account-url: AWS_ECR_API_URL
+          repo: rkscz_pro_api
+          tag: "${CIRCLE_SHA1}"
+
+      - aws-ecr/build-and-push-image:
+          dockerfile: Dockerfile
+          path: nginx/
+          account-url: AWS_ECR_NGINX_URL
+          repo: rkscz_pro_nginx
+          tag: "${CIRCLE_SHA1}"
+
+workflows:
+  Test-and-Deploy:
+    jobs:
+      - test
+      - deploy:
+          requires:
+            - test
+          # filters:
+          #   branches:
+          #     only:
+          #       - main
