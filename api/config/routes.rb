@@ -1,4 +1,4 @@
 Rails.application.routes.draw do
-  root 'posts#root'
+  get '/health_check', to: 'health_check#index'
   get '/posts', to: 'posts#index'
 end
