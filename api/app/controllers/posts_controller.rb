@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   def root
-    render json: {'greeting' => 'Hello!', 'time' => Time.zone.now}
+    render json: { 'greeting' => 'Hello!', 'time' => Time.zone.now }
   end
 
   def index
