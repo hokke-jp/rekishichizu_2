@@ -3,6 +3,8 @@ orbs:
   aws-s3: circleci/aws-s3@3.0.0
   aws-ecr: circleci/aws-ecr@8.1.2
   aws-ecs: circleci/aws-ecs@3.0.0
+  # aws-cli: circleci/aws-cli@1.3
+  # aws-cli: circleci/aws-cli@3.1.1
 jobs:
   test:
     docker:
@@ -70,7 +72,7 @@ jobs:
 
   aws-s3-deploy:
     docker:
-      - image: 'cimg/python:3.6'
+      - image: cimg/python:3.6
     steps:
       - checkout
       - aws-s3/copy:
@@ -80,6 +82,17 @@ jobs:
           aws-secret-access-key: AWS_SECRET_ACCESS_KEY
           from: frontend/build
           to: 's3://rkscz-bucket/'
+
+  # update-tag:
+  #   docker:
+  #     - image: cimg/python:3.9.1
+  #   steps:
+  #     - aws-cli/setup:
+  #         aws-region: AWS_REGION
+  #     - aws-ecs/update-service:
+  #         cluster: '${MY_APP_PREFIX}-cluster'
+  #         container-image-name-updates: 'container=${MY_APP_PREFIX}-service,tag=stable'
+  #         family: '${MY_APP_PREFIX}-service'
 
 workflows:
   Test-and-Deploy:
@@ -103,18 +116,29 @@ workflows:
           dockerfile: Dockerfile_pro
           path: api/
           registry-id: AWS_ACCOUNT_ID
-          repo: rkscz_pro_api
+          repo: "${MY_APP_PREFIX}_pro_api"
           tag: "${CIRCLE_SHA1}"
 
-      - aws-ecr/build-and-push-image:
+      - aws-ecs/deploy-service-update:
           requires:
-            - test
-          # filters:
-          #   branches:
-          #     only:
-          #       - main
-          dockerfile: Dockerfile
-          path: nginx/
-          registry-id: AWS_ACCOUNT_ID
-          repo: rkscz_pro_nginx
-          tag: "${CIRCLE_SHA1}"
+            - aws-ecr/build-and-push-image
+          family: "${MY_APP_PREFIX}-service"
+          cluster: "${MY_APP_PREFIX}-cluster"
+          container-image-name-updates: "container=api,image-and-tag=${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}_pro_api:${CIRCLE_SHA1}"
+
+      # - aws-ecr/build-and-push-image:
+      #     requires:
+      #       - test
+      #     # filters:
+      #     #   branches:
+      #     #     only:
+      #     #       - main
+      #     dockerfile: Dockerfile
+      #     path: nginx/
+      #     registry-id: AWS_ACCOUNT_ID
+      #     repo: rkscz_pro_nginx
+      #     tag: "${CIRCLE_SHA1}"
+
+      # - update-tag:
+      #   requires:
+      #     - aws-ecr/build-and-push-image
