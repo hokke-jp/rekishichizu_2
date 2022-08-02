@@ -102,7 +102,7 @@ workflows:
           #       - main
           dockerfile: Dockerfile_pro
           path: api/
-          registry-id: AWS_ECR_API_URL
+          registry-id: AWS_ACCOUNT_ID
           repo: rkscz_pro_api
           tag: "${CIRCLE_SHA1}"
 
@@ -115,6 +115,6 @@ workflows:
           #       - main
           dockerfile: Dockerfile
           path: nginx/
-          registry-id: AWS_ECR_NGINX_URL
+          registry-id: AWS_ACCOUNT_ID
           repo: rkscz_pro_nginx
           tag: "${CIRCLE_SHA1}"
