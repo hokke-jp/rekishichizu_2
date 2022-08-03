@@ -122,7 +122,7 @@ workflows:
           aws-region: AWS_REGION
           cluster: "${MY_APP_PREFIX}-cluster"
           service-name: "${MY_APP_PREFIX}-service"
-          family: "${MY_APP_PREFIX}-task-2"
+          family: "${MY_APP_PREFIX}-task"
           container-image-name-updates: "container=api,image-and-tag=${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}_pro_api:${CIRCLE_SHA1}"
 
       # - aws-ecr/build-and-push-image:
