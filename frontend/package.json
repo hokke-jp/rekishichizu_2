@@ -25,7 +25,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "tailwind build src/index.css -o src/tailwind.css && react-scripts build",
     "build:tailwind": "tailwind build src/index.css -o src/tailwind.css",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -69,5 +69,11 @@
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
     "tailwindcss": "^3.1.6"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --cache --ext"
+    ]
   }
 }

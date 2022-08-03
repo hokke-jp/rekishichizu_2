@@ -1,0 +1,19 @@
+FROM ruby:3.1.2
+
+ENV TZ Asia/Tokyo
+ENV LANG C.UTF-8
+ENV RAILS_ENV production
+
+WORKDIR /api
+COPY Gemfile Gemfile.lock ./
+RUN gem install bundler -v 2.3.7
+RUN bundle install --without test development
+COPY . .
+# COPY entrypoint.sh /usr/bin/
+# RUN chmod +x /usr/bin/entrypoint.sh
+# ENTRYPOINT ["entrypoint.sh"]
+
+EXPOSE 3000
+
+# CMD ["/bin/sh", "-c", "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset && bundle exec rails db:seed && rm -f tmp/pids/unicorn.pid && bundle exec unicorn -p 3000 -c /api/config/unicorn.rb -E production"]
+CMD ["/bin/sh", "-c", "bundle exec rails db:migrate && bundle exec rails db:seed && rm -f tmp/pids/unicorn.pid && bundle exec unicorn -p 3000 -c /api/config/unicorn.rb -E production"]

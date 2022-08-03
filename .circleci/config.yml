@@ -1,6 +1,10 @@
 version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@3.0.0
+  aws-ecr: circleci/aws-ecr@8.1.2
+  aws-ecs: circleci/aws-ecs@3.0.0
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/ruby:3.1.2
         environment:
@@ -27,12 +31,11 @@ jobs:
           working_directory: api
           command: |
             gem install bundler -v 2.3.7
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            bundle check || bundle install --jobs=4 --retry=3 --path vendor/bundle
       - save_cache:
           paths:
             - api/vendor/bundle
           key: v1-deps-{{ checksum "api/Gemfile.lock" }}
-
 
       - run:
           name: Wait for db
@@ -46,12 +49,11 @@ jobs:
             bundle exec rake db:create
             bundle exec rake db:schema:load
 
-
       - run:
           name: Rubocop
           working_directory: api
           command: bundle exec rubocop
-
+          when: always
 
       - run:
           name: Run tests
@@ -66,8 +68,65 @@ jobs:
               --format progress \
               $TEST_FILES
 
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
+  aws-s3-deploy:
+    docker:
+      - image: cimg/python:3.6
+    steps:
+      - checkout
+      - aws-s3/copy:
+          arguments: --recursive
+          from: frontend/build
+          to: 's3://rkscz-bucket/'
+
+
+workflows:
+  Test-and-Deploy:
+    jobs:
+      - test
+      - aws-s3-deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - main
+
+      - aws-ecr/build-and-push-image:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - main
+          dockerfile: Dockerfile_pro
+          path: api/
+          registry-id: AWS_ACCOUNT_ID
+          repo: "${MY_APP_PREFIX}_pro_api"
+          tag: "${CIRCLE_SHA1}"
+
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          filters:
+            branches:
+              only:
+                - main
+          aws-region: AWS_REGION
+          cluster: "${MY_APP_PREFIX}-cluster"
+          service-name: "${MY_APP_PREFIX}-service"
+          family: "${MY_APP_PREFIX}-task"
+          container-image-name-updates: "container=api,image-and-tag=${AWS_ECR_ACCOUNT_URL}/${MY_APP_PREFIX}_pro_api:${CIRCLE_SHA1}"
+
+      # Nginxのビルドとデプロイは頻繁に変更がないため省略する
+      # - aws-ecr/build-and-push-image:
+      #     requires:
+      #       - test
+      #     # filters:
+      #     #   branches:
+      #     #     only:
+      #     #       - main
+      #     dockerfile: Dockerfile
+      #     path: nginx/
+      #     registry-id: AWS_ACCOUNT_ID
+      #     repo: rkscz_pro_nginx
+      #     tag: "${CIRCLE_SHA1}"
