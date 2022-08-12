@@ -21,7 +21,7 @@ export const SideBar = () => {
           to="posts"
           className={({ isActive }) =>
             (isActive ? 'bg-gray-100' : '').concat(
-              ' flex justify-center items-center mt-auto h-16 px-6 '
+              ' flex justify-center items-center mt-auto h-16 px-6'
             )
           }
         >

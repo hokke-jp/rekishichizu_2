@@ -38,16 +38,20 @@
 }
 
 #posts_drawer[type='checkbox']:checked ~ #posts_drawer_div {
-  left: 0;
+  left: 72px;
 }
 #posts_drawer[type='checkbox']:checked ~ #search_drawer_div {
-  margin-left: 192px;
+  margin-left: 168px;
 }
 
 #search_drawer_div {
   transition: all 0.2s;
 }
-
 #search_drawer[type='checkbox']:checked ~ #search_drawer_div {
-  left: -208px;
+  left: 104px;
 }
+
+/* .map-icon-wrapper:hover > svg {
+  stroke: white;
+  fill: white;
+} */
