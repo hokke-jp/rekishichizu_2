@@ -57,16 +57,29 @@ export const GeoLocation = ({ map }: { map: google.maps.Map | null }) => {
     )
   }
 
+  // isLoading ?
+  //    ローディング中のGeoLocationIcon
+  //  : hasAcquired ?
+  //      取得済みGeoLocationIcon
+  //    :
+  //      未取得GeoLocationIcon
   return (
     <div id="geo-wrapper">
-      {hasAcquired ? (
+      {isLoading ? (
+        <button className="py-3 px-3 w-auto">
+          <GeoLocationIcon
+            tailwindClass="stroke-blue-400 fill-blue-400"
+            flashAnime={true}
+          />
+        </button>
+      ) : hasAcquired ? (
         <button
           className="geo-btn py-3 px-3 w-auto map-icon-anime"
           onClick={() => {
             geoLocation()
           }}
         >
-          <GeoLocationIcon tailwindClass="stroke-black" />
+          <GeoLocationIcon tailwindClass="stroke-black" flashAnime={false} />
         </button>
       ) : (
         <button
@@ -76,15 +89,23 @@ export const GeoLocation = ({ map }: { map: google.maps.Map | null }) => {
             geoLocation()
           }}
         >
-          <GeoLocationIcon tailwindClass="fill-gray-500 stroke-neutral-500" />
+          <GeoLocationIcon
+            tailwindClass="fill-gray-500 stroke-neutral-500"
+            flashAnime={false}
+          />
         </button>
       )}
-      {isLoading && <p>...</p>}
     </div>
   )
 }
 
-const GeoLocationIcon = ({ tailwindClass }: { tailwindClass: string }) => {
+const GeoLocationIcon = ({
+  tailwindClass,
+  flashAnime
+}: {
+  tailwindClass: string
+  flashAnime: boolean
+}) => {
   return (
     <svg
       version="1.1"
@@ -93,7 +114,11 @@ const GeoLocationIcon = ({ tailwindClass }: { tailwindClass: string }) => {
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     >
-      <circle cx="100" cy="100" r="40" />
+      {flashAnime ? (
+        <circle cx="100" cy="100" r="40" className="flash-anime" />
+      ) : (
+        <circle cx="100" cy="100" r="40" />
+      )}
       <circle cx="100" cy="100" r="70" className="fill-transparent" />
       <line x1="100" y1="0" x2="100" y2="30" />
       <line x1="200" y1="100" x2="170" y2="100" />

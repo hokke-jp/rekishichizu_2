@@ -52,10 +52,28 @@
 }
 
 .map-icon-anime {
-  @apply hover:bg-gray-100 focus:bg-none focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out
+  @apply hover:bg-gray-100 focus:bg-none focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out;
 }
 
 .geo-btn:hover > svg {
   stroke: rgb(82 82 82);
   fill: rgb(82 82 82);
+}
+
+.flash-anime {
+  animation: flash 1s linear infinite;
+}
+@keyframes flash {
+  0% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 100%;
+  }
+  51% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
 }
