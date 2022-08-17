@@ -31,5 +31,6 @@ rules:
 settings:
   react:
     version: detect
+ignorePatterns: ['.eslintrc.*']
 globals:
     google: readonly

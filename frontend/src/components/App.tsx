@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Map } from './Map'
+import { Map } from './map/Map'
 import { Page2 } from './page2'
 import { Page1Child } from './page1Child'
 import { Posts } from './posts'
@@ -19,10 +19,6 @@ const App = () => {
   // }
 
   return (
-    // <div className='flex flex-row-reverse'>
-    //   <GlobalNav />
-    //   <div className='grow'>
-    //     <div className='h-screen bg-slate-400'>
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Map />} />
@@ -33,9 +29,6 @@ const App = () => {
       </Route>
       <Route path="*" element={<Notfound />} />
     </Routes>
-    //     </div>
-    //   </div>
-    // </div>
   )
 }
 
