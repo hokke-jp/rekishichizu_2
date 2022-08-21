@@ -1,0 +1,28 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 256 256"
+  stroke="black"
+  stroke-width="9"
+>
+  <polyline
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    points="94.011 170 136 128 94.011 86"
+  />
+  <line
+    x1="24"
+    x2="135.971"
+    y1="128"
+    y2="128"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
+  <path
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    d="M136,40h56a8,8,0,0,1,8,8V208a8,8,0,0,1-8,8H136"
+  />
+</svg>

@@ -1,12 +1,11 @@
 import { Routes, Route } from 'react-router-dom'
 import { Map } from './map/Map'
-import { Page2 } from './page2'
-import { Page1Child } from './page1Child'
 import { Posts } from './posts'
 import { Notfound } from './Notfound'
 import { Layout } from './Layout'
 import { Login } from './session/Login'
 import { CreateAccount } from './user/CreateAccount'
+import { Profile } from './user/Profile'
 
 const App = () => {
   // if (sessionStorage.getItem('isAlreadyDisplayed') === null) {
@@ -25,11 +24,11 @@ const App = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<Map />} />
         <Route path="posts" element={<Posts />}>
-          <Route path="page1Child" element={<Page1Child />} />
+          {/* <Route path="page1Child" element={<Page1Child />} /> */}
         </Route>
         <Route path="login" element={<Login />}></Route>
         <Route path="createAccount" element={<CreateAccount />}></Route>
-        <Route path="page2" element={<Page2 />} />
+        <Route path="profile" element={<Profile />}></Route>
       </Route>
       <Route path="*" element={<Notfound />} />
     </Routes>
