@@ -5,7 +5,6 @@ export const GeoLocation = () => {
   const [isLoading, setIsLoading] = useState(false)
   const geoInfoWindow = useMemo(() => new google.maps.InfoWindow(), [])
   const { googleMap } = useContext(GoogleMapsContext)
-
   const geoLocation = () => {
     geoInfoWindow.close()
 
@@ -61,7 +60,7 @@ export const GeoLocation = () => {
   return (
     <div id="geo-wrapper">
       {isLoading ? (
-        <button className="py-3 px-3 w-auto">
+        <button className="w-auto p-3">
           <GeoLocationIcon
             tailwindClass="stroke-blue-400 fill-blue-400"
             flashAnime="flash-anime"
@@ -69,14 +68,13 @@ export const GeoLocation = () => {
         </button>
       ) : (
         <button
-          className="geo-btn py-3 px-3 w-auto map-icon-anime"
+          className="hover-and-click-effect w-auto p-3"
           onClick={() => {
             geoLocation()
           }}
         >
           <GeoLocationIcon
             tailwindClass="stroke-black"
-            // tailwindClass="fill-gray-500 stroke-neutral-500"
             flashAnime={undefined}
           />
         </button>

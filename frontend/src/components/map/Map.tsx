@@ -4,24 +4,24 @@ import { Drawer } from './Drawer'
 import { VerticalIconBar } from './VerticalIconBar'
 import { GoogleMapsContext } from './GoogleMapsContext'
 
+// マップ全体のレイアウト
 export const Map = () => {
   return (
-    <div className="flex h-screen bg-gray-200">
+    <div className="h-screen bg-gray-200">
       <Drawer />
-      <div className="w-full h-full">
-        <RootMap />
+      <div className="h-full w-full">
+        <InitMap />
       </div>
     </div>
   )
 }
 
-const RootMap = () => {
+// マップ取得
+const InitMap = () => {
   const [googleMapsApiLoaded, setGoogleMapsApiLoaded] = useState<boolean>(false)
-
   const initGoogleMapsApi = useCallback(async () => {
     const loader = new Loader({
-      // eslint-disable-next-line googlemaps/no-api-keys
-      apiKey: 'AIzaSyCIX7ci0yBU4r9axzQEvNd5nefZiifw1bM',
+      apiKey: `${process.env.REACT_APP_API_KEY}`,
       version: 'weekly',
       region: 'JP',
       language: 'ja'
@@ -31,12 +31,11 @@ const RootMap = () => {
   }, [])
   initGoogleMapsApi()
 
-  return <>{googleMapsApiLoaded && <GoogleMaps />}</>
+  return <>{googleMapsApiLoaded && <GoogleMap />}</>
 }
 
-const GoogleMaps = () => {
+const GoogleMap = () => {
   const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null)
-
   interface Options {
     center: {
       lat: number
@@ -44,14 +43,30 @@ const GoogleMaps = () => {
     }
     zoom: number
     disableDefaultUI: boolean
+    restriction: {
+      latLngBounds: {
+        north: number
+        south: number
+        west: number
+        east: number
+      }
+      strictBounds: boolean
+    }
   }
-
   const options: Options = {
     center: { lat: 38, lng: 138 },
     zoom: 5,
-    disableDefaultUI: true
+    disableDefaultUI: true,
+    restriction: {
+      latLngBounds: {
+        north: 65.0,
+        south: 14.0,
+        west: 100.0,
+        east: 180.0
+      },
+      strictBounds: false
+    }
   }
-
   const initGoogleMaps = useCallback(() => {
     const map = new google.maps.Map(
       document.getElementById('target') as HTMLElement,
@@ -60,11 +75,9 @@ const GoogleMaps = () => {
     setGoogleMap(map)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
   useEffect(() => {
     initGoogleMaps()
   }, [initGoogleMaps])
-
   // GoogleMapに独自コンポーネントを挿入
   // pushメソッドを使い挿入しないとmapを操作できないと考えていたが,mapオブジェクトを渡せばmapを操作できたのでCSS:fixedで位置合わせをした
   // const iconBar = document.getElementById('icon-bar')

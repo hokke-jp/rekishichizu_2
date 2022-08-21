@@ -8,8 +8,8 @@ import Login from '../images/login.svg'
 import CreateAccount from '../images/create_account.svg'
 
 export const SideBar = () => {
-  // const currentUser = true
-  const currentUser = null
+  const currentUser = true
+  // const currentUser = null
 
   return (
     <aside className="relative z-30 flex flex-col items-center justify-between h-screen w-[72px] bg-white shadow-xl shadow-gray-300">

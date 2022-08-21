@@ -16,17 +16,17 @@ export const FullScreen = () => {
     <>
       {isFullScreen ? (
         <button
-          className="py-3 px-3 w-auto map-icon-anime"
+          className="hover-and-click-effect w-auto p-3"
           onClick={() => {
             document.exitFullscreen()
           }}
         >
           <svg
             version="1.1"
-            className="w-6 h-6 stroke-black stroke-[2px]"
             viewBox="0, 0, 150, 150"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
+            className="w-6 h-6 stroke-black stroke-[2px]"
           >
             <polyline points="0.5,50.5 50.5,50.5 50.5,0.5" fill="none" />
             <polyline points="99.5,0.5 99.5,50.5 149.5,50.5" fill="none" />
@@ -36,17 +36,17 @@ export const FullScreen = () => {
         </button>
       ) : (
         <button
-          className="py-3 px-3 w-auto map-icon-anime"
+          className="hover-and-click-effect w-auto p-3"
           onClick={() => {
             document.body.requestFullscreen()
           }}
         >
           <svg
             version="1.1"
-            className="w-6 h-6 stroke-black stroke-[4px]"
             viewBox="0, 0, 150, 150"
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
+            className="w-6 h-6 stroke-black stroke-[6px]"
           >
             <polyline points="0.5,50.5 0.5,0.5 50.5,0.5" fill="none" />
             <polyline points="99.5,0.5 149.5,0.5 149.5,50.5" fill="none" />
