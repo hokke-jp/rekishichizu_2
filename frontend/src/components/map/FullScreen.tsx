@@ -19,7 +19,6 @@ export const FullScreen = () => {
           className="py-3 px-3 w-auto map-icon-anime"
           onClick={() => {
             document.exitFullscreen()
-            // setIsFullScreen(false)
           }}
         >
           <svg
@@ -40,7 +39,6 @@ export const FullScreen = () => {
           className="py-3 px-3 w-auto map-icon-anime"
           onClick={() => {
             document.body.requestFullscreen()
-            // setIsFullScreen(true)
           }}
         >
           <svg

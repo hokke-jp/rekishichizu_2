@@ -1,7 +1,8 @@
-import { Drawer } from './Drawer'
-import { Loader } from '@googlemaps/js-api-loader'
 import { useCallback, useEffect, useState } from 'react'
+import { Loader } from '@googlemaps/js-api-loader'
+import { Drawer } from './Drawer'
 import { VerticalIconBar } from './VerticalIconBar'
+import { GoogleMapsContext } from './GoogleMapsContext'
 
 export const Map = () => {
   return (
@@ -74,7 +75,15 @@ const GoogleMaps = () => {
   return (
     <>
       <div id="target" className="w-full h-full" />
-      <VerticalIconBar map={googleMap} options={options} />
+      <GoogleMapsContext.Provider
+        value={{
+          googleMap,
+          defaultOptions: options
+        }}
+      >
+        {/* {Children} */}
+        <VerticalIconBar />
+      </GoogleMapsContext.Provider>
     </>
   )
 }

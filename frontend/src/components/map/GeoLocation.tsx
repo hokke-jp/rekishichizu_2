@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useContext, useMemo, useState } from 'react'
+import { GoogleMapsContext } from './GoogleMapsContext'
 
-export const GeoLocation = ({ map }: { map: google.maps.Map | null }) => {
-  const [hasAcquired, setHasAcquired] = useState(false)
+export const GeoLocation = () => {
   const [isLoading, setIsLoading] = useState(false)
   const geoInfoWindow = useMemo(() => new google.maps.InfoWindow(), [])
+  const { googleMap } = useContext(GoogleMapsContext)
 
   const geoLocation = () => {
     geoInfoWindow.close()
@@ -11,9 +12,9 @@ export const GeoLocation = ({ map }: { map: google.maps.Map | null }) => {
     // ブラウザが Geolocation に対応しているかを判定
     // 対応していない場合の処理
     if (!navigator.geolocation) {
-      geoInfoWindow.setPosition(map?.getCenter())
+      geoInfoWindow.setPosition(googleMap?.getCenter())
       geoInfoWindow.setContent('Geolocation に対応していません。')
-      geoInfoWindow.open(map)
+      geoInfoWindow.open(googleMap)
     }
 
     // ブラウザが対応している場合、position にユーザーの位置情報が入る
@@ -27,9 +28,9 @@ export const GeoLocation = ({ map }: { map: google.maps.Map | null }) => {
         }
         geoInfoWindow.setPosition(pos)
         geoInfoWindow.setContent('現在位置を取得しました。')
-        geoInfoWindow.open(map)
-        map?.panTo(pos)
-        map?.setZoom(12)
+        geoInfoWindow.open(googleMap)
+        googleMap?.panTo(pos)
+        googleMap?.setZoom(12)
         setIsLoading(false)
       },
 
@@ -57,41 +58,26 @@ export const GeoLocation = ({ map }: { map: google.maps.Map | null }) => {
     )
   }
 
-  // isLoading ?
-  //    ローディング中のGeoLocationIcon
-  //  : hasAcquired ?
-  //      取得済みGeoLocationIcon
-  //    :
-  //      未取得GeoLocationIcon
   return (
     <div id="geo-wrapper">
       {isLoading ? (
         <button className="py-3 px-3 w-auto">
           <GeoLocationIcon
             tailwindClass="stroke-blue-400 fill-blue-400"
-            flashAnime={true}
+            flashAnime="flash-anime"
           />
-        </button>
-      ) : hasAcquired ? (
-        <button
-          className="geo-btn py-3 px-3 w-auto map-icon-anime"
-          onClick={() => {
-            geoLocation()
-          }}
-        >
-          <GeoLocationIcon tailwindClass="stroke-black" flashAnime={false} />
         </button>
       ) : (
         <button
           className="geo-btn py-3 px-3 w-auto map-icon-anime"
           onClick={() => {
-            setHasAcquired(!hasAcquired)
             geoLocation()
           }}
         >
           <GeoLocationIcon
-            tailwindClass="fill-gray-500 stroke-neutral-500"
-            flashAnime={false}
+            tailwindClass="stroke-black"
+            // tailwindClass="fill-gray-500 stroke-neutral-500"
+            flashAnime={undefined}
           />
         </button>
       )}
@@ -104,7 +90,7 @@ const GeoLocationIcon = ({
   flashAnime
 }: {
   tailwindClass: string
-  flashAnime: boolean
+  flashAnime: string | undefined
 }) => {
   return (
     <svg
@@ -114,11 +100,7 @@ const GeoLocationIcon = ({
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
     >
-      {flashAnime ? (
-        <circle cx="100" cy="100" r="40" className="flash-anime" />
-      ) : (
-        <circle cx="100" cy="100" r="40" />
-      )}
+      <circle cx="100" cy="100" r="40" className={flashAnime} />
       <circle cx="100" cy="100" r="70" className="fill-transparent" />
       <line x1="100" y1="0" x2="100" y2="30" />
       <line x1="200" y1="100" x2="170" y2="100" />
