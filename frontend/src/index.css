@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+
+/* 初期画面オーバーレイ */
 .displaycss {
   position: absolute;
   top: 0;
@@ -11,7 +16,6 @@
   background-color: white;
   animation: fadeout-anim 5s linear forwards;
 }
-
 @keyframes fadeout-anim {
   0% {
     opacity: 100%;
@@ -23,7 +27,6 @@
     opacity: 0;
   }
 }
-
 .textcss {
   position: absolute;
   top: 50%;
@@ -32,6 +35,21 @@
   font-size: 3rem;
   line-height: 1;
 }
+
+
+
+
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+
+/* SideBarのアイコン */
+
+
+
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 
 /* GoogleMapのDrawerのポジション */
 #posts-drawer-div {
@@ -58,6 +76,13 @@
 #search-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
   left: 104px;
 }
+
+
+
+
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 
 /* GoogleMapの右アイコンバー */
 .map-icon-anime {
