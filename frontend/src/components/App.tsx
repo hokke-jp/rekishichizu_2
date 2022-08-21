@@ -5,6 +5,8 @@ import { Page1Child } from './page1Child'
 import { Posts } from './posts'
 import { Notfound } from './Notfound'
 import { Layout } from './Layout'
+import { Login } from './session/Login'
+import { CreateAccount } from './user/CreateAccount'
 
 const App = () => {
   // if (sessionStorage.getItem('isAlreadyDisplayed') === null) {
@@ -25,6 +27,8 @@ const App = () => {
         <Route path="posts" element={<Posts />}>
           <Route path="page1Child" element={<Page1Child />} />
         </Route>
+        <Route path="login" element={<Login />}></Route>
+        <Route path="createAccount" element={<CreateAccount />}></Route>
         <Route path="page2" element={<Page2 />} />
       </Route>
       <Route path="*" element={<Notfound />} />
