@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { NavLink } from 'react-router-dom'
+import { axiosInstance } from '../../utils/axios'
 
 const theme = createTheme()
 
@@ -20,10 +21,22 @@ export function Login() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    })
+    // console.log(data.get('name'))
+    const f = async () => {
+      const res = await axiosInstance
+        .post('/login', {
+          name: data.get('name'),
+          password: data.get('password')
+        })
+        .then(function (response) {
+          console.log(response)
+          console.log(`first document.cookie : ${document.cookie}`)
+          document.cookie = `name=${response.data.name}`
+          console.log(`second document.cookie : ${document.cookie}`)
+        })
+      console.log(res)
+    }
+    f()
   }
 
   return (
@@ -54,10 +67,10 @@ export function Login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="メールアドレス"
-              name="email"
-              autoComplete="email"
+              id="name"
+              label="ユーザー名"
+              name="name"
+              autoComplete="name"
               autoFocus
             />
             <TextField
