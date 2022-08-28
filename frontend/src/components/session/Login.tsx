@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { FormEvent, useContext } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -12,31 +12,36 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { axiosInstance } from '../../utils/axios'
+import Cookies from 'js-cookie'
+import { CurrentUserContext } from '../user/CurrentUserContext'
 
 const theme = createTheme()
 
-export function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export const Login = () => {
+  const { setCurrentUser } = useContext(CurrentUserContext)
+  const navigate = useNavigate()
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     // console.log(data.get('name'))
-    const f = async () => {
-      const res = await axiosInstance
-        .post('/login', {
-          name: data.get('name'),
+    ;(async () => {
+      await axiosInstance
+        .post('/auth/sign_in', {
+          email: data.get('email'),
           password: data.get('password')
         })
-        .then(function (response) {
+        .then((response) => {
           console.log(response)
-          console.log(`first document.cookie : ${document.cookie}`)
-          document.cookie = `name=${response.data.name}`
-          console.log(`second document.cookie : ${document.cookie}`)
+          Cookies.set('uid', response.headers.uid)
+          Cookies.set('client', response.headers.client)
+          Cookies.set('access-token', response.headers['access-token'])
+          setCurrentUser(response.data.data)
+          navigate(`/posts`)
         })
-      console.log(res)
-    }
-    f()
+        .catch((error) => console.log(error))
+    })()
   }
 
   return (
@@ -67,10 +72,10 @@ export function Login() {
               margin="normal"
               required
               fullWidth
-              id="name"
-              label="ユーザー名"
-              name="name"
-              autoComplete="name"
+              id="email"
+              label="メールアドレス"
+              name="email"
+              autoComplete="email"
               autoFocus
             />
             <TextField

@@ -1,8 +1,9 @@
 import { ButtonBase } from '@mui/material'
 import DefaultUserImage from '../../images/default_user_image.jpg'
 import { AccountMenu } from './AccountMenu'
+import type { User } from './CurrentUserContext'
 
-export const Profile = () => {
+export const Profile = ({ user }: { user: User | null }) => {
   return (
     <>
       <section className="">
@@ -18,13 +19,13 @@ export const Profile = () => {
         <div className="max-w-screen-xl px-8 pt-6 pb-12 mx-auto sm:px-16 lg:px-24">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-              テストユーザー
+              {user?.name}
             </h2>
 
             <p className="mt-4 text-gray-500 sm:text-lg">
-              好きな時代は、戦国時代です。
-              <br />
-              武田信玄が特に好きです。
+              {user?.introduction
+                ? user?.introduction
+                : 'コメントが設定されていません。'}
             </p>
           </div>
 
