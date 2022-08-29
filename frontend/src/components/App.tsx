@@ -61,10 +61,11 @@ export const App = () => {
           <Route path="posts" element={<Posts />}></Route>
           <Route path="login" element={<Login />}></Route>
           <Route path="createAccount" element={<CreateAccount />}></Route>
-          <Route
+          {/* <Route
             path={currentUser?.name}
             element={<Profile user={currentUser} />}
-          ></Route>
+          ></Route> */}
+          <Route path=":userName" element={<Profile />}></Route>
         </Route>
         <Route path="*" element={<Notfound />} />
       </Routes>

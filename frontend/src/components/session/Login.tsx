@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
@@ -102,14 +101,16 @@ export const Login = () => {
             >
               ログイン
             </Button>
-            <Grid container>
-              <Grid item xs>
+            <Grid container justifyContent="flex-end">
+              {/* <Grid item xs>
                 <Link href="#" variant="body2">
                   パスワードを忘れた
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid item>
-                <NavLink to="/createAccount">アカウントを作成する</NavLink>
+                <NavLink to="/createAccount" className={'text-blue-600'}>
+                  アカウントを作成する
+                </NavLink>
               </Grid>
             </Grid>
           </Box>
