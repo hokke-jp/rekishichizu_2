@@ -1,10 +1,8 @@
-import { FormEvent, useContext } from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
@@ -15,11 +13,15 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { axiosInstance } from '../../utils/axios'
 import Cookies from 'js-cookie'
 import { CurrentUserContext } from '../user/CurrentUserContext'
+import { Alert } from '@mui/material'
+// import FormControlLabel from '@mui/material/FormControlLabel'
+// import Checkbox from '@mui/material/Checkbox'
 
 const theme = createTheme()
 
 export const Login = () => {
   const { setCurrentUser } = useContext(CurrentUserContext)
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -37,9 +39,12 @@ export const Login = () => {
           Cookies.set('client', response.headers.client)
           Cookies.set('access-token', response.headers['access-token'])
           setCurrentUser(response.data.data)
-          navigate(`/posts`)
+          navigate(`/`)
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          console.error(error)
+          setErrorMessage('メールアドレスもしくはパスワードに誤りがあります')
+        })
     })()
   }
 
@@ -61,6 +66,17 @@ export const Login = () => {
           <Typography component="h1" variant="h5">
             ログイン
           </Typography>
+          {errorMessage ? (
+            <Alert
+              onClose={() => {
+                setErrorMessage('')
+              }}
+              severity="error"
+              sx={{ mt: 2, alignItems: 'center' }}
+            >
+              {errorMessage}
+            </Alert>
+          ) : null}
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -87,12 +103,12 @@ export const Login = () => {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={
                 <Checkbox value="remember" color="primary" size="small" />
               }
               label="ログイン状態を保存する"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth

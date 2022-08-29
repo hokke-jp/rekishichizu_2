@@ -14,7 +14,6 @@ export const Profile = () => {
   const { currentUser } = useContext(CurrentUserContext)
   const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
-    setIsLoading(true)
     ;(async () => {
       await axiosInstance
         .get(`/users/${params.userName}`, {})

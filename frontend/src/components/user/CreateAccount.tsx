@@ -18,7 +18,7 @@ import { CurrentUserContext } from './CurrentUserContext'
 const theme = createTheme()
 export const CreateAccount = () => {
   const navigate = useNavigate()
-  const [errorMessage, setErrorMessage] = useState<string>('')
+  const [errorMessage, setErrorMessage] = useState('')
   const { setCurrentUser } = useContext(CurrentUserContext)
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -37,14 +37,14 @@ export const CreateAccount = () => {
           Cookies.set('client', response.headers.client)
           Cookies.set('access-token', response.headers['access-token'])
           setCurrentUser(response.data.data)
-          navigate(`/posts`)
+          navigate(`/${response.data.data.name}`)
         })
         .catch((error) => {
           console.error(error)
           Cookies.remove('uid')
           Cookies.remove('client')
           Cookies.remove('access-token')
-          setErrorMessage(error.response.data.errors.full_messages.toString())
+          setErrorMessage(error.response.data.errors.full_messages.join('\n'))
         })
     })()
   }
@@ -67,22 +67,24 @@ export const CreateAccount = () => {
           <Typography component="h1" variant="h5">
             アカウント作成
           </Typography>
+          {errorMessage ? (
+            <Alert
+              onClose={() => {
+                setErrorMessage('')
+              }}
+              severity="error"
+              sx={{ mt: 2, alignItems: 'center' }}
+              style={{ whiteSpace: 'pre-wrap' }}
+            >
+              {errorMessage}
+            </Alert>
+          ) : null}
           <Box
             component="form"
             noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
-            {errorMessage ? (
-              <Alert
-                onClose={() => {
-                  setErrorMessage('')
-                }}
-                severity="error"
-              >
-                {errorMessage}
-              </Alert>
-            ) : null}
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField

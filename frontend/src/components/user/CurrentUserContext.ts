@@ -9,6 +9,7 @@ export interface User {
   image: string | null
   introduction: string | null
 }
+
 export const CurrentUserContext = createContext(
   {} as {
     currentUser: User | null
