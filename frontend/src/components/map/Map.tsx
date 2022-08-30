@@ -79,7 +79,7 @@ const GoogleMap = () => {
     initGoogleMaps()
   }, [initGoogleMaps])
   // GoogleMapに独自コンポーネントを挿入
-  // pushメソッドを使い挿入しないとmapを操作できないと考えていたが,mapオブジェクトを渡せばmapを操作できたのでCSS:fixedで位置合わせをした
+  // GooglemapInstance.pushメソッドを使い挿入しないとmapを操作できないと考えていたが,mapオブジェクトを渡せばmapを操作できたのでCSS:fixedで位置合わせをした
   // const iconBar = document.getElementById('icon-bar')
   // googleMap?.controls[google.maps.ControlPosition.TOP_RIGHT].push(
   //   iconBar as HTMLElement

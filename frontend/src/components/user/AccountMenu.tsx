@@ -10,8 +10,13 @@ import Logout from '@mui/icons-material/Logout'
 import { Settings, Edit } from '@mui/icons-material'
 import { EditProfileDialog } from './EditProfileDialog'
 import { EditRegistryDialog } from './EditRegistryDialog'
+import { CurrentUserContext } from './CurrentUserContext'
+import { useNavigate } from 'react-router-dom'
+import Cookies from 'js-cookie'
+import { axiosInstance } from '../../utils/axios'
 
 export const AccountMenu = () => {
+  const { setCurrentUser } = React.useContext(CurrentUserContext)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -19,6 +24,35 @@ export const AccountMenu = () => {
   }
   const handleClose = () => {
     setAnchorEl(null)
+  }
+  const navigate = useNavigate()
+  const handleLogout = () => {
+    ;(async () => {
+      await axiosInstance
+        .delete('/auth/sign_out', {
+          params: {
+            uid: Cookies.get('uid'),
+            client: Cookies.get('client'),
+            // eslint-disable-next-line no-useless-computed-key
+            ['access-token']: Cookies.get('access-token')
+          }
+        })
+        .then(() => {
+          Cookies.remove('uid')
+          Cookies.remove('client')
+          Cookies.remove('access-token')
+          setCurrentUser(null)
+          navigate('/')
+        })
+        .catch((error) => {
+          console.error(error)
+          Cookies.remove('uid')
+          Cookies.remove('client')
+          Cookies.remove('access-token')
+          setCurrentUser(null)
+          navigate('/')
+        })
+    })()
   }
   return (
     <>
@@ -96,10 +130,12 @@ export const AccountMenu = () => {
         </MenuItem>
         <Divider />
         <MenuItem>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          ログアウト
+          <button className="flex items-center" onClick={handleLogout}>
+            <ListItemIcon>
+              <Logout fontSize="small" />
+            </ListItemIcon>
+            ログアウト
+          </button>
         </MenuItem>
       </Menu>
     </>

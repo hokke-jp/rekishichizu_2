@@ -1,25 +1,51 @@
-import * as React from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
-import Link from '@mui/material/Link'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { axiosInstance } from '../../utils/axios'
+import Cookies from 'js-cookie'
+import Alert from '@mui/material/Alert'
+import { CurrentUserContext } from './CurrentUserContext'
 
 const theme = createTheme()
 export const CreateAccount = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate()
+  const [errorMessage, setErrorMessage] = useState('')
+  const { setCurrentUser } = useContext(CurrentUserContext)
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    })
+    ;(async () => {
+      setErrorMessage('')
+      return await axiosInstance
+        .post('/auth', {
+          name: data.get('name'),
+          email: data.get('email'),
+          password: data.get('password')
+        })
+        .then((response) => {
+          Cookies.set('uid', response.headers.uid)
+          Cookies.set('client', response.headers.client)
+          Cookies.set('access-token', response.headers['access-token'])
+          setCurrentUser(response.data.data)
+          navigate(`/${response.data.data.name}`)
+        })
+        .catch((error) => {
+          console.error(error)
+          Cookies.remove('uid')
+          Cookies.remove('client')
+          Cookies.remove('access-token')
+          setErrorMessage(error.response.data.errors.full_messages.join('\n'))
+        })
+    })()
   }
 
   return (
@@ -40,6 +66,18 @@ export const CreateAccount = () => {
           <Typography component="h1" variant="h5">
             アカウント作成
           </Typography>
+          {errorMessage ? (
+            <Alert
+              onClose={() => {
+                setErrorMessage('')
+              }}
+              severity="error"
+              sx={{ mt: 2, alignItems: 'center' }}
+              style={{ whiteSpace: 'pre-wrap' }}
+            >
+              {errorMessage}
+            </Alert>
+          ) : null}
           <Box
             component="form"
             noValidate
@@ -89,9 +127,9 @@ export const CreateAccount = () => {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+                <NavLink to="/login" className={'text-blue-600'}>
+                  ログイン画面へ
+                </NavLink>
               </Grid>
             </Grid>
           </Box>

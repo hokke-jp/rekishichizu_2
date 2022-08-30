@@ -1,29 +1,50 @@
-import * as React from 'react'
+import { FormEvent, useContext, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
-import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { axiosInstance } from '../../utils/axios'
+import Cookies from 'js-cookie'
+import { CurrentUserContext } from '../user/CurrentUserContext'
+import { Alert } from '@mui/material'
+// import FormControlLabel from '@mui/material/FormControlLabel'
+// import Checkbox from '@mui/material/Checkbox'
 
 const theme = createTheme()
 
-export function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+export const Login = () => {
+  const { setCurrentUser } = useContext(CurrentUserContext)
+  const [errorMessage, setErrorMessage] = useState('')
+  const navigate = useNavigate()
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    })
+    // console.log(data.get('name'))
+    ;(async () => {
+      await axiosInstance
+        .post('/auth/sign_in', {
+          email: data.get('email'),
+          password: data.get('password')
+        })
+        .then((response) => {
+          Cookies.set('uid', response.headers.uid)
+          Cookies.set('client', response.headers.client)
+          Cookies.set('access-token', response.headers['access-token'])
+          setCurrentUser(response.data.data)
+          navigate(`/`)
+        })
+        .catch((error) => {
+          console.error(error)
+          setErrorMessage('メールアドレスもしくはパスワードに誤りがあります')
+        })
+    })()
   }
 
   return (
@@ -44,6 +65,17 @@ export function Login() {
           <Typography component="h1" variant="h5">
             ログイン
           </Typography>
+          {errorMessage ? (
+            <Alert
+              onClose={() => {
+                setErrorMessage('')
+              }}
+              severity="error"
+              sx={{ mt: 2, alignItems: 'center' }}
+            >
+              {errorMessage}
+            </Alert>
+          ) : null}
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -70,12 +102,12 @@ export function Login() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={
                 <Checkbox value="remember" color="primary" size="small" />
               }
               label="ログイン状態を保存する"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
@@ -84,14 +116,16 @@ export function Login() {
             >
               ログイン
             </Button>
-            <Grid container>
-              <Grid item xs>
+            <Grid container justifyContent="flex-end">
+              {/* <Grid item xs>
                 <Link href="#" variant="body2">
                   パスワードを忘れた
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid item>
-                <NavLink to="/createAccount">アカウントを作成する</NavLink>
+                <NavLink to="/createAccount" className={'text-blue-600'}>
+                  アカウントを作成する
+                </NavLink>
               </Grid>
             </Grid>
           </Box>
