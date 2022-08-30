@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Loader } from '@googlemaps/js-api-loader'
 import { Drawer } from './Drawer'
-import { VerticalIconBar } from './VerticalIconBar'
 import { GoogleMapsContext } from './GoogleMapsContext'
+import { VerticalIconBar } from './VerticalIconBar'
+import { Loader } from '@googlemaps/js-api-loader'
+import { useCallback, useEffect, useState } from 'react'
 
 // マップ全体のレイアウト
 export const Map = () => {

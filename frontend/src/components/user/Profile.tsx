@@ -1,12 +1,12 @@
-import { ButtonBase } from '@mui/material'
-import CircularProgress from '@mui/material/CircularProgress'
-import { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import DefaultUserImage from '../../images/default_user_image.jpg'
 import { axiosInstance } from '../../utils/axios'
 import { Notfound } from '../Notfound'
 import { AccountMenu } from './AccountMenu'
 import { CurrentUserContext, User } from './CurrentUserContext'
+import { ButtonBase } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import { useContext, useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export const Profile = () => {
   const params = useParams()

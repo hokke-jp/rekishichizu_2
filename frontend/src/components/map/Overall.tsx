@@ -1,5 +1,5 @@
-import { useContext } from 'react'
 import { GoogleMapsContext } from './GoogleMapsContext'
+import { useContext } from 'react'
 
 export const Overall = () => {
   const { googleMap, defaultOptions } = useContext(GoogleMapsContext)
