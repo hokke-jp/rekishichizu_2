@@ -23,6 +23,8 @@ export const App = () => {
   //   display.className = 'displaycss'
   //   text.className = 'textcss'
   // }
+
+  // Cookieをチェックし,トークンがあるならログインリクエストを飛ばし,ないならnull
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const token = Cookies.get('access-token')
   useEffect(() => {
@@ -39,7 +41,6 @@ export const App = () => {
         })
         .then((response) => {
           // トークンが有効な場合
-          console.log(response)
           setCurrentUser(response.data.data)
         })
         .catch((error) => {

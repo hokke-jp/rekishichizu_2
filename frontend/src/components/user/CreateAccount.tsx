@@ -32,7 +32,6 @@ export const CreateAccount = () => {
           password: data.get('password')
         })
         .then((response) => {
-          console.log(response)
           Cookies.set('uid', response.headers.uid)
           Cookies.set('client', response.headers.client)
           Cookies.set('access-token', response.headers['access-token'])

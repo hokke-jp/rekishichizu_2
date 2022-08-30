@@ -18,12 +18,11 @@ export const Profile = () => {
       await axiosInstance
         .get(`/users/${params.userName}`, {})
         .then((response) => {
-          console.log(response)
           setUser(response.data)
           setIsLoading(false)
         })
         .catch((error) => {
-          console.log(error)
+          console.error(error)
           setIsLoading(false)
         })
     })()

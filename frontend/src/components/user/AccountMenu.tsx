@@ -37,8 +37,7 @@ export const AccountMenu = () => {
             ['access-token']: Cookies.get('access-token')
           }
         })
-        .then((response) => {
-          console.log(response)
+        .then(() => {
           Cookies.remove('uid')
           Cookies.remove('client')
           Cookies.remove('access-token')
