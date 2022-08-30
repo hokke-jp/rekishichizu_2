@@ -1,16 +1,16 @@
-import { Routes, Route } from 'react-router-dom'
+import { axiosInstance } from '../utils/axios'
+import { Layout } from './Layout'
+import { Notfound } from './Notfound'
 import { Map } from './map/Map'
 import { Posts } from './posts'
-import { Notfound } from './Notfound'
-import { Layout } from './Layout'
 import { Login } from './session/Login'
 import { CreateAccount } from './user/CreateAccount'
-import { Profile } from './user/Profile'
 import { CurrentUserContext } from './user/CurrentUserContext'
 import type { User } from './user/CurrentUserContext'
-import { useEffect, useState } from 'react'
-import { axiosInstance } from '../utils/axios'
+import { Profile } from './user/Profile'
 import Cookies from 'js-cookie'
+import { useEffect, useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 
 export const App = () => {
   // if (sessionStorage.getItem('isAlreadyDisplayed') === null) {

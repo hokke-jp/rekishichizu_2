@@ -1,5 +1,5 @@
-import { useContext, useMemo, useState } from 'react'
 import { GoogleMapsContext } from './GoogleMapsContext'
+import { useContext, useMemo, useState } from 'react'
 
 export const GeoLocation = () => {
   const [isLoading, setIsLoading] = useState(false)

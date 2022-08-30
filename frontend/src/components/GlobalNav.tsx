@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom'
+import { SideBar } from './SideBar'
 // import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 // import PostAddIcon from '@mui/icons-material/PostAdd';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import LoginIcon from '@mui/icons-material/Login'
 import { IconButton } from '@mui/material'
-import { SideBar } from './SideBar'
+import { Link } from 'react-router-dom'
 
 export const GlobalNav = () => {
   return (
