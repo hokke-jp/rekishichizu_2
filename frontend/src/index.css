@@ -1,3 +1,93 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+
+/* 初期画面オーバーレイ */
+.displaycss {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+  animation: fadeout-anim 5s linear forwards;
+}
+@keyframes fadeout-anim {
+  0% {
+    opacity: 100%;
+  }
+  80% {
+    opacity: 100%;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.textcss {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+
+/* GoogleMapのDrawerのポジション */
+#posts-drawer-div {
+  position: fixed;
+  left: -96px;
+  z-index: 20;
+  transition: all 0.2s;
+  width: 224px;
+}
+#posts-drawer-checkbox[type='checkbox']:checked ~ #posts-drawer-div {
+  left: 72px;
+}
+#posts-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
+  margin-left: 168px;
+}
+
+#search-drawer-div {
+  position: fixed;
+  left: -40px;
+  z-index: 10;
+  transition: all 0.2s;
+  width: 224px;
+}
+#search-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
+  left: 104px;
+}
+
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+/* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+
+/* GoogleMapの右アイコンバー */
+.hover-and-click-effect {
+  @apply hover:bg-gray-100 focus:bg-none focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out;
+}
+.flash-anime {
+  animation: flash 1s linear infinite;
+}
+@keyframes flash {
+  0% {
+    opacity: 100%;
+  }
+  50% {
+    opacity: 100%;
+  }
+  51% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
