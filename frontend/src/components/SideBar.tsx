@@ -31,7 +31,7 @@ export const SideBar = () => {
                   className="h-8 w-8 rounded-full"
                 />
               </IconWrapper>
-              <IconWrapper path="posts" tooltip="新規投稿">
+              <IconWrapper path="post" tooltip="新規投稿">
                 <img src={Post} alt="Post icon" className="h-6 w-6" />
               </IconWrapper>
             </>
