@@ -1,7 +1,15 @@
 import { axiosInstance } from '../../utils/axios'
 import { CurrentUserContext } from '../user/CurrentUserContext'
+import { VisibilityOff, Visibility } from '@mui/icons-material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import { Alert } from '@mui/material'
+import {
+  Alert,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput
+} from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -21,6 +29,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 const theme = createTheme()
 
 export const Login = () => {
+  // 入力情報送信機能
   const { setCurrentUser } = useContext(CurrentUserContext)
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
@@ -46,6 +55,37 @@ export const Login = () => {
           setErrorMessage('メールアドレスもしくはパスワードに誤りがあります')
         })
     })()
+  }
+
+  // パスワード表示切り替え機能
+  interface State {
+    amount: string
+    password: string
+    weight: string
+    weightRange: string
+    showPassword: boolean
+  }
+  const [values, setValues] = useState<State>({
+    amount: '',
+    password: '',
+    weight: '',
+    weightRange: '',
+    showPassword: false
+  })
+  const handleChange =
+    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValues({ ...values, [prop]: event.target.value })
+    }
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword
+    })
+  }
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
   }
 
   return (
@@ -93,16 +133,34 @@ export const Login = () => {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="パスワード"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+            <FormControl sx={{ width: '100%' }} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                パスワード *
+              </InputLabel>
+              <OutlinedInput
+                required
+                fullWidth
+                name="password"
+                type={values.showPassword ? 'text' : 'password'}
+                id="outlined-adornment-password"
+                autoComplete="current-password"
+                value={values.password}
+                onChange={handleChange('password')}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="パスワード"
+              />
+            </FormControl>
             {/* <FormControlLabel
               control={
                 <Checkbox value="remember" color="primary" size="small" />
