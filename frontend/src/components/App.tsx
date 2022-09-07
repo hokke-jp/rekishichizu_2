@@ -1,9 +1,9 @@
-import { axiosInstance } from '../utils/axios'
 import { Layout } from './Layout'
 import { Notfound } from './Notfound'
 import { Map } from './map/Map'
 import { Posts } from './posts'
 import { Login } from './session/Login'
+import { loginWithCookie } from './session/loginWithCookie'
 import { CreateAccount } from './user/CreateAccount'
 import { CurrentUserContext } from './user/CurrentUserContext'
 import type { User } from './user/CurrentUserContext'
@@ -23,35 +23,21 @@ export const App = () => {
   //   display.className = 'displaycss'
   //   text.className = 'textcss'
   // }
+  // display → welcomDisplay / textcss → welcomText
 
-  // Cookieをチェックし,トークンがあるならログインリクエストを飛ばし,ないならnull
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const token = Cookies.get('access-token')
   useEffect(() => {
+    // Cookieをチェックし,トークンがあるならログインリクエストを飛ばし,ないならリターン
     if (!token) return
-    ;(async () => {
-      await axiosInstance
-        .get('/auth/validate_token', {
-          params: {
-            uid: Cookies.get('uid'),
-            client: Cookies.get('client'),
-            // eslint-disable-next-line no-useless-computed-key
-            ['access-token']: Cookies.get('access-token')
-          }
-        })
-        .then((response) => {
-          // トークンが有効な場合
-          setCurrentUser(response.data.data)
-        })
-        .catch((error) => {
-          // トークンの期限が切れている場合
-          console.error(error)
-          setCurrentUser(null)
-          Cookies.remove('uid')
-          Cookies.remove('client')
-          Cookies.remove('access-token')
-        })
-    })()
+    loginWithCookie()
+      .then((response) => {
+        setCurrentUser(response.data.data)
+      })
+      .catch((error) => {
+        console.log(error)
+        setCurrentUser(null)
+      })
   }, [token])
 
   return (

@@ -1,5 +1,6 @@
-import { axiosInstance } from '../../utils/axios'
+// import { axiosInstance } from '../../utils/axios'
 import { CurrentUserContext } from '../user/CurrentUserContext'
+import { loginWithInput } from './loginWithInput'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import {
@@ -19,7 +20,7 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 import { FormEvent, useContext, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
@@ -36,25 +37,18 @@ export const Login = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    // console.log(data.get('name'))
-    ;(async () => {
-      await axiosInstance
-        .post('/auth/sign_in', {
-          email: data.get('email'),
-          password: data.get('password')
-        })
-        .then((response) => {
-          Cookies.set('uid', response.headers.uid)
-          Cookies.set('client', response.headers.client)
-          Cookies.set('access-token', response.headers['access-token'])
-          setCurrentUser(response.data.data)
-          navigate(`/`)
-        })
-        .catch((error) => {
-          console.error(error)
-          setErrorMessage('メールアドレスもしくはパスワードに誤りがあります')
-        })
-    })()
+    loginWithInput({
+      email: data.get('email')?.toString(),
+      password: data.get('password')?.toString()
+    })
+      .then((response) => {
+        setCurrentUser(response.data.data)
+        navigate(`/`)
+      })
+      .catch((error) => {
+        console.error(error)
+        setErrorMessage('メールアドレスもしくはパスワードに誤りがあります')
+      })
   }
 
   // パスワード表示切り替え機能
@@ -72,7 +66,7 @@ export const Login = () => {
     weightRange: '',
     showPassword: false
   })
-  const handleChange =
+  const handleClick =
     (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setValues({ ...values, [prop]: event.target.value })
     }
@@ -145,7 +139,7 @@ export const Login = () => {
                 id="outlined-adornment-password"
                 autoComplete="current-password"
                 value={values.password}
-                onChange={handleChange('password')}
+                onChange={handleClick('password')}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
