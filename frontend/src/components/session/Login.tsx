@@ -1,6 +1,5 @@
-// import { axiosInstance } from '../../utils/axios'
 import { CurrentUserContext } from '../user/CurrentUserContext'
-import { loginWithInput } from './loginWithInput'
+import { login } from './session'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import {
@@ -37,7 +36,7 @@ export const Login = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    loginWithInput({
+    login({
       email: data.get('email')?.toString(),
       password: data.get('password')?.toString()
     })

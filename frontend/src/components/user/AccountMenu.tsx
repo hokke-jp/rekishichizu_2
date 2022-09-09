@@ -1,4 +1,4 @@
-import { axiosInstance } from '../../utils/axios'
+import { logout } from '../session/session'
 import { CurrentUserContext } from './CurrentUserContext'
 import { EditProfileDialog } from './EditProfileDialog'
 import { EditRegistryDialog } from './EditRegistryDialog'
@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Cookies from 'js-cookie'
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -27,32 +26,15 @@ export const AccountMenu = () => {
   }
   const navigate = useNavigate()
   const handleLogout = () => {
-    ;(async () => {
-      await axiosInstance
-        .delete('/auth/sign_out', {
-          params: {
-            uid: Cookies.get('uid'),
-            client: Cookies.get('client'),
-            // eslint-disable-next-line no-useless-computed-key
-            ['access-token']: Cookies.get('access-token')
-          }
-        })
-        .then(() => {
-          Cookies.remove('uid')
-          Cookies.remove('client')
-          Cookies.remove('access-token')
-          setCurrentUser(null)
-          navigate('/')
-        })
-        .catch((error) => {
-          console.error(error)
-          Cookies.remove('uid')
-          Cookies.remove('client')
-          Cookies.remove('access-token')
-          setCurrentUser(null)
-          navigate('/')
-        })
-    })()
+    logout()
+      .then(() => {
+        setCurrentUser(null)
+        navigate('/')
+      })
+      .catch(() => {
+        setCurrentUser(null)
+        navigate('/')
+      })
   }
   return (
     <>
@@ -121,7 +103,7 @@ export const AccountMenu = () => {
           </EditProfileDialog>
         </MenuItem>
         <MenuItem>
-          <EditRegistryDialog>
+          <EditRegistryDialog setAnchorEl={setAnchorEl}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>

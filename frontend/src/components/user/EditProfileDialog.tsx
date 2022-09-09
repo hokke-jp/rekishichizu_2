@@ -5,14 +5,10 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
-import * as React from 'react'
+import { ReactNode, useState } from 'react'
 
-export const EditProfileDialog = ({
-  children
-}: {
-  children: React.ReactNode
-}) => {
-  const [open, setOpen] = React.useState(false)
+export const EditProfileDialog = ({ children }: { children: ReactNode }) => {
+  const [open, setOpen] = useState(false)
   const handleClickOpen = () => {
     setOpen(true)
   }
