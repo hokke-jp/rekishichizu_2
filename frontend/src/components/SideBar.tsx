@@ -5,6 +5,7 @@ import EasyLogin from '../images/easy_login.svg'
 import Login from '../images/login.svg'
 import Post from '../images/post.svg'
 import { axiosInstance } from '../utils/axios'
+import { Avatar } from './user/Avatar'
 import { CurrentUserContext } from './user/CurrentUserContext'
 import { ButtonBase, Tooltip } from '@mui/material'
 import Cookies from 'js-cookie'
@@ -24,6 +25,10 @@ export const SideBar = () => {
         <div className="w-full mb-6">
           {currentUser ? (
             <>
+              <Avatar
+                url={currentUser.avatar_url}
+                className="h-8 w-8 rounded-full"
+              />
               <IconWrapper path={currentUser.name} tooltip="マイページ">
                 <img
                   src={DefaultUserImage}
@@ -98,7 +103,7 @@ const EasyLoginWrapper = ({ children }: { children: ReactNode }) => {
     ;(async () => {
       await axiosInstance
         .post('/auth/sign_in', {
-          email: 'sample01@example.com',
+          email: 'sample@mail.com',
           password: 'password'
         })
         .then((response) => {
@@ -106,7 +111,7 @@ const EasyLoginWrapper = ({ children }: { children: ReactNode }) => {
           Cookies.set('client', response.headers.client)
           Cookies.set('access-token', response.headers['access-token'])
           setCurrentUser(response.data.data)
-          navigate(`/sample01`)
+          navigate(`/${response.data.data.name}`)
         })
         .catch((error) => {
           console.error(error)

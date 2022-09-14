@@ -16,10 +16,9 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import TextField from '@mui/material/TextField'
 import { Dispatch, FormEvent, ReactNode, SetStateAction, useState } from 'react'
 
-export const EditRegistryDialog = ({
+export const EditPasswordDialog = ({
   children,
   setAnchorEl
 }: {
@@ -42,7 +41,7 @@ export const EditRegistryDialog = ({
       return await axiosInstance
         .patch(
           '/auth',
-          { email: data.get('email'), password: data.get('password') },
+          { password: data.get('password') },
           {
             headers: {
               'Content-Type': 'application/json',
@@ -102,26 +101,13 @@ export const EditRegistryDialog = ({
         {children}
       </button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>登録情報更新</DialogTitle>
-        <Box component="form" noValidate onSubmit={handleUpdate} sx={{ mt: 1 }}>
+        <DialogTitle sx={{ pb: 0 }}>パスワード変更</DialogTitle>
+        <Box component="form" noValidate onSubmit={handleUpdate}>
           <DialogContent>
             <DialogContentText>
-              ご登録のメールアドレスとパスワードを変更できます。
-              <br />
-              新しいメールアドレス、もしくはパスワードを入力してください。
+              新しいパスワードを入力してください。
             </DialogContentText>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="email"
-              label="メールアドレス"
-              type="email"
-              variant="standard"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <FormControl sx={{ width: '100%' }} variant="standard">
+            <FormControl sx={{ width: '100%', mt: 2 }} variant="standard">
               <InputLabel>パスワード</InputLabel>
               <Input
                 fullWidth
@@ -131,6 +117,7 @@ export const EditRegistryDialog = ({
                 autoComplete="current-password"
                 value={values.password}
                 onChange={handleClick('password')}
+                autoFocus
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -148,7 +135,9 @@ export const EditRegistryDialog = ({
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>キャンセル</Button>
-            <Button type="submit">更新</Button>
+            <Button variant="contained" type="submit">
+              更新
+            </Button>
           </DialogActions>
         </Box>
       </Dialog>

@@ -1,8 +1,9 @@
 import { logout } from '../session/session'
 import { CurrentUserContext } from './CurrentUserContext'
+import { EditEmailDialog } from './EditEmailDialog'
+import { EditPasswordDialog } from './EditPasswordDialog'
 import { EditProfileDialog } from './EditProfileDialog'
-import { EditRegistryDialog } from './EditRegistryDialog'
-import { Settings, Edit } from '@mui/icons-material'
+import { Lock, Edit, Email } from '@mui/icons-material'
 import Logout from '@mui/icons-material/Logout'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Box from '@mui/material/Box'
@@ -37,17 +38,8 @@ export const AccountMenu = () => {
       })
   }
   return (
-    <>
-      <Box
-        pt={1}
-        pr={2}
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}
-      >
+    <div className="fixed top-2 right-3">
+      <Box>
         <IconButton
           onClick={handleClick}
           size="small"
@@ -95,7 +87,7 @@ export const AccountMenu = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem>
-          <EditProfileDialog>
+          <EditProfileDialog setAnchorEl={setAnchorEl}>
             <ListItemIcon>
               <Edit fontSize="small" />
             </ListItemIcon>
@@ -103,12 +95,20 @@ export const AccountMenu = () => {
           </EditProfileDialog>
         </MenuItem>
         <MenuItem>
-          <EditRegistryDialog setAnchorEl={setAnchorEl}>
+          <EditEmailDialog setAnchorEl={setAnchorEl}>
             <ListItemIcon>
-              <Settings fontSize="small" />
+              <Email fontSize="small" />
             </ListItemIcon>
-            登録情報
-          </EditRegistryDialog>
+            メールアドレス
+          </EditEmailDialog>
+        </MenuItem>
+        <MenuItem>
+          <EditPasswordDialog setAnchorEl={setAnchorEl}>
+            <ListItemIcon>
+              <Lock fontSize="small" />
+            </ListItemIcon>
+            パスワード
+          </EditPasswordDialog>
         </MenuItem>
         <Divider />
         <MenuItem>
@@ -120,6 +120,6 @@ export const AccountMenu = () => {
           </button>
         </MenuItem>
       </Menu>
-    </>
+    </div>
   )
 }
