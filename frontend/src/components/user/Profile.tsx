@@ -60,7 +60,6 @@ export const Profile = () => {
         })
         .then((response) => {
           setCurrentUser(response.data)
-          console.log(response)
         })
         .catch((error) => {
           console.error(error.response.data)
@@ -275,7 +274,7 @@ const EditName = ({ name }: { name: string }) => {
       return await axiosInstance
         .patch(
           '/auth',
-          { name: data.get('name'), introduction: data.get('introduction') },
+          { name: data.get('name') },
           {
             headers: {
               'Content-Type': 'application/json',

@@ -4,6 +4,10 @@ module Overrides
       if @resource
         if @resource.send(resource_update_method, account_update_params)
           yield @resource if block_given?
+          if account_update_params.key?(:introduction)
+            @resource.introduction.strip_zenkaku!
+            @resource.save
+          end
           render json: @resource, methods: [:avatar_url]
         else
           render_update_error
