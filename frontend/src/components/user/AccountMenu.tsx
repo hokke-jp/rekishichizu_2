@@ -2,8 +2,7 @@ import { logout } from '../session/session'
 import { CurrentUserContext } from './CurrentUserContext'
 import { EditEmailDialog } from './EditEmailDialog'
 import { EditPasswordDialog } from './EditPasswordDialog'
-import { EditProfileDialog } from './EditProfileDialog'
-import { Lock, Edit, Email } from '@mui/icons-material'
+import { Lock, Email } from '@mui/icons-material'
 import Logout from '@mui/icons-material/Logout'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Box from '@mui/material/Box'
@@ -86,14 +85,14 @@ export const AccountMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
+        {/* <MenuItem>
           <EditProfileDialog setAnchorEl={setAnchorEl}>
             <ListItemIcon>
               <Edit fontSize="small" />
             </ListItemIcon>
             プロフィール
           </EditProfileDialog>
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem>
           <EditEmailDialog setAnchorEl={setAnchorEl}>
             <ListItemIcon>

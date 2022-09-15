@@ -1,6 +1,5 @@
 import Logo from '../images/app_logo.png'
 import CreateAccount from '../images/create_account.svg'
-import DefaultUserImage from '../images/default_user_image.jpg'
 import EasyLogin from '../images/easy_login.svg'
 import Login from '../images/login.svg'
 import Post from '../images/post.svg'
@@ -25,14 +24,9 @@ export const SideBar = () => {
         <div className="w-full mb-6">
           {currentUser ? (
             <>
-              <Avatar
-                url={currentUser.avatar_url}
-                className="h-8 w-8 rounded-full"
-              />
               <IconWrapper path={currentUser.name} tooltip="マイページ">
-                <img
-                  src={DefaultUserImage}
-                  alt="User image"
+                <Avatar
+                  url={currentUser.avatar_url}
                   className="h-8 w-8 rounded-full"
                 />
               </IconWrapper>

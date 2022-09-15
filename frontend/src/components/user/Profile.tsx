@@ -1,11 +1,10 @@
 import { axiosInstance } from '../../utils/axios'
 import { Notfound } from '../Notfound'
 import { getToken } from '../session/getToken'
-import { setCookie } from '../session/handleCookie'
 import { AccountMenu } from './AccountMenu'
 import { Avatar } from './Avatar'
 import { CurrentUserContext, User } from './CurrentUserContext'
-import { Edit } from '@mui/icons-material'
+import { AddPhotoAlternateOutlined, Edit } from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -23,6 +22,7 @@ export const Profile = () => {
   const [user, setUser] = useState<User | null>(null)
   const { currentUser } = useContext(CurrentUserContext)
   const [isLoading, setIsLoading] = useState(true)
+  const { setCurrentUser } = useContext(CurrentUserContext)
   useEffect(() => {
     ;(async () => {
       await axiosInstance
@@ -39,6 +39,30 @@ export const Profile = () => {
   }, [params.userName])
   const isMypage = currentUser?.name === user?.name
 
+  const handleChange = (e: { target: HTMLInputElement | null }) => {
+    const target = e.target
+    const tokens = getToken()
+    ;(async () => {
+      if (target === null || target.files === null) return
+      const params = new FormData()
+      params.append('avatar', target.files[0])
+      return await axiosInstance
+        .patch('/auth', params, {
+          headers: {
+            'Content-Type': 'application/json',
+            ...tokens
+          }
+        })
+        .then((response) => {
+          setCurrentUser(response.data)
+          console.log(response)
+        })
+        .catch((error) => {
+          console.error(error.response.data)
+        })
+    })()
+  }
+
   return (
     <>
       {isLoading ? (
@@ -53,10 +77,36 @@ export const Profile = () => {
                 {isMypage && <AccountMenu />}
 
                 <div className="flex justify-center">
-                  <Avatar
-                    url={user?.avatar_url}
-                    className="h-48 w-48 rounded-full"
-                  />
+                  {isMypage ? (
+                    <>
+                      <input
+                        type="file"
+                        id="file"
+                        onChange={handleChange}
+                        hidden
+                      />
+                      <label
+                        htmlFor="file"
+                        className="avatar-wrapper relative h-48 w-48 rounded-full overflow-hidden"
+                      >
+                        <Avatar
+                          url={currentUser?.avatar_url}
+                          className="h-48 w-48"
+                        />
+                        <div className="absolute bottom-0 flex justify-center items-center  w-48 h-12 bg-neutral-900 opacity-0">
+                          <AddPhotoAlternateOutlined
+                            color="action"
+                            sx={{ fontSize: 40, color: 'white' }}
+                          />
+                        </div>
+                      </label>
+                    </>
+                  ) : (
+                    <Avatar
+                      url={user?.avatar_url}
+                      className="h-48 w-48 rounded-full"
+                    />
+                  )}
                 </div>
                 <div className="max-w-screen-xl px-8 pt-6 pb-12 mx-auto sm:px-16 lg:px-24">
                   <div className="max-w-3xl mx-auto text-center">
@@ -154,13 +204,7 @@ const EditIntroduction = ({
           }
         )
         .then((response) => {
-          const keysAndValues = [
-            { key: 'uid', value: response.headers.uid },
-            { key: 'client', value: response.headers.client },
-            { key: 'access-token', value: response.headers['access-token'] }
-          ]
-          setCookie(keysAndValues)
-          setCurrentUser(response.data.data)
+          setCurrentUser(response.data)
         })
         .catch((error) => {
           console.error(error.response.data)
@@ -177,7 +221,7 @@ const EditIntroduction = ({
             type="text"
             variant="outlined"
             name="introduction"
-            value={newIntroduction}
+            value={newIntroduction || ''}
             autoFocus
             multiline
             rows={4}
@@ -234,13 +278,7 @@ const EditName = ({ name }: { name: string }) => {
           }
         )
         .then((response) => {
-          const keysAndValues = [
-            { key: 'uid', value: response.headers.uid },
-            { key: 'client', value: response.headers.client },
-            { key: 'access-token', value: response.headers['access-token'] }
-          ]
-          setCookie(keysAndValues)
-          setCurrentUser(response.data.data)
+          setCurrentUser(response.data)
           navigate(`/${data.get('name')}`)
         })
         .catch((error) => {

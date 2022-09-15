@@ -36,8 +36,8 @@
   line-height: 1;
 }
 
-.tmpcss {
-  transform: translate(-50%, 0);
+.avatar-wrapper:hover div {
+  opacity: 60%;
 }
 
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */

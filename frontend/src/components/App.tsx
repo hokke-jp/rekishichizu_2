@@ -32,7 +32,7 @@ export const App = () => {
     if (!token) return
     loginWithCookie()
       .then((response) => {
-        setCurrentUser(response.data.data)
+        setCurrentUser(response.data)
       })
       .catch((error) => {
         console.log(error)

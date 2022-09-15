@@ -4,7 +4,7 @@ export const Avatar = ({
   url,
   className
 }: {
-  url: string | null
+  url: string | null | undefined
   className: string
 }) => {
   return (

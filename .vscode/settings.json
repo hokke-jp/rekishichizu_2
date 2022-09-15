@@ -7,6 +7,9 @@
   "editor.formatOnSave": true,
   "editor.lineNumbers": "on",
   "editor.wordWrap": "on",
+  "emmet.includeLanguages": {
+    "postcss": "css"
+  },
   "eslint.packageManager": "yarn",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
