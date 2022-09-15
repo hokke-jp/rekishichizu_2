@@ -44,6 +44,11 @@ export const Profile = () => {
     const tokens = getToken()
     ;(async () => {
       if (target === null || target.files === null) return
+      const sizeInMegabytes = target.files[0].size / 1024 / 1024
+      if (sizeInMegabytes > 2) {
+        alert('2MB以下のファイルを選択してください。')
+        return
+      }
       const params = new FormData()
       params.append('avatar', target.files[0])
       return await axiosInstance
@@ -82,6 +87,7 @@ export const Profile = () => {
                       <input
                         type="file"
                         id="file"
+                        accept="image/jpeg,image/png"
                         onChange={handleChange}
                         hidden
                       />

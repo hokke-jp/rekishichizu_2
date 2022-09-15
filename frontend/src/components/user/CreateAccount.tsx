@@ -53,6 +53,7 @@ export const CreateAccount = () => {
         .catch((error) => {
           console.error(error)
           removeCookie(['uid', 'client', 'access-token'])
+          console.log(error)
           setErrorMessage(error.response.data.errors.full_messages.join('\n'))
         })
     })()

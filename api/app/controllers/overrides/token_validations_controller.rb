@@ -1,6 +1,5 @@
 module Overrides
   class TokenValidationsController < DeviseTokenAuth::TokenValidationsController
-
     def validate_token
       if @resource
         yield @resource if block_given?
@@ -8,7 +7,7 @@ module Overrides
       else
         render json: {
           success: false,
-          errors: ["Invalid login credentials"]
+          errors: ['Invalid login credentials']
         }, status: 401
       end
     end

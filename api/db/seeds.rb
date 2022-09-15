@@ -8,4 +8,4 @@ user = User.create!(
   email: 'sample@mail.com',
   password: 'password'
 )
-user.avatar.attach(io: File.open(Rails.root + 'db/seed_data/avatar_8.jpg'), filename: 'avatar.jpg', content_type: 'image/jpg')
+user.avatar.attach(io: File.open(Rails.root.join('db/seed_data/avatar_8.jpg')), filename: 'avatar.jpg', content_type: 'image/jpg')

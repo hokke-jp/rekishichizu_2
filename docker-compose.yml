@@ -20,8 +20,6 @@ services:
       #   target: /etc/mysql/conf.d/
     ports:
       - 3306:3306
-    tty: true
-    stdin_open: true
 
   api:
     build:
