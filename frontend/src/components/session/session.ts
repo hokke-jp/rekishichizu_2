@@ -1,4 +1,4 @@
-import { axiosInstance } from '../../utils/axios'
+import { axiosInstance } from '../../Utils/axios'
 import { getToken } from './getToken'
 import { removeCookie, setCookie } from './handleCookie'
 

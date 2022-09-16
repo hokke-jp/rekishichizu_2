@@ -1,4 +1,4 @@
-import { axiosInstance } from '../utils/axios.js'
+import { axiosInstance } from '../Utils/axios.js'
 import { OutlinedCard } from './OutlinedCard'
 import { useState, useEffect } from 'react'
 

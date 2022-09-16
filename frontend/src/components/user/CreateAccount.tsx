@@ -1,4 +1,4 @@
-import { axiosInstance } from '../../utils/axios'
+import { axiosInstance } from '../../Utils/axios'
 import { removeCookie, setCookie } from '../session/handleCookie'
 import { CurrentUserContext } from './CurrentUserContext'
 import { VisibilityOff, Visibility } from '@mui/icons-material'

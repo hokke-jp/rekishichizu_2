@@ -1,4 +1,4 @@
-import { axiosInstance } from '../../utils/axios'
+import { axiosInstance } from '../../Utils/axios'
 import { Notfound } from '../Notfound'
 import { getToken } from '../session/getToken'
 import { AccountMenu } from './AccountMenu'
@@ -42,29 +42,27 @@ export const Profile = () => {
   const handleChange = (e: { target: HTMLInputElement | null }) => {
     const target = e.target
     const tokens = getToken()
-    ;(async () => {
-      if (target === null || target.files === null) return
-      const sizeInMegabytes = target.files[0].size / 1024 / 1024
-      if (sizeInMegabytes > 2) {
-        alert('2MB以下のファイルを選択してください。')
-        return
-      }
-      const params = new FormData()
-      params.append('avatar', target.files[0])
-      return await axiosInstance
-        .patch('/auth', params, {
-          headers: {
-            'Content-Type': 'application/json',
-            ...tokens
-          }
-        })
-        .then((response) => {
-          setCurrentUser(response.data)
-        })
-        .catch((error) => {
-          console.error(error.response.data)
-        })
-    })()
+    if (target === null || target.files === null) return
+    const sizeInMegabytes = target.files[0].size / 1024 / 1024
+    if (sizeInMegabytes > 2) {
+      alert('2MB以下のファイルを選択してください。')
+      return
+    }
+    const params = new FormData()
+    params.append('avatar', target.files[0])
+    axiosInstance
+      .patch('/auth', params, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...tokens
+        }
+      })
+      .then((response) => {
+        setCurrentUser(response.data)
+      })
+      .catch((error) => {
+        console.error(error.response.data)
+      })
   }
 
   return (

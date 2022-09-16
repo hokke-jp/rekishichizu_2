@@ -1,9 +1,9 @@
+import { axiosInstance } from '../Utils/axios'
 import Logo from '../images/app_logo.png'
 import CreateAccount from '../images/create_account.svg'
 import EasyLogin from '../images/easy_login.svg'
 import Login from '../images/login.svg'
 import Post from '../images/post.svg'
-import { axiosInstance } from '../utils/axios'
 import { Avatar } from './user/Avatar'
 import { CurrentUserContext } from './user/CurrentUserContext'
 import { ButtonBase, Tooltip } from '@mui/material'
@@ -18,7 +18,7 @@ export const SideBar = () => {
     <>
       <div className="w-[72px]" />
       <aside className="fixed top-0 left-0 z-30 flex flex-col items-center justify-between h-screen w-[72px] bg-white shadow-xl shadow-gray-300">
-        <NavLink to="/" className="mt-12 hover:opacity-80">
+        <NavLink to="/" className="mt-12 hover:opacity-90">
           <img className="h-12 w-12 rounded-md" src={Logo} alt="App logo" />
         </NavLink>
         <div className="w-full mb-6">

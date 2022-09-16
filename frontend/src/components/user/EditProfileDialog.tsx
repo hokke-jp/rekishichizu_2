@@ -1,4 +1,4 @@
-import { axiosInstance } from '../../utils/axios'
+import { axiosInstance } from '../../Utils/axios'
 import { getToken } from '../session/getToken'
 import { setCookie } from '../session/handleCookie'
 import { CurrentUserContext } from './CurrentUserContext'
