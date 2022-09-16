@@ -1,8 +1,8 @@
-import { axiosInstance } from '../../utils/axios'
+import { logout } from '../session/session'
 import { CurrentUserContext } from './CurrentUserContext'
-import { EditProfileDialog } from './EditProfileDialog'
-import { EditRegistryDialog } from './EditRegistryDialog'
-import { Settings, Edit } from '@mui/icons-material'
+import { EditEmailDialog } from './EditEmailDialog'
+import { EditPasswordDialog } from './EditPasswordDialog'
+import { Lock, Email } from '@mui/icons-material'
 import Logout from '@mui/icons-material/Logout'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import Box from '@mui/material/Box'
@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import Cookies from 'js-cookie'
 import * as React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -27,45 +26,19 @@ export const AccountMenu = () => {
   }
   const navigate = useNavigate()
   const handleLogout = () => {
-    ;(async () => {
-      await axiosInstance
-        .delete('/auth/sign_out', {
-          params: {
-            uid: Cookies.get('uid'),
-            client: Cookies.get('client'),
-            // eslint-disable-next-line no-useless-computed-key
-            ['access-token']: Cookies.get('access-token')
-          }
-        })
-        .then(() => {
-          Cookies.remove('uid')
-          Cookies.remove('client')
-          Cookies.remove('access-token')
-          setCurrentUser(null)
-          navigate('/')
-        })
-        .catch((error) => {
-          console.error(error)
-          Cookies.remove('uid')
-          Cookies.remove('client')
-          Cookies.remove('access-token')
-          setCurrentUser(null)
-          navigate('/')
-        })
-    })()
+    logout()
+      .then(() => {
+        setCurrentUser(null)
+        navigate('/')
+      })
+      .catch(() => {
+        setCurrentUser(null)
+        navigate('/')
+      })
   }
   return (
-    <>
-      <Box
-        pt={1}
-        pr={2}
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          textAlign: 'center'
-        }}
-      >
+    <div className="fixed top-2 right-3">
+      <Box>
         <IconButton
           onClick={handleClick}
           size="small"
@@ -112,21 +85,29 @@ export const AccountMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
-          <EditProfileDialog>
+        {/* <MenuItem>
+          <EditProfileDialog setAnchorEl={setAnchorEl}>
             <ListItemIcon>
               <Edit fontSize="small" />
             </ListItemIcon>
             プロフィール
           </EditProfileDialog>
+        </MenuItem> */}
+        <MenuItem>
+          <EditEmailDialog setAnchorEl={setAnchorEl}>
+            <ListItemIcon>
+              <Email fontSize="small" />
+            </ListItemIcon>
+            メールアドレス
+          </EditEmailDialog>
         </MenuItem>
         <MenuItem>
-          <EditRegistryDialog>
+          <EditPasswordDialog setAnchorEl={setAnchorEl}>
             <ListItemIcon>
-              <Settings fontSize="small" />
+              <Lock fontSize="small" />
             </ListItemIcon>
-            登録情報
-          </EditRegistryDialog>
+            パスワード
+          </EditPasswordDialog>
         </MenuItem>
         <Divider />
         <MenuItem>
@@ -138,6 +119,6 @@ export const AccountMenu = () => {
           </button>
         </MenuItem>
       </Menu>
-    </>
+    </div>
   )
 }

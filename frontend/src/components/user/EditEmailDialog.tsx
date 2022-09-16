@@ -1,25 +1,17 @@
 import { axiosInstance } from '../../utils/axios'
 import { getToken } from '../session/getToken'
 import { setCookie } from '../session/handleCookie'
-import { CurrentUserContext } from './CurrentUserContext'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
-import {
-  Dispatch,
-  FormEvent,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useState
-} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Dispatch, FormEvent, ReactNode, SetStateAction, useState } from 'react'
 
-export const EditProfileDialog = ({
+export const EditEmailDialog = ({
   children,
   setAnchorEl
 }: {
@@ -34,18 +26,15 @@ export const EditProfileDialog = ({
     setOpen(false)
     setAnchorEl(null)
   }
-
-  const navigate = useNavigate()
-  const { setCurrentUser } = useContext(CurrentUserContext)
+  const tokens = getToken()
   const handleUpdate = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const tokens = getToken()
     const data = new FormData(event.currentTarget)
     ;(async () => {
       return await axiosInstance
         .patch(
           '/auth',
-          { name: data.get('name'), introduction: data.get('introduction') },
+          { email: data.get('email') },
           {
             headers: {
               'Content-Type': 'application/json',
@@ -60,8 +49,6 @@ export const EditProfileDialog = ({
             { key: 'access-token', value: response.headers['access-token'] }
           ]
           setCookie(keysAndValues)
-          setCurrentUser(response.data.data)
-          navigate(`/${data.get('name')}`)
         })
         .catch((error) => {
           console.error(error.response.data)
@@ -77,33 +64,29 @@ export const EditProfileDialog = ({
         {children}
       </button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle sx={{ pb: 0 }}>プロフィール更新</DialogTitle>
+        <DialogTitle sx={{ pb: 0 }}>メールアドレス変更</DialogTitle>
         <Box component="form" noValidate onSubmit={handleUpdate}>
           <DialogContent>
+            <DialogContentText>
+              現在のメールアドレス : {tokens.uid}
+            </DialogContentText>
             <TextField
               margin="normal"
               fullWidth
-              id="name"
-              label="ユーザー名"
-              type="text"
+              id="email"
+              label="新しいメールアドレス"
+              type="email"
               variant="standard"
-              name="name"
-              autoComplete="name"
+              name="email"
+              autoComplete="email"
               autoFocus
-            />
-            <TextField
-              margin="normal"
-              fullWidth
-              id="introduction"
-              label="紹介文"
-              type="text"
-              variant="standard"
-              name="introduction"
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>キャンセル</Button>
-            <Button type="submit">更新</Button>
+            <Button variant="contained" type="submit">
+              更新
+            </Button>
           </DialogActions>
         </Box>
       </Dialog>

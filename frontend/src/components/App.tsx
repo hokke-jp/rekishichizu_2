@@ -3,7 +3,7 @@ import { Notfound } from './Notfound'
 import { Map } from './map/Map'
 import { Posts } from './posts'
 import { Login } from './session/Login'
-import { loginWithCookie } from './session/loginWithCookie'
+import { loginWithCookie } from './session/session'
 import { CreateAccount } from './user/CreateAccount'
 import { CurrentUserContext } from './user/CurrentUserContext'
 import type { User } from './user/CurrentUserContext'
@@ -32,7 +32,7 @@ export const App = () => {
     if (!token) return
     loginWithCookie()
       .then((response) => {
-        setCurrentUser(response.data.data)
+        setCurrentUser(response.data)
       })
       .catch((error) => {
         console.log(error)

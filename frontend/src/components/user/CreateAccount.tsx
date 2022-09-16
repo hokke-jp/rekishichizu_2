@@ -1,4 +1,5 @@
 import { axiosInstance } from '../../utils/axios'
+import { removeCookie, setCookie } from '../session/handleCookie'
 import { CurrentUserContext } from './CurrentUserContext'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
@@ -19,7 +20,6 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import Cookies from 'js-cookie'
 import { FormEvent, useContext, useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
@@ -32,9 +32,8 @@ export const CreateAccount = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log(data)
+    setErrorMessage('')
     ;(async () => {
-      setErrorMessage('')
       return await axiosInstance
         .post('/auth', {
           name: data.get('name'),
@@ -42,17 +41,19 @@ export const CreateAccount = () => {
           password: data.get('password')
         })
         .then((response) => {
-          Cookies.set('uid', response.headers.uid)
-          Cookies.set('client', response.headers.client)
-          Cookies.set('access-token', response.headers['access-token'])
+          const keysAndValues = [
+            { key: 'uid', value: response.headers.uid },
+            { key: 'client', value: response.headers.client },
+            { key: 'access-token', value: response.headers['access-token'] }
+          ]
+          setCookie(keysAndValues)
           setCurrentUser(response.data.data)
           navigate(`/${response.data.data.name}`)
         })
         .catch((error) => {
           console.error(error)
-          Cookies.remove('uid')
-          Cookies.remove('client')
-          Cookies.remove('access-token')
+          removeCookie(['uid', 'client', 'access-token'])
+          console.log(error)
           setErrorMessage(error.response.data.errors.full_messages.join('\n'))
         })
     })()

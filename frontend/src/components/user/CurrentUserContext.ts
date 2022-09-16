@@ -9,6 +9,7 @@ export interface User {
   email: string
   image: string | null
   introduction: string | null
+  avatar_url: string | null
 }
 
 export const CurrentUserContext = createContext(
