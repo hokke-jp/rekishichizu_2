@@ -1,24 +1,30 @@
 import Cookies from 'js-cookie'
 
-interface KeyAndValue {
-  key: string
-  value: string
+export const setCookie = (tokens: string[]) => {
+  Cookies.set('uid', tokens[0])
+  Cookies.set('client', tokens[1])
+  Cookies.set('access-token', tokens[2])
 }
 
-export const setCookie = (keysAndValues: KeyAndValue[]): void => {
-  keysAndValues.forEach((keyAndValue) => {
-    Cookies.set(keyAndValue.key, keyAndValue.value)
-  })
+export const removeCookie = () => {
+  Cookies.remove('uid')
+  Cookies.remove('client')
+  Cookies.remove('access-token')
 }
 
-export const removeCookie = (keys: string[]): void => {
-  keys.forEach((key) => {
-    Cookies.remove(key)
-  })
-}
-
-export const getCookie = (keys: string[]): (string | undefined)[] => {
-  return keys.map((key: string) => {
-    return Cookies.get(key)
-  })
+export const getToken = () => {
+  const cookies = [
+    Cookies.get('uid'),
+    Cookies.get('client'),
+    Cookies.get('access-token')
+  ]
+  // Cookieの型(string|undefined)からundefinedを取り除く
+  const tokens = cookies.filter(
+    (item): item is string => typeof item === 'string'
+  )
+  return {
+    uid: tokens[0],
+    client: tokens[1],
+    'access-token': tokens[2]
+  }
 }

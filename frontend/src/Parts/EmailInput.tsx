@@ -1,6 +1,6 @@
 import { TextField } from '@mui/material'
 
-export const EmailInput = () => {
+export const EmailInput = ({ autoFocus = false }: { autoFocus?: boolean }) => {
   return (
     <TextField
       margin="none"
@@ -10,7 +10,7 @@ export const EmailInput = () => {
       label="メールアドレス"
       name="email"
       autoComplete="email"
-      autoFocus
+      autoFocus={autoFocus}
     />
   )
 }

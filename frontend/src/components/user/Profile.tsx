@@ -1,6 +1,3 @@
-import { axiosInstance } from '../../Utils/axios'
-import { Notfound } from '../Notfound'
-import { getToken } from '../session/getToken'
 import { AccountMenu } from './AccountMenu'
 import { Avatar } from './Avatar'
 import { CurrentUserContext, User } from './CurrentUserContext'
@@ -14,15 +11,17 @@ import {
   Tooltip
 } from '@mui/material'
 import CircularProgress from '@mui/material/CircularProgress'
+import { axiosInstance } from 'Utils/axios'
+import { Notfound } from 'components/Notfound'
+import { getToken } from 'components/session/handleCookie'
 import { FormEvent, useContext, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 export const Profile = () => {
   const params = useParams()
   const [user, setUser] = useState<User | null>(null)
-  const { currentUser } = useContext(CurrentUserContext)
   const [isLoading, setIsLoading] = useState(true)
-  const { setCurrentUser } = useContext(CurrentUserContext)
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
   useEffect(() => {
     ;(async () => {
       await axiosInstance

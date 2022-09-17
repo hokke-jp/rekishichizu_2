@@ -17,6 +17,7 @@ export const FormAlert = ({
           }}
           severity="error"
           sx={{ alignItems: 'center' }}
+          style={{ whiteSpace: 'pre-wrap' }}
         >
           {errorMessage}
         </Alert>

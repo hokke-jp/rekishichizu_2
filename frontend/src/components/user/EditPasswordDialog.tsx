@@ -1,6 +1,3 @@
-import { axiosInstance } from '../../Utils/axios'
-import { getToken } from '../session/getToken'
-import { setCookie } from '../session/handleCookie'
 import { VisibilityOff, Visibility } from '@mui/icons-material'
 import {
   Box,
@@ -16,6 +13,8 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
+import { axiosInstance } from 'Utils/axios'
+import { getToken, setCookie } from 'components/session/handleCookie'
 import { Dispatch, FormEvent, ReactNode, SetStateAction, useState } from 'react'
 
 export const EditPasswordDialog = ({
@@ -50,12 +49,8 @@ export const EditPasswordDialog = ({
           }
         )
         .then((response) => {
-          const keysAndValues = [
-            { key: 'uid', value: response.headers.uid },
-            { key: 'client', value: response.headers.client },
-            { key: 'access-token', value: response.headers['access-token'] }
-          ]
-          setCookie(keysAndValues)
+          const headers = response.headers
+          setCookie([headers.uid, headers.client, headers['access-token']])
         })
         .catch((error) => {
           console.error(error.response.data)

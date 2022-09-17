@@ -1,27 +1,5 @@
-import { axiosInstance } from '../../Utils/axios'
-import { getToken } from './getToken'
-import { removeCookie, setCookie } from './handleCookie'
-
-interface Data {
-  email: string | undefined
-  password: string | undefined
-}
-export const login = async (data: Data) => {
-  return await axiosInstance
-    .post('/auth/sign_in', {
-      email: data.email,
-      password: data.password
-    })
-    .then((response) => {
-      const keysAndValues = [
-        { key: 'uid', value: response.headers.uid },
-        { key: 'client', value: response.headers.client },
-        { key: 'access-token', value: response.headers['access-token'] }
-      ]
-      setCookie(keysAndValues)
-      return response
-    })
-}
+import { axiosInstance } from 'Utils/axios'
+import { getToken, removeCookie } from 'components/session/handleCookie'
 
 export const loginWithCookie = async () => {
   const tokens = getToken()
@@ -34,7 +12,7 @@ export const loginWithCookie = async () => {
     })
     .catch((error) => {
       // トークンの期限が切れている等,認証に失敗した場合
-      removeCookie(['uid', 'client', 'access-token'])
+      removeCookie()
       throw new Error(error)
     })
 }
@@ -49,11 +27,11 @@ export const logout = async () => {
       }
     })
     .then(() => {
-      removeCookie(['uid', 'client', 'access-token'])
+      removeCookie()
     })
     .catch((error) => {
       console.error(error)
-      removeCookie(['uid', 'client', 'access-token'])
+      removeCookie()
       throw new Error(error)
     })
 }

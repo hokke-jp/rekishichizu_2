@@ -1,7 +1,3 @@
-import { axiosInstance } from '../../Utils/axios'
-import { getToken } from '../session/getToken'
-import { setCookie } from '../session/handleCookie'
-import { CurrentUserContext } from './CurrentUserContext'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -9,6 +5,9 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import TextField from '@mui/material/TextField'
+import { axiosInstance } from 'Utils/axios'
+import { getToken, setCookie } from 'components/session/handleCookie'
+import { CurrentUserContext } from 'components/user/CurrentUserContext'
 import {
   Dispatch,
   FormEvent,
@@ -54,12 +53,8 @@ export const EditProfileDialog = ({
           }
         )
         .then((response) => {
-          const keysAndValues = [
-            { key: 'uid', value: response.headers.uid },
-            { key: 'client', value: response.headers.client },
-            { key: 'access-token', value: response.headers['access-token'] }
-          ]
-          setCookie(keysAndValues)
+          const headers = response.headers
+          setCookie([headers.uid, headers.client, headers['access-token']])
           setCurrentUser(response.data.data)
           navigate(`/${data.get('name')}`)
         })

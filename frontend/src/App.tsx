@@ -6,18 +6,6 @@ import Cookies from 'js-cookie'
 import { useEffect, useState } from 'react'
 
 export const App = () => {
-  // if (sessionStorage.getItem('isAlreadyDisplayed') === null) {
-  //   sessionStorage.setItem('isAlreadyDisplayed', 'true')
-  //   const display = document.createElement('div')
-  //   const text = document.createElement('div')
-  //   display.appendChild(text)
-  //   document.body.appendChild(display)
-  //   text.innerText = '歴史地図へようこそ.'
-  //   display.className = 'displaycss'
-  //   text.className = 'textcss'
-  // }
-  // display → welcomDisplay / textcss → welcomText
-
   const [currentUser, setCurrentUser] = useState<User | null>(null)
   const token = Cookies.get('access-token')
   useEffect(() => {
