@@ -1,4 +1,4 @@
-import DefaultUserImage from '../../images/default_user_image.jpg'
+import DefaultUserImage from 'Images/default_user_image.jpg'
 
 export const Avatar = ({
   url,

@@ -9,14 +9,11 @@ export const useLogin = () => {
   const navigate = useNavigate()
 
   const [errorMessage, setErrorMessage] = useState('')
-  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setErrorMessage('')
-    const data = new FormData(event.currentTarget)
+  const login = (email: string | undefined, password: string | undefined) => {
     axiosInstance
       .post('/auth/sign_in', {
-        email: data.get('email')?.toString(),
-        password: data.get('password')?.toString()
+        email,
+        password
       })
       .then((response) => {
         const headers = response.headers
@@ -28,6 +25,12 @@ export const useLogin = () => {
         console.error(error)
         setErrorMessage('メールアドレスもしくはパスワードに誤りがあります')
       })
+  }
+  const handleLogin = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setErrorMessage('')
+    const data = new FormData(event.currentTarget)
+    login(data.get('email')?.toString(), data.get('password')?.toString())
   }
 
   return { errorMessage, setErrorMessage, handleLogin }

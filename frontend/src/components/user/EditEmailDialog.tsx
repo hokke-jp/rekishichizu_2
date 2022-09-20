@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import TextField from '@mui/material/TextField'
+import { EmailInput } from 'Parts/EmailInput'
 import { axiosInstance } from 'Utils/axios'
 import { getToken, setCookie } from 'components/session/handleCookie'
 import { Dispatch, FormEvent, ReactNode, SetStateAction, useState } from 'react'
@@ -18,7 +18,7 @@ export const EditEmailDialog = ({
   setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>
 }) => {
   const [open, setOpen] = useState(false)
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
@@ -29,33 +29,31 @@ export const EditEmailDialog = ({
   const handleUpdate = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    ;(async () => {
-      return await axiosInstance
-        .patch(
-          '/auth',
-          { email: data.get('email') },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              ...tokens
-            }
+    axiosInstance
+      .patch(
+        '/auth',
+        { email: data.get('email') },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            ...tokens
           }
-        )
-        .then((response) => {
-          const headers = response.headers
-          setCookie([headers.uid, headers.client, headers['access-token']])
-        })
-        .catch((error) => {
-          console.error(error.response.data)
-        })
-    })()
+        }
+      )
+      .then((response) => {
+        const headers = response.headers
+        setCookie([headers.uid, headers.client, headers['access-token']])
+      })
+      .catch((error) => {
+        console.error(error.response.data)
+      })
     setOpen(false)
     setAnchorEl(null)
   }
 
   return (
     <>
-      <button className="flex items-center" onClick={handleClickOpen}>
+      <button className="flex items-center" onClick={handleOpen}>
         {children}
       </button>
       <Dialog open={open} onClose={handleClose}>
@@ -65,17 +63,7 @@ export const EditEmailDialog = ({
             <DialogContentText>
               現在のメールアドレス : {tokens.uid}
             </DialogContentText>
-            <TextField
-              margin="normal"
-              fullWidth
-              id="email"
-              label="新しいメールアドレス"
-              type="email"
-              variant="standard"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
+            <EmailInput autoFocus />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>キャンセル</Button>

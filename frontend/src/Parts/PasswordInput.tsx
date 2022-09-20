@@ -8,7 +8,11 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 
-export const PasswordInput = () => {
+export const PasswordInput = ({
+  autoFocus = false
+}: {
+  autoFocus?: boolean
+}) => {
   // パスワード表示切り替え機能
   interface State {
     amount: string
@@ -47,13 +51,14 @@ export const PasswordInput = () => {
       </InputLabel>
       <OutlinedInput
         required
-        fullWidth
+        autoFocus={autoFocus}
+        id="outlined-adornment-password"
         name="password"
         type={values.showPassword ? 'text' : 'password'}
-        id="outlined-adornment-password"
-        autoComplete="current-password"
         value={values.password}
+        autoComplete="current-password"
         label="パスワード"
+        fullWidth
         onChange={handleClick('password')}
         endAdornment={
           <InputAdornment position="end">

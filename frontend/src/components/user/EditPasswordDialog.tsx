@@ -25,7 +25,7 @@ export const EditPasswordDialog = ({
   setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>
 }) => {
   const [open, setOpen] = useState(false)
-  const handleClickOpen = () => {
+  const handleOpen = () => {
     setOpen(true)
   }
   const handleClose = () => {
@@ -92,7 +92,7 @@ export const EditPasswordDialog = ({
 
   return (
     <>
-      <button className="flex items-center" onClick={handleClickOpen}>
+      <button className="flex items-center" onClick={handleOpen}>
         {children}
       </button>
       <Dialog open={open} onClose={handleClose}>

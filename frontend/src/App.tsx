@@ -15,8 +15,7 @@ export const App = () => {
       .then((response) => {
         setCurrentUser(response.data)
       })
-      .catch((error) => {
-        console.log(error)
+      .catch(() => {
         setCurrentUser(null)
       })
   }, [token])
