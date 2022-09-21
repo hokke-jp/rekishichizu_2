@@ -1,11 +1,11 @@
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { setCookie } from 'components/session/handleCookie'
-import { CurrentUserContext } from 'components/user/CurrentUserContext'
-import { useContext, useState, FormEvent } from 'react'
+import { setCookie } from 'Utils/handleCookie'
+import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const useLogin = () => {
-  const { setCurrentUser } = useContext(CurrentUserContext)
+  const { setCurrentUser } = useCurrentUserContext()
   const navigate = useNavigate()
 
   const [errorMessage, setErrorMessage] = useState('')

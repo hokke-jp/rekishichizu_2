@@ -1,13 +1,12 @@
 import { AddPhotoAlternateOutlined } from '@mui/icons-material'
 import { ButtonBase } from '@mui/material'
 import { Avatar } from 'Templates/Avatar'
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken } from 'components/session/handleCookie'
-import { CurrentUserContext } from 'components/user/CurrentUserContext'
-import { useContext } from 'react'
+import { getToken } from 'Utils/handleCookie'
 
 export const ProfileEditableAvatar = () => {
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
+  const { currentUser, setCurrentUser } = useCurrentUserContext()
   const handleChange = (e: { target: HTMLInputElement | null }) => {
     const target = e.target
     const tokens = getToken()

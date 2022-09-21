@@ -3,20 +3,20 @@ import Cookies from 'js-cookie'
 export const setCookie = (tokens: string[]) => {
   Cookies.set('uid', tokens[0])
   Cookies.set('client', tokens[1])
-  Cookies.set('access-token', tokens[2])
+  Cookies.set('accessToken', tokens[2])
 }
 
 export const removeCookie = () => {
   Cookies.remove('uid')
   Cookies.remove('client')
-  Cookies.remove('access-token')
+  Cookies.remove('accessToken')
 }
 
 export const getToken = () => {
   const cookies = [
     Cookies.get('uid'),
     Cookies.get('client'),
-    Cookies.get('access-token')
+    Cookies.get('accessToken')
   ]
   // Cookieの型(string|undefined)からundefinedを取り除く
   const tokens = cookies.filter(

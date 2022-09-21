@@ -1,16 +1,16 @@
 import { Edit } from '@mui/icons-material'
 import { Box, TextField, Button, Tooltip } from '@mui/material'
 import { ProfileName } from 'Templates/ProfileName'
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken } from 'components/session/handleCookie'
-import { CurrentUserContext } from 'components/user/CurrentUserContext'
-import { useState, useContext, FormEvent } from 'react'
+import { getToken } from 'Utils/handleCookie'
+import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const ProfileEditableName = () => {
   const [isFocus, setIsFocus] = useState(false)
   const navigate = useNavigate()
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
+  const { currentUser, setCurrentUser } = useCurrentUserContext()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = currentUser!
   const [newName, setNewName] = useState(user.name)

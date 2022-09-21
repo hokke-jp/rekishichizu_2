@@ -1,13 +1,15 @@
+import { User, useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { User, CurrentUserContext } from 'components/user/CurrentUserContext'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 export const useProfile = () => {
   const params = useParams()
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const { currentUser } = useContext(CurrentUserContext)
+  const { currentUser } = useCurrentUserContext()
+  const isMypage = currentUser?.name === user?.name
+  // fetchUser
   useEffect(() => {
     axiosInstance
       .get(`/users/${params.userName}`, {})
@@ -21,6 +23,5 @@ export const useProfile = () => {
         setIsLoading(false)
       })
   }, [params.userName])
-  const isMypage = currentUser?.name === user?.name
   return { isLoading, isMypage, user }
 }

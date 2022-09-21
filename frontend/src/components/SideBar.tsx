@@ -1,18 +1,18 @@
-import { Avatar } from '../Templates/Avatar'
-import { axiosInstance } from '../Utils/axios'
-import { CurrentUserContext } from './user/CurrentUserContext'
 import { ButtonBase, Tooltip } from '@mui/material'
 import Logo from 'Images/app_logo.png'
 import CreateAccount from 'Images/create_account.svg'
 import EasyLogin from 'Images/easy_login.svg'
 import Login from 'Images/login.svg'
 import Post from 'Images/post.svg'
-import Cookies from 'js-cookie'
-import { ReactNode, useContext } from 'react'
+import { Avatar } from 'Templates/Avatar'
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
+import { axiosInstance } from 'Utils/axios'
+import { setCookie } from 'Utils/handleCookie'
+import { ReactNode } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 
 export const SideBar = () => {
-  const { currentUser } = useContext(CurrentUserContext)
+  const { currentUser } = useCurrentUserContext()
 
   return (
     <>
@@ -91,26 +91,23 @@ const IconWrapper = ({
 }
 
 const EasyLoginWrapper = ({ children }: { children: ReactNode }) => {
-  const { setCurrentUser } = useContext(CurrentUserContext)
+  const { setCurrentUser } = useCurrentUserContext()
   const navigate = useNavigate()
   const handleClick = () => {
-    ;(async () => {
-      await axiosInstance
-        .post('/auth/sign_in', {
-          email: 'sample@mail.com',
-          password: 'password'
-        })
-        .then((response) => {
-          Cookies.set('uid', response.headers.uid)
-          Cookies.set('client', response.headers.client)
-          Cookies.set('access-token', response.headers['access-token'])
-          setCurrentUser(response.data.data)
-          navigate(`/${response.data.data.name}`)
-        })
-        .catch((error) => {
-          console.error(error)
-        })
-    })()
+    axiosInstance
+      .post('/auth/sign_in', {
+        email: 'sample@mail.com',
+        password: 'password'
+      })
+      .then((response) => {
+        const headers = response.headers
+        setCookie([headers.uid, headers.client, headers['access-token']])
+        setCurrentUser(response.data.data)
+        navigate(`/${response.data.data.name}`)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
   return (
     <Tooltip title="簡単ログイン" placement="right">

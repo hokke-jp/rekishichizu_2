@@ -1,14 +1,14 @@
 import { ProfileIntroduction } from './ProfileIntroduction'
 import { Edit } from '@mui/icons-material'
 import { Box, TextField, Grid, Button, Tooltip } from '@mui/material'
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken } from 'components/session/handleCookie'
-import { CurrentUserContext } from 'components/user/CurrentUserContext'
-import { useState, useContext, FormEvent } from 'react'
+import { getToken } from 'Utils/handleCookie'
+import { useState, FormEvent } from 'react'
 
 export const ProfileEditableIntroducation = () => {
   const [isFocus, setIsFocus] = useState(false)
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
+  const { currentUser, setCurrentUser } = useCurrentUserContext()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = currentUser!
   const [newIntroduction, setNewIntroduction] = useState(user.introduction)

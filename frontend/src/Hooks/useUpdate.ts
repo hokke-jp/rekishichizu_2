@@ -1,19 +1,13 @@
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken, setCookie } from 'components/session/handleCookie'
-import { CurrentUserContext } from 'components/user/CurrentUserContext'
-import {
-  useState,
-  FormEvent,
-  Dispatch,
-  SetStateAction,
-  useContext
-} from 'react'
+import { getToken, setCookie } from 'Utils/handleCookie'
+import { useState, FormEvent, Dispatch, SetStateAction } from 'react'
 
 export const useUpdate = (
   setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>
 ) => {
   const [open, setOpen] = useState(false)
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext)
+  const { currentUser, setCurrentUser } = useCurrentUserContext()
   const handleOpen = () => {
     setOpen(true)
   }
@@ -36,8 +30,8 @@ export const useUpdate = (
         }
       })
       .then((response) => {
-        const headers = response.headers
         setCurrentUser(response.data)
+        const headers = response.headers
         setCookie([headers.uid, headers.client, headers['access-token']])
       })
       .catch((error) => {
