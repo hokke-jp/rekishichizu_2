@@ -1,4 +1,4 @@
-import { Email } from '@mui/icons-material'
+import { Lock } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -7,33 +7,32 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { useUpdate } from 'Hooks/useUpdate'
-import { EmailInput } from 'Parts/EmailInput'
-import { ProfileMenuItem } from 'Templates/ProfileMenuItem'
+import { PasswordInput } from 'Parts/PasswordInput'
+import { ProfileMenuItem } from 'Templates/Profile/ProfileMenuItem'
 import { Dispatch, SetStateAction } from 'react'
 
-export const ProfileDialogEmail = ({
+export const DialogPassword = ({
   setAnchorEl
 }: {
   setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>
 }) => {
-  const { currentUser, open, handleOpen, handleClose, handleUpdate } =
-    useUpdate(setAnchorEl)
+  const { open, handleOpen, handleClose, handleUpdate } = useUpdate(setAnchorEl)
 
   return (
     <>
       <ProfileMenuItem
         handleFunction={handleOpen}
-        icon={<Email fontSize="small" />}
-        text="メールアドレス"
+        icon={<Lock fontSize="small" />}
+        text="パスワード"
       />
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle sx={{ pb: 0 }}>メールアドレス変更</DialogTitle>
+        <DialogTitle sx={{ pb: 0 }}>パスワード変更</DialogTitle>
         <Box component="form" noValidate onSubmit={handleUpdate}>
           <DialogContent>
             <DialogContentText sx={{ mb: 3 }}>
-              現在のメールアドレス : {currentUser?.email}
+              新しいパスワードを入力してください。
             </DialogContentText>
-            <EmailInput autoFocus />
+            <PasswordInput autoFocus />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>キャンセル</Button>

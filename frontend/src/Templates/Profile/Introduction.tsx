@@ -1,4 +1,4 @@
-export const ProfileIntroduction = ({
+export const Introduction = ({
   introduction
 }: {
   introduction: string | null

@@ -1,10 +1,10 @@
-import { GoogleMapsContext } from 'components/map/GoogleMapsContext'
-import { useContext, useMemo, useState } from 'react'
+import { useGoogleMapsContext } from 'Utils/GoogleMapsContext'
+import { useMemo, useState } from 'react'
 
 export const GeoLocation = () => {
   const [isLoading, setIsLoading] = useState(false)
   const geoInfoWindow = useMemo(() => new google.maps.InfoWindow(), [])
-  const { googleMap } = useContext(GoogleMapsContext)
+  const { googleMap } = useGoogleMapsContext()
   const geoLocation = () => {
     geoInfoWindow.close()
 

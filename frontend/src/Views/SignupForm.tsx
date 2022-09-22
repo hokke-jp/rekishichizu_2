@@ -6,8 +6,8 @@ import { FormButton } from 'Parts/FormButton'
 import { FormTitle } from 'Parts/FormTitle'
 import { NameInput } from 'Parts/NameInput'
 import { PasswordInput } from 'Parts/PasswordInput'
-import { FormAlert } from 'Templates/FormAlert'
-import { FormLink } from 'Templates/FormLink'
+import { Alert } from 'Templates/Form/Alert'
+import { Link } from 'Templates/Form/Link'
 
 export const SignupForm = () => {
   const { errorMessage, setErrorMessage, handleSignup } = useSignup()
@@ -24,10 +24,7 @@ export const SignupForm = () => {
         }}
       >
         <FormTitle text="アカウント作成" />
-        <FormAlert
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-        />
+        <Alert errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
         <Box
           component="form"
           onSubmit={handleSignup}
@@ -45,7 +42,7 @@ export const SignupForm = () => {
           <FormButton text="作成" />
         </Box>
         <Box sx={{ alignSelf: 'flex-end' }}>
-          <FormLink to="/login" text="ログイン画面へ" />
+          <Link to="/login" text="ログイン画面へ" />
         </Box>
       </Box>
     </Container>

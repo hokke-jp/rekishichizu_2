@@ -1,7 +1,7 @@
-import { ProfileStatus } from 'Templates/ProfileStatus'
+import { Status } from 'Templates/Profile/Status'
 import { ReactNode } from 'react'
 
-export const ProfileLayout = ({
+export const Layout = ({
   avatar,
   name,
   introduction
@@ -18,7 +18,7 @@ export const ProfileLayout = ({
       <hr className="h-5" />
       <div className="w-3/4 text-center">{introduction}</div>
       <hr className="h-20" />
-      <ProfileStatus />
+      <Status />
     </section>
   )
 }

@@ -1,6 +1,6 @@
 import { ButtonBase } from '@mui/material'
 
-export const ProfileStatus = () => {
+export const Status = () => {
   return (
     <div className="w-full">
       <dl className="grid grid-cols-1 gap-16 sm:grid-cols-3">

@@ -1,6 +1,6 @@
-import { FullScreen } from 'components/map/FullScreen'
-import { GeoLocation } from 'components/map/GeoLocation'
-import { Overall } from 'components/map/Overall'
+import { FullScreen } from 'Templates/Map/FullScreen'
+import { GeoLocation } from 'Templates/Map/GeoLocation'
+import { Overall } from 'Templates/Map/Overall'
 
 export const VerticalIconBar = () => {
   return (
@@ -10,11 +10,11 @@ export const VerticalIconBar = () => {
     >
       <FullScreen />
 
-      <div className="w-8 border-t border-gray-300" />
+      <hr className="w-8 border-t border-gray-300" />
 
       <Overall />
 
-      <div className="w-8 border-t border-gray-300" />
+      <hr className="w-8 border-t border-gray-300" />
 
       <GeoLocation />
     </div>

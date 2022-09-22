@@ -5,7 +5,7 @@ import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
 import { getToken } from 'Utils/handleCookie'
 
-export const ProfileEditableAvatar = () => {
+export const EditableAvatar = () => {
   const { currentUser, setCurrentUser } = useCurrentUserContext()
   const handleChange = (e: { target: HTMLInputElement | null }) => {
     const target = e.target

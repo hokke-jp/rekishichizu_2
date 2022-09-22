@@ -1,17 +1,19 @@
 import { Edit } from '@mui/icons-material'
-import { Box, TextField, Grid, Button, Tooltip } from '@mui/material'
-import { ProfileIntroduction } from 'Templates/ProfileIntroduction'
+import { Box, TextField, Button, Tooltip } from '@mui/material'
+import { Name } from 'Templates/Profile/Name'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
 import { getToken } from 'Utils/handleCookie'
 import { useState, FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export const ProfileEditableIntroducation = () => {
+export const EditableName = () => {
   const [isFocus, setIsFocus] = useState(false)
+  const navigate = useNavigate()
   const { currentUser, setCurrentUser } = useCurrentUserContext()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = currentUser!
-  const [newIntroduction, setNewIntroduction] = useState(user.introduction)
+  const [newName, setNewName] = useState(user.name)
   const handleEdit = () => {
     setIsFocus(true)
   }
@@ -22,7 +24,7 @@ export const ProfileEditableIntroducation = () => {
     axiosInstance
       .patch(
         '/auth',
-        { introduction: data.get('introduction') },
+        { name: data.get('name') },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -32,6 +34,7 @@ export const ProfileEditableIntroducation = () => {
       )
       .then((response) => {
         setCurrentUser(response.data)
+        navigate(`/${data.get('name')}`)
       })
       .catch((error) => {
         console.error(error.response.data)
@@ -43,28 +46,22 @@ export const ProfileEditableIntroducation = () => {
       {isFocus ? (
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
-            id="introduction"
+            id="name"
             type="text"
-            variant="outlined"
-            name="introduction"
-            value={newIntroduction || ''}
+            variant="standard"
+            name="name"
+            value={newName}
             autoFocus
-            multiline
-            rows={4}
+            autoComplete="name"
             margin="none"
-            fullWidth
-            onChange={(e) => setNewIntroduction(e.target.value)}
+            sx={{ width: '320px' }}
+            inputProps={{ style: { fontSize: 24 } }}
+            onChange={(e) => setNewName(e.target.value)}
           />
-          <Grid container spacing={2} justifyContent="flex-end" sx={{ pt: 3 }}>
-            <Grid item>
-              <Button onClick={() => setIsFocus(false)}>キャンセル</Button>
-            </Grid>
-            <Grid item>
-              <Button variant="contained" type="submit">
-                更新
-              </Button>
-            </Grid>
-          </Grid>
+          <Button onClick={() => setIsFocus(false)}>キャンセル</Button>
+          <Button variant="contained" type="submit">
+            更新
+          </Button>
         </Box>
       ) : (
         <Tooltip
@@ -72,7 +69,7 @@ export const ProfileEditableIntroducation = () => {
           placement="right"
         >
           <div onDoubleClick={handleEdit} className="inline-block">
-            <ProfileIntroduction introduction={user.introduction} />
+            <Name name={user.name} />
           </div>
         </Tooltip>
       )}

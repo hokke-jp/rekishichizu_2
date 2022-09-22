@@ -1,19 +1,13 @@
-import { SidebarIcons } from 'Templates/SidebarIcons'
-import { SidebarLayout } from 'Templates/SidebarLayout'
-import { SidebarLoggedinIcons } from 'Templates/SidebarLoggedinIcons'
+import { Icons } from 'Templates/Sidebar/Icons'
+import { Layout } from 'Templates/Sidebar/Layout'
+import { LoggedinIcons } from 'Templates/Sidebar/LoggedinIcons'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 
 export const Sidebar = () => {
   const { currentUser } = useCurrentUserContext()
   return (
-    <SidebarLayout
-      icons={
-        currentUser ? (
-          <SidebarLoggedinIcons user={currentUser} />
-        ) : (
-          <SidebarIcons />
-        )
-      }
+    <Layout
+      icons={currentUser ? <LoggedinIcons user={currentUser} /> : <Icons />}
     />
   )
 }

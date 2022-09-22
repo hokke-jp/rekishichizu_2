@@ -6,9 +6,9 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { useLogout } from 'Hooks/useLogout'
-import { ProfileDialogEmail } from 'Templates/ProfileDialogEmail'
-import { ProfileDialogPassword } from 'Templates/ProfileDialogPassword'
-import { ProfileMenuItem } from 'Templates/ProfileMenuItem'
+import { DialogEmail } from 'Templates/Profile/DialogEmail'
+import { DialogPassword } from 'Templates/Profile/DialogPassword'
+import { ProfileMenuItem } from 'Templates/Profile/ProfileMenuItem'
 import { useState } from 'react'
 
 export const ProfileMenu = () => {
@@ -70,10 +70,10 @@ export const ProfileMenu = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem>
-          <ProfileDialogEmail setAnchorEl={setAnchorEl} />
+          <DialogEmail setAnchorEl={setAnchorEl} />
         </MenuItem>
         <MenuItem>
-          <ProfileDialogPassword setAnchorEl={setAnchorEl} />
+          <DialogPassword setAnchorEl={setAnchorEl} />
         </MenuItem>
         <Divider />
         <MenuItem>

@@ -5,8 +5,8 @@ import { EmailInput } from 'Parts/EmailInput'
 import { FormButton } from 'Parts/FormButton'
 import { FormTitle } from 'Parts/FormTitle'
 import { PasswordInput } from 'Parts/PasswordInput'
-import { FormAlert } from 'Templates/FormAlert'
-import { FormLink } from 'Templates/FormLink'
+import { Alert } from 'Templates/Form/Alert'
+import { Link } from 'Templates/Form/Link'
 
 export const LoginForm = () => {
   const { errorMessage, setErrorMessage, handleLogin } = useLogin()
@@ -23,10 +23,7 @@ export const LoginForm = () => {
         }}
       >
         <FormTitle text="ログイン" />
-        <FormAlert
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-        />
+        <Alert errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
         <Box
           component="form"
           onSubmit={handleLogin}
@@ -43,7 +40,7 @@ export const LoginForm = () => {
           <FormButton text="ログイン" />
         </Box>
         <Box sx={{ alignSelf: 'flex-end' }}>
-          <FormLink to="/createAccount" text="アカウントを作成する" />
+          <Link to="/createAccount" text="アカウントを作成する" />
         </Box>
       </Box>
     </Container>

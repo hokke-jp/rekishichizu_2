@@ -1,8 +1,7 @@
-import { GoogleMapsContext } from 'components/map/GoogleMapsContext'
-import { useContext } from 'react'
+import { useGoogleMapsContext } from 'Utils/GoogleMapsContext'
 
 export const Overall = () => {
-  const { googleMap, defaultOptions } = useContext(GoogleMapsContext)
+  const { googleMap, defaultOptions } = useGoogleMapsContext()
   return (
     <button
       className="hover-and-click-effect w-auto py-4 px-3"

@@ -1,7 +1,7 @@
-import { Alert } from '@mui/material'
+import { Alert as MuiAlert } from '@mui/material'
 import { Dispatch, SetStateAction } from 'react'
 
-export const FormAlert = ({
+export const Alert = ({
   errorMessage,
   setErrorMessage
 }: {
@@ -11,7 +11,7 @@ export const FormAlert = ({
   return (
     <>
       {errorMessage ? (
-        <Alert
+        <MuiAlert
           onClose={() => {
             setErrorMessage('')
           }}
@@ -20,7 +20,7 @@ export const FormAlert = ({
           style={{ whiteSpace: 'pre-wrap' }}
         >
           {errorMessage}
-        </Alert>
+        </MuiAlert>
       ) : null}
     </>
   )

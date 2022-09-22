@@ -4,7 +4,7 @@ import Login from 'Images/login.svg'
 import { EasyLoginWrapper } from 'Parts/EasyLoginWrapper'
 import { IconWrapper } from 'Parts/IconWrapper'
 
-export const SidebarIcons = () => {
+export const Icons = () => {
   return (
     <>
       <EasyLoginWrapper>

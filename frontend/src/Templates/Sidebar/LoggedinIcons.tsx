@@ -3,7 +3,7 @@ import { IconWrapper } from 'Parts/IconWrapper'
 import { Avatar } from 'Templates/Avatar'
 import { User } from 'Utils/CurrentUserContext'
 
-export const SidebarLoggedinIcons = ({ user }: { user: User }) => {
+export const LoggedinIcons = ({ user }: { user: User }) => {
   return (
     <>
       <IconWrapper path={user.name} tooltip="マイページ">
