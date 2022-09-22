@@ -1,4 +1,4 @@
-import { GoogleMapsContext } from './GoogleMapsContext'
+import { GoogleMapsContext } from 'components/map/GoogleMapsContext'
 import { useContext, useMemo, useState } from 'react'
 
 export const GeoLocation = () => {

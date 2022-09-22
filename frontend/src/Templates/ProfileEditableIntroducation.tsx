@@ -1,6 +1,6 @@
-import { ProfileIntroduction } from './ProfileIntroduction'
 import { Edit } from '@mui/icons-material'
 import { Box, TextField, Grid, Button, Tooltip } from '@mui/material'
+import { ProfileIntroduction } from 'Templates/ProfileIntroduction'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
 import { getToken } from 'Utils/handleCookie'

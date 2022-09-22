@@ -1,10 +1,11 @@
-import { SideBar } from './SideBar'
+import { Sidebar } from 'Views/Sidebar'
 import { Outlet } from 'react-router-dom'
 
 export const Layout = () => {
   return (
-    <div className="h-screen w-screen flex">
-      <SideBar />
+    <div className="flex">
+      <div className="w-[72px]" />
+      <Sidebar />
       <div className="grow">
         <Outlet />
       </div>

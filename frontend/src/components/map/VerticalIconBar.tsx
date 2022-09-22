@@ -1,6 +1,6 @@
-import { FullScreen } from './FullScreen'
-import { GeoLocation } from './GeoLocation'
-import { Overall } from './Overall'
+import { FullScreen } from 'components/map/FullScreen'
+import { GeoLocation } from 'components/map/GeoLocation'
+import { Overall } from 'components/map/Overall'
 
 export const VerticalIconBar = () => {
   return (

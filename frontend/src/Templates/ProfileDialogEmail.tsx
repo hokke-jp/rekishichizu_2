@@ -1,4 +1,3 @@
-import { ProfileMenuItem } from './ProfileMenuItem'
 import { Email } from '@mui/icons-material'
 import { Box } from '@mui/material'
 import Button from '@mui/material/Button'
@@ -9,6 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import { useUpdate } from 'Hooks/useUpdate'
 import { EmailInput } from 'Parts/EmailInput'
+import { ProfileMenuItem } from 'Templates/ProfileMenuItem'
 import { Dispatch, SetStateAction } from 'react'
 
 export const ProfileDialogEmail = ({

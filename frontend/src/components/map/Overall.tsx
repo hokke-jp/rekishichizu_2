@@ -1,4 +1,4 @@
-import { GoogleMapsContext } from './GoogleMapsContext'
+import { GoogleMapsContext } from 'components/map/GoogleMapsContext'
 import { useContext } from 'react'
 
 export const Overall = () => {

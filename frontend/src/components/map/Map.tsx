@@ -1,7 +1,7 @@
-import { Drawer } from './Drawer'
-import { GoogleMapsContext } from './GoogleMapsContext'
-import { VerticalIconBar } from './VerticalIconBar'
 import { Loader } from '@googlemaps/js-api-loader'
+import { Drawer } from 'components/map/Drawer'
+import { GoogleMapsContext } from 'components/map/GoogleMapsContext'
+import { VerticalIconBar } from 'components/map/VerticalIconBar'
 import { useCallback, useEffect, useState } from 'react'
 
 // マップ全体のレイアウト

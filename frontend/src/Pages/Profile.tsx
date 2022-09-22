@@ -10,7 +10,7 @@ export const Profile = () => {
   return (
     <>
       {isLoading ? (
-        <div className="flex justify-center items-center w-full h-full">
+        <div className="flex justify-center items-center w-full h-screen">
           <CircularProgress size={68} />
         </div>
       ) : (
