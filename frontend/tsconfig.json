@@ -15,7 +15,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["google.maps"] // 2022/08/09追記googlemap用
+    "baseUrl": "src",
+    "types": ["google.maps"]
   },
   "include": ["src"]
 }

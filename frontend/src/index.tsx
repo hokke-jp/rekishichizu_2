@@ -1,4 +1,4 @@
-import { App } from './components/App'
+import { App } from './App'
 import './index.css'
 import reportWebVitals from './reportWebVitals'
 import './tailwind.css'
