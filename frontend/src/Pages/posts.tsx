@@ -1,5 +1,5 @@
 import { axiosInstance } from 'Utils/axios.js'
-import { OutlinedCard } from 'components/OutlinedCard'
+import { OutlinedCard } from 'Views/OutlinedCard'
 import { useState, useEffect } from 'react'
 
 interface Post {

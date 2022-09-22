@@ -1,8 +1,8 @@
 import { CircularProgress } from '@mui/material'
 import { useProfile } from 'Hooks/useProfile'
 import { MyProfile } from 'Views/MyProfile'
+import { NotFound } from 'Views/NotFound'
 import { UserProfile } from 'Views/UserProfile'
-import { Notfound } from 'components/Notfound'
 
 export const Profile = () => {
   const { isLoading, isMypage, user } = useProfile()
@@ -18,7 +18,7 @@ export const Profile = () => {
           {user ? (
             <>{isMypage ? <MyProfile /> : <UserProfile user={user} />}</>
           ) : (
-            <Notfound />
+            <NotFound />
           )}
         </>
       )}

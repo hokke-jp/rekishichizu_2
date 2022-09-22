@@ -3,8 +3,8 @@ import { Home } from 'Pages/Home'
 import { Layout } from 'Pages/Layout'
 import { Login } from 'Pages/Login'
 import { Profile } from 'Pages/Profile'
-import { Notfound } from 'components/Notfound'
-import { Posts } from 'components/posts'
+import { Posts } from 'Pages/posts'
+import { NotFound } from 'Views/NotFound'
 import { Routes, Route } from 'react-router-dom'
 
 export const AppRoutes = () => {
@@ -17,7 +17,7 @@ export const AppRoutes = () => {
         <Route path="createAccount" element={<CreateAccount />}></Route>
         <Route path=":userName" element={<Profile />}></Route>
       </Route>
-      <Route path="*" element={<Notfound />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   )
 }
