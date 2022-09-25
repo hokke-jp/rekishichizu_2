@@ -1,11 +1,4 @@
-import {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 
 interface DefaultOptions {
   center: {
@@ -53,10 +46,7 @@ export const useGoogleMapsContext = () => {
 export const GoogleMapsProvider = ({ children }: { children: ReactNode }) => {
   const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null)
   const initGoogleMaps = useCallback(() => {
-    const map = new google.maps.Map(
-      document.getElementById('target') as HTMLElement,
-      defaultOptions
-    )
+    const map = new google.maps.Map(document.getElementById('target') as HTMLElement, defaultOptions)
     setGoogleMap(map)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -68,9 +58,5 @@ export const GoogleMapsProvider = ({ children }: { children: ReactNode }) => {
     defaultOptions
   }
 
-  return (
-    <GoogleMapsContext.Provider value={value}>
-      {children}
-    </GoogleMapsContext.Provider>
-  )
+  return <GoogleMapsContext.Provider value={value}>{children}</GoogleMapsContext.Provider>
 }

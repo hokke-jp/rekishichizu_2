@@ -55,6 +55,16 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe 'introduction属性' do
+    it '200文字以内は有効である' do
+      expect(build(:user, introduction: '')).to be_valid
+      expect(build(:user, introduction: 'a' * 200)).to be_valid
+    end
+    it '201文字以上は無効である' do
+      expect(build(:user, introduction: 'a' * 201)).not_to be_valid
+    end
+  end
+
   describe 'メールアドレス属性' do
     it 'メールアドレスは0文字では無効である' do
       expect(build(:user, email: '')).not_to be_valid

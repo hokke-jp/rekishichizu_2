@@ -1,18 +1,8 @@
 import { VisibilityOff, Visibility } from '@mui/icons-material'
-import {
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  InputAdornment,
-  IconButton
-} from '@mui/material'
+import { FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton } from '@mui/material'
 import { useState } from 'react'
 
-export const PasswordInput = ({
-  autoFocus = false
-}: {
-  autoFocus?: boolean
-}) => {
+export const PasswordInput = ({ autoFocus = false }: { autoFocus?: boolean }) => {
   // パスワード表示切り替え機能
   interface State {
     amount: string
@@ -28,27 +18,22 @@ export const PasswordInput = ({
     weightRange: '',
     showPassword: false
   })
-  const handleClick =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value })
-    }
+  const handleClick = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [prop]: event.target.value })
+  }
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword
     })
   }
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
 
   return (
     <FormControl sx={{ width: '100%' }} variant="outlined">
-      <InputLabel htmlFor="outlined-adornment-password">
-        パスワード *
-      </InputLabel>
+      <InputLabel htmlFor="outlined-adornment-password">パスワード *</InputLabel>
       <OutlinedInput
         required
         autoFocus={autoFocus}

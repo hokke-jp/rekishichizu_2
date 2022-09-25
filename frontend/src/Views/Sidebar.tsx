@@ -5,9 +5,5 @@ import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 
 export const Sidebar = () => {
   const { currentUser } = useCurrentUserContext()
-  return (
-    <Layout
-      icons={currentUser ? <LoggedinIcons user={currentUser} /> : <Icons />}
-    />
-  )
+  return <Layout icons={currentUser ? <LoggedinIcons user={currentUser} /> : <Icons />} />
 }

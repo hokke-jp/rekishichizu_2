@@ -1,12 +1,6 @@
 import { axiosInstance } from 'Utils/axios'
 import { getToken, removeCookie } from 'Utils/handleCookie'
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState
-} from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 
 export interface User {
   id: number
@@ -23,7 +17,7 @@ export interface User {
 const CurrentUserContext = createContext(
   {} as {
     currentUser: User | null
-    setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>
+    setCurrentUser: Dispatch<SetStateAction<User | null>>
   }
 )
 export const useCurrentUserContext = () => {
@@ -60,9 +54,5 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
     setCurrentUser
   }
 
-  return (
-    <CurrentUserContext.Provider value={value}>
-      {children}
-    </CurrentUserContext.Provider>
-  )
+  return <CurrentUserContext.Provider value={value}>{children}</CurrentUserContext.Provider>
 }

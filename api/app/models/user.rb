@@ -10,9 +10,11 @@ class User < ActiveRecord::Base
 
   has_one_attached :avatar
 
+  validates :email, uniqueness: true
   NAME_REGEX = /\A[a-zA-Z\p{Hiragana}\p{Katakana}\p{Han}\d_ー-]+\z/.freeze
   validates :name, presence: true, uniqueness: true, length: { maximum: 20 }, exclusion: { in: %w[login createAccount post] },
                    format: { with: NAME_REGEX, message: 'に使用できる文字は「半角英数字」「日本語」「-」ハイフン「_」アンダーバーのみです' }
+  validates :introduction, length: { maximum: 200 }
   validate :avatar_type, :avatar_size, on: :update
 
   def avatar_url

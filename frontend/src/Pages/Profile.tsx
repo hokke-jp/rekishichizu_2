@@ -14,13 +14,7 @@ export const Profile = () => {
           <CircularProgress size={68} />
         </div>
       ) : (
-        <>
-          {user ? (
-            <>{isMypage ? <MyProfile /> : <UserProfile user={user} />}</>
-          ) : (
-            <NotFound />
-          )}
-        </>
+        <>{user ? <>{isMypage ? <MyProfile /> : <UserProfile user={user} />}</> : <NotFound />}</>
       )}
     </>
   )
