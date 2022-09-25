@@ -42,8 +42,7 @@ export const GeoLocation = () => {
           '位置情報の取得に時間がかかり過ぎてタイムアウトしました。'
         ]
         const errorNo = error.code
-        const errorMessage =
-          '[エラー番号: ' + errorNo + ']\n' + errorInfo[errorNo]
+        const errorMessage = '[エラー番号: ' + errorNo + ']\n' + errorInfo[errorNo]
         alert(errorMessage)
         setIsLoading(false)
       },
@@ -61,10 +60,7 @@ export const GeoLocation = () => {
     <div id="geo-wrapper">
       {isLoading ? (
         <button className="w-auto p-3">
-          <GeoLocationIcon
-            tailwindClass="stroke-blue-400 fill-blue-400"
-            flashAnime="flash-anime"
-          />
+          <GeoLocationIcon tailwindClass="stroke-blue-400 fill-blue-400" flashAnime="flash-anime" />
         </button>
       ) : (
         <button
@@ -73,23 +69,14 @@ export const GeoLocation = () => {
             geoLocation()
           }}
         >
-          <GeoLocationIcon
-            tailwindClass="stroke-black"
-            flashAnime={undefined}
-          />
+          <GeoLocationIcon tailwindClass="stroke-black" flashAnime={undefined} />
         </button>
       )}
     </div>
   )
 }
 
-const GeoLocationIcon = ({
-  tailwindClass,
-  flashAnime
-}: {
-  tailwindClass: string
-  flashAnime: string | undefined
-}) => {
+const GeoLocationIcon = ({ tailwindClass, flashAnime }: { tailwindClass: string; flashAnime: string | undefined }) => {
   return (
     <svg
       version="1.1"

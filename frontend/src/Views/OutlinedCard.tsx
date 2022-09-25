@@ -11,24 +11,11 @@ interface Post {
   content: string
 }
 
-const MyCard = ({
-  title,
-  content,
-  createdAt
-}: {
-  title: string
-  content: string
-  createdAt: string
-}) => {
+const MyCard = ({ title, content, createdAt }: { title: string; content: string; createdAt: string }) => {
   return (
     <CardContent className="">
       <div className="flex justify-center items-center">
-        <Typography
-          className="pr-8"
-          sx={{ fontSize: 14 }}
-          color="text.secondary"
-          gutterBottom
-        >
+        <Typography className="pr-8" sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           タイトル :
         </Typography>
         <Typography className="" variant="h5" component="div">
@@ -50,15 +37,8 @@ export const OutlinedCard = ({ posts }: { posts: Post[] }) => {
         {posts?.map((post: Post, index: number) => {
           return (
             <li key={index}>
-              <Card
-                className="inline-block my-6 min-w-[600px]"
-                variant="outlined"
-              >
-                <MyCard
-                  title={post.title}
-                  content={post.content}
-                  createdAt={post.created_at.toString()}
-                />
+              <Card className="inline-block my-6 min-w-[600px]" variant="outlined">
+                <MyCard title={post.title} content={post.content} createdAt={post.created_at.toString()} />
               </Card>
             </li>
           )

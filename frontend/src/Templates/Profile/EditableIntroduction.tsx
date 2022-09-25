@@ -1,47 +1,19 @@
 import { Edit } from '@mui/icons-material'
 import { Box, TextField, Grid, Button, Tooltip } from '@mui/material'
+import { useUpdate } from 'Hooks/useUpdate'
 import { Introduction } from 'Templates/Profile/Introduction'
-import { useCurrentUserContext } from 'Utils/CurrentUserContext'
-import { axiosInstance } from 'Utils/axios'
-import { getToken } from 'Utils/handleCookie'
-import { useState, FormEvent } from 'react'
+import { useState } from 'react'
 
 export const EditableIntroduction = () => {
-  const [isFocus, setIsFocus] = useState(false)
-  const { currentUser, setCurrentUser } = useCurrentUserContext()
+  const { currentUser, open, handleOpen, handleClose, update } = useUpdate()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const user = currentUser!
   const [newIntroduction, setNewIntroduction] = useState(user.introduction)
-  const handleEdit = () => {
-    setIsFocus(true)
-  }
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const tokens = getToken()
-    const data = new FormData(e.currentTarget)
-    axiosInstance
-      .patch(
-        '/auth',
-        { introduction: data.get('introduction') },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...tokens
-          }
-        }
-      )
-      .then((response) => {
-        setCurrentUser(response.data)
-      })
-      .catch((error) => {
-        console.error(error.response.data)
-      })
-    setIsFocus(false)
-  }
+
   return (
     <>
-      {isFocus ? (
-        <Box component="form" onSubmit={handleSubmit}>
+      {open ? (
+        <Box component="form" onSubmit={update}>
           <TextField
             id="introduction"
             type="text"
@@ -57,7 +29,7 @@ export const EditableIntroduction = () => {
           />
           <Grid container spacing={2} justifyContent="flex-end" sx={{ pt: 3 }}>
             <Grid item>
-              <Button onClick={() => setIsFocus(false)}>キャンセル</Button>
+              <Button onClick={handleClose}>キャンセル</Button>
             </Grid>
             <Grid item>
               <Button variant="contained" type="submit">
@@ -67,11 +39,8 @@ export const EditableIntroduction = () => {
           </Grid>
         </Box>
       ) : (
-        <Tooltip
-          title={<Edit onClick={handleEdit} fontSize="small" />}
-          placement="right"
-        >
-          <div onDoubleClick={handleEdit} className="inline-block">
+        <Tooltip title={<Edit onClick={handleOpen} fontSize="small" />} placement="right">
+          <div onDoubleClick={handleOpen} className="inline-block">
             <Introduction introduction={user.introduction} />
           </div>
         </Tooltip>

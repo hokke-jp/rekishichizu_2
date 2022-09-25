@@ -33,4 +33,4 @@ settings:
     version: detect
 ignorePatterns: ['.eslintrc.*']
 globals:
-    google: readonly
+  google: readonly

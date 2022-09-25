@@ -1,12 +1,7 @@
 export const Drawers = () => {
   return (
     <div className="flex">
-      <input
-        type="checkbox"
-        defaultChecked={true}
-        id="posts-drawer-checkbox"
-        className="absolute"
-      />
+      <input type="checkbox" defaultChecked={true} id="posts-drawer-checkbox" className="absolute" />
       <input type="checkbox" id="search-drawer-checkbox" className="absolute" />
       <div
         id="posts-drawer-div"

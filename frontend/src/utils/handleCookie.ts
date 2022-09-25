@@ -13,15 +13,9 @@ export const removeCookie = () => {
 }
 
 export const getToken = () => {
-  const cookies = [
-    Cookies.get('uid'),
-    Cookies.get('client'),
-    Cookies.get('accessToken')
-  ]
+  const cookies = [Cookies.get('uid'), Cookies.get('client'), Cookies.get('accessToken')]
   // Cookieの型(string|undefined)からundefinedを取り除く
-  const tokens = cookies.filter(
-    (item): item is string => typeof item === 'string'
-  )
+  const tokens = cookies.filter((item): item is string => typeof item === 'string')
   return {
     uid: tokens[0],
     client: tokens[1],

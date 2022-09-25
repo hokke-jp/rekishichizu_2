@@ -1,3 +1,4 @@
+import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
 import { setCookie } from 'Utils/handleCookie'
@@ -6,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const useLogin = () => {
   const { setCurrentUser } = useCurrentUserContext()
+  const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const navigate = useNavigate()
 
   const [errorMessage, setErrorMessage] = useState('')
@@ -20,6 +22,8 @@ export const useLogin = () => {
         setCookie([headers.uid, headers.client, headers['access-token']])
         setCurrentUser(response.data.data)
         navigate(`/`)
+        setAlertSeverity('success')
+        setAlertMessage('ログインしました')
       })
       .catch((error) => {
         console.error(error)

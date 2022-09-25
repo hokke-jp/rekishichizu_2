@@ -8,11 +8,7 @@ export const MyProfile = () => {
   return (
     <>
       <ProfileMenu />
-      <Layout
-        avatar={<EditableAvatar />}
-        name={<EditableName />}
-        introduction={<EditableIntroduction />}
-      />
+      <Layout avatar={<EditableAvatar />} name={<EditableName />} introduction={<EditableIntroduction />} />
     </>
   )
 }
