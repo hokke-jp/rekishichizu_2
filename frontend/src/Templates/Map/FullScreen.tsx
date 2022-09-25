@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export const FullScreen = () => {
-  const [isFullScreen, setIsFullScreen] = useState<boolean>(
-    !!document.fullscreenElement
-  )
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(!!document.fullscreenElement)
   useEffect(() => {
     const eventFunc = () => {
       setIsFullScreen(!isFullScreen)

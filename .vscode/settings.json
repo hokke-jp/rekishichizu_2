@@ -4,6 +4,7 @@
     "source.fixAll.eslint": true
   },
   "eslint.format.enable": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.lineNumbers": "on",
   "editor.wordWrap": "on",

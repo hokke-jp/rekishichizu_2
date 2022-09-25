@@ -9,30 +9,25 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { useUpdate } from 'Hooks/useUpdate'
 import { EmailInput } from 'Parts/EmailInput'
 import { ProfileMenuItem } from 'Templates/Profile/ProfileMenuItem'
-import { Dispatch, SetStateAction } from 'react'
+import Cookies from 'js-cookie'
+import { Dispatch, FormEvent, SetStateAction } from 'react'
 
-export const DialogEmail = ({
-  setAnchorEl
-}: {
-  setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>
-}) => {
-  const { currentUser, open, handleOpen, handleClose, handleUpdate } =
-    useUpdate(setAnchorEl)
+export const DialogEmail = ({ setAnchorEl }: { setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>> }) => {
+  const { currentUser, open, handleOpen, handleClose, update } = useUpdate(setAnchorEl)
+  const handleUpdate = (event: FormEvent<HTMLFormElement>) => {
+    update(event).then((response) => {
+      Cookies.set('uid', response.headers.uid)
+    })
+  }
 
   return (
     <>
-      <ProfileMenuItem
-        handleFunction={handleOpen}
-        icon={<Email fontSize="small" />}
-        text="メールアドレス"
-      />
+      <ProfileMenuItem handleFunction={handleOpen} icon={<Email fontSize="small" />} text="メールアドレス" />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ pb: 0 }}>メールアドレス変更</DialogTitle>
-        <Box component="form" noValidate onSubmit={handleUpdate}>
+        <Box component="form" noValidate onSubmit={handleUpdate} sx={{ width: '500px' }}>
           <DialogContent>
-            <DialogContentText sx={{ mb: 3 }}>
-              現在のメールアドレス : {currentUser?.email}
-            </DialogContentText>
+            <DialogContentText sx={{ mb: 3 }}>現在のメールアドレス : {currentUser?.email}</DialogContentText>
             <EmailInput autoFocus />
           </DialogContent>
           <DialogActions>

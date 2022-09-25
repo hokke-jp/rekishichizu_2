@@ -77,11 +77,7 @@ export const ProfileMenu = () => {
         </MenuItem>
         <Divider />
         <MenuItem>
-          <ProfileMenuItem
-            handleFunction={logout}
-            icon={<Logout fontSize="small" />}
-            text="ログアウト"
-          />
+          <ProfileMenuItem handleFunction={logout} icon={<Logout fontSize="small" />} text="ログアウト" />
         </MenuItem>
       </Menu>
     </div>

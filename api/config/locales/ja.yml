@@ -3,6 +3,7 @@ ja:
     attributes:
       user:
         name: ユーザー名
+        introduction: 紹介文
         email: メールアドレス
         avatar: ユーザー画像
       #   password: パスワード

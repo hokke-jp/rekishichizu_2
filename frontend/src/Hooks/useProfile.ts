@@ -8,9 +8,13 @@ export const useProfile = () => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { currentUser } = useCurrentUserContext()
-  const isMypage = currentUser?.name === user?.name
+  const isMypage = currentUser?.name === params.userName
   // fetchUser
   useEffect(() => {
+    if (isMypage) {
+      setIsLoading(false)
+      return
+    }
     axiosInstance
       .get(`/users/${params.userName}`, {})
       .then((response) => {
@@ -22,6 +26,6 @@ export const useProfile = () => {
       .finally(() => {
         setIsLoading(false)
       })
-  }, [params.userName])
+  }, [currentUser, isMypage, params.userName])
   return { isLoading, isMypage, user }
 }

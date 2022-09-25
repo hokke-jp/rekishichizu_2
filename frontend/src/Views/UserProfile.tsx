@@ -7,9 +7,7 @@ import { User } from 'Utils/CurrentUserContext'
 export const UserProfile = ({ user }: { user: User }) => {
   return (
     <Layout
-      avatar={
-        <Avatar url={user.avatar_url} className="h-48 w-48 rounded-full" />
-      }
+      avatar={<Avatar url={user.avatar_url} className="h-48 w-48 rounded-full" />}
       name={<Name name={user.name} />}
       introduction={<Introduction introduction={user.introduction} />}
     />

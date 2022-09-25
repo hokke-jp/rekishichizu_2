@@ -10,7 +10,7 @@ export const Alert = ({
 }) => {
   return (
     <>
-      {errorMessage ? (
+      {errorMessage && (
         <MuiAlert
           onClose={() => {
             setErrorMessage('')
@@ -21,7 +21,7 @@ export const Alert = ({
         >
           {errorMessage}
         </MuiAlert>
-      ) : null}
+      )}
     </>
   )
 }
