@@ -15,8 +15,8 @@ export const EditableAvatar = () => {
     if (target === null || target.files === null) return
     const sizeInMegabytes = target.files[0].size / 1024 / 1024
     if (sizeInMegabytes > 2) {
-      setAlertMessage('2MB以下のファイルを選択してください。')
-      setAlertSeverity('error')
+      setAlertMessage('2MB以下のファイルを選択してください')
+      setAlertSeverity('warning')
       return
     }
     const params = new FormData()
@@ -30,6 +30,8 @@ export const EditableAvatar = () => {
       })
       .then((response) => {
         setCurrentUser(response.data)
+        setAlertMessage('更新しました')
+        setAlertSeverity('info')
       })
       .catch((error) => {
         setAlertMessage(error.response.data.errors.full_messages)

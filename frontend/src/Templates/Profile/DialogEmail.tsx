@@ -25,7 +25,7 @@ export const DialogEmail = ({ setAnchorEl }: { setAnchorEl: Dispatch<SetStateAct
       <ProfileMenuItem handleFunction={handleOpen} icon={<Email fontSize="small" />} text="メールアドレス" />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ pb: 0 }}>メールアドレス変更</DialogTitle>
-        <Box component="form" noValidate onSubmit={handleUpdate}>
+        <Box component="form" noValidate onSubmit={handleUpdate} sx={{ width: '500px' }}>
           <DialogContent>
             <DialogContentText sx={{ mb: 3 }}>現在のメールアドレス : {currentUser?.email}</DialogContentText>
             <EmailInput autoFocus />

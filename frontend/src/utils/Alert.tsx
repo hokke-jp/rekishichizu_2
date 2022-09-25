@@ -4,15 +4,19 @@ import { useEffect } from 'react'
 
 export const Alert = () => {
   const { alertSeverity, alertMessage, setAlertMessage } = useAlertMessageContext()
+  const check = Boolean(alertMessage)
   useEffect(() => {
     if (!alertMessage) return
-    setTimeout(() => {
+    const timeOut = setTimeout(() => {
       setAlertMessage('')
     }, 5000)
+    return () => {
+      clearTimeout(timeOut)
+    }
   }, [alertMessage, setAlertMessage])
   return (
     <>
-      <input id="alert-checkbox" type="checkbox" checked={!!alertMessage} readOnly hidden />
+      <input id="alert-checkbox" type="checkbox" checked={check} readOnly hidden />
       <div id="alert-div" onClick={() => setAlertMessage('')}>
         <MuiAlert severity={alertSeverity} sx={{ alignItems: 'center' }}>
           {alertMessage}

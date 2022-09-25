@@ -19,7 +19,7 @@ export const DialogPassword = ({ setAnchorEl }: { setAnchorEl: Dispatch<SetState
       <ProfileMenuItem handleFunction={handleOpen} icon={<Lock fontSize="small" />} text="パスワード" />
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ pb: 0 }}>パスワード変更</DialogTitle>
-        <Box component="form" noValidate onSubmit={update}>
+        <Box component="form" noValidate onSubmit={update} sx={{ width: '500px' }}>
           <DialogContent>
             <DialogContentText sx={{ mb: 3 }}>新しいパスワードを入力してください。</DialogContentText>
             <PasswordInput autoFocus />

@@ -22,7 +22,7 @@ export const useLogin = () => {
         setCookie([headers.uid, headers.client, headers['access-token']])
         setCurrentUser(response.data.data)
         navigate(`/`)
-        setAlertSeverity('success')
+        setAlertSeverity('info')
         setAlertMessage('ログインしました')
       })
       .catch((error) => {
