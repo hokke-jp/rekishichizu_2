@@ -4,12 +4,7 @@ import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffe
 
 export interface User {
   id: number
-  provider: 'email'
-  uid: string
-  allow_password_change: boolean
   name: string
-  email: string
-  image: string | null
   introduction: string | null
   avatar_url: string | null
 }
