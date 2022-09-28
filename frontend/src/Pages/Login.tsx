@@ -1,5 +1,9 @@
 import { LoginForm } from 'Views/LoginForm'
 
 export const Login = () => {
-  return <LoginForm />
+  return (
+    <div className="pb-48">
+      <LoginForm />
+    </div>
+  )
 }

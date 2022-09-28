@@ -8,7 +8,7 @@ export const Profile = () => {
   const { isLoading, isMypage, user } = useProfile()
 
   return (
-    <>
+    <div className="pb-48">
       {isLoading ? (
         <div className="flex justify-center items-center w-full h-screen">
           <CircularProgress size={68} />
@@ -16,6 +16,6 @@ export const Profile = () => {
       ) : (
         <>{isMypage ? <MyProfile /> : <>{user ? <UserProfile user={user} /> : <NotFound />}</>}</>
       )}
-    </>
+    </div>
   )
 }

@@ -12,8 +12,17 @@ interface Post {
 }
 
 export const Posts = () => {
+  const [count, setCount] = useState(0)
   const [posts, setPosts] = useState<Post[]>([])
+  console.log('呼ばれた')
+  const testFunc = async () => {
+    const res = await axiosInstance.get('/posts')
+    console.log('res : ', res)
+    // setCount((p) => p + 10)
+  }
+  testFunc()
   useEffect(() => {
+    console.log('useEffect 呼ばれた')
     const f = async () => {
       const res = await axiosInstance.get('/posts')
       setPosts(res.data)
@@ -36,8 +45,11 @@ export const Posts = () => {
 
   return (
     <div className="">
+      count : {count}
+      <div>
+        <button onClick={() => setCount((p) => p + 1)}>+</button>
+      </div>
       <OutlinedCard posts={posts} />
-
       <button className="block px-8 py-4 bg-blue-200 mb-5" onClick={handleCreate}>
         作成
       </button>

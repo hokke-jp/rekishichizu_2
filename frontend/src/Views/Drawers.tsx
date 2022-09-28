@@ -1,17 +1,23 @@
+import { SkeletonCard } from 'Templates/Post/SkeletonCard'
+
 export const Drawers = () => {
   return (
-    <div className="flex">
-      <input type="checkbox" defaultChecked={true} id="posts-drawer-checkbox" className="absolute" />
-      <input type="checkbox" id="search-drawer-checkbox" className="absolute" />
+    <>
+      <input type="checkbox" defaultChecked={true} id="posts-drawer-checkbox" hidden />
+      <input type="checkbox" id="search-drawer-checkbox" hidden />
       <div
         id="posts-drawer-div"
-        className="flex rounded-tr-3xl rounded-br-3xl border border-gray-100 bg-white overflow-hidden shadow-lg"
+        className="flex h-screen rounded-tr-3xl rounded-br-3xl bg-white shadow-md shadow-gray-300 overflow-hidden"
       >
-        <div className="mt-10 mx-auto w-32 h-60 bg-gray-400"></div>
+        <ul className="grow flex flex-col items-center gap-y-10 h-screen pt-10 pb-10 overflow-auto">
+          {[...Array(4)].map((v, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </ul>
         <label
           id="posts-drawer-label"
           htmlFor="posts-drawer-checkbox"
-          className="block relative h-screen w-12 hover:bg-gray-50"
+          className="block relative h-screen w-12 hover:bg-gray-100"
         >
           <span className="absolute top-1/2 right-3 w-1 h-8 bg-gray-300 rounded-lg"></span>
         </label>
@@ -19,17 +25,22 @@ export const Drawers = () => {
 
       <div
         id="search-drawer-div"
-        className="flex rounded-tr-3xl rounded-br-3xl border border-gray-100 bg-white overflow-hidden shadow-lg"
+        className="flex h-screen rounded-tr-3xl rounded-br-3xl bg-white shadow-lg overflow-hidden"
       >
-        <div className="mt-10 mx-auto w-32 h-60 bg-gray-400"></div>
+        <div className="grow flex flex-col items-center gap-y-3 pt-10">
+          <div className="w-24 h-60 bg-gray-400"></div>
+          <div className="w-24 h-60 bg-gray-400"></div>
+          <div className="w-24 h-60 bg-gray-400"></div>
+          <div className="w-24 h-60 bg-gray-400"></div>
+        </div>
         <label
           id="search-drawer-label"
           htmlFor="search-drawer-checkbox"
-          className="block relative h-screen w-12 hover:bg-gray-50"
+          className="block relative h-screen w-12 hover:bg-gray-100"
         >
           <span className="absolute top-1/2 right-3 w-1 h-8 bg-gray-300 rounded-lg"></span>
         </label>
       </div>
-    </div>
+    </>
   )
 }
