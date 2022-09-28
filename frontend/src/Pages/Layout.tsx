@@ -8,7 +8,7 @@ export const Layout = () => {
   return (
     <>
       <Alert />
-      <div className="flex pb-48">
+      <div className="flex">
         <div className="w-[72px]" />
         <Sidebar />
         <div className="grow">

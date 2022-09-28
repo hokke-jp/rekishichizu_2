@@ -16,29 +16,49 @@
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 
 /* GoogleMapのDrawerのポジション */
+:root {
+  --posts-width: 288px;
+  --search-width: 224px;
+  --drawer-handle-width: 48px;
+  --sidebar-width: 72px;
+}
+
 #posts-drawer-div {
   position: fixed;
-  left: -96px;
+  left: calc(0px - var(--posts-width) + var(--sidebar-width) + var(--drawer-handle-width));
   z-index: 20;
   transition: all 0.2s;
-  width: 224px;
+  width: var(--posts-width);
 }
 #posts-drawer-checkbox[type='checkbox']:checked ~ #posts-drawer-div {
-  left: 72px;
+  left: var(--sidebar-width);
 }
 #posts-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
-  margin-left: 168px;
+  margin-left: calc(var(--posts-width) - var(--drawer-handle-width));
 }
 
 #search-drawer-div {
   position: fixed;
-  left: -40px;
+  left: calc(0px - var(--search-width) + var(--sidebar-width) + 2 * var(--drawer-handle-width));
   z-index: 10;
   transition: all 0.2s;
-  width: 224px;
+  width: var(--search-width);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+#search-drawer-div::-webkit-scrollbar {
+  display: none;
 }
 #search-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
-  left: 104px;
+  left: calc(var(--sidebar-width) + var(--drawer-handle-width) - 18px);
+}
+
+#posts-drawer-div ul {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+#posts-drawer-div ul::-webkit-scrollbar {
+  display: none;
 }
 
 #alert-div {
