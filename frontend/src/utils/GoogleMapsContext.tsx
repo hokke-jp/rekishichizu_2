@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
 interface DefaultOptions {
   center: {
@@ -17,6 +17,7 @@ interface DefaultOptions {
     strictBounds: boolean
   }
 }
+
 const defaultOptions: DefaultOptions = {
   center: { lat: 38, lng: 138 },
   zoom: 5,
@@ -31,28 +32,28 @@ const defaultOptions: DefaultOptions = {
     strictBounds: false
   }
 }
+
 interface Props {
-  googleMap: google.maps.Map | null
+  googleMap: google.maps.Map | undefined
   defaultOptions: DefaultOptions
 }
 
 const GoogleMapsContext = createContext<Props>({
-  googleMap: null,
+  googleMap: undefined,
   defaultOptions
 })
+
 export const useGoogleMapsContext = () => {
   return useContext(GoogleMapsContext)
 }
+
 export const GoogleMapsProvider = ({ children }: { children: ReactNode }) => {
-  const [googleMap, setGoogleMap] = useState<google.maps.Map | null>(null)
-  const initGoogleMaps = useCallback(() => {
+  const [googleMap, setGoogleMap] = useState<google.maps.Map>()
+  useEffect(() => {
     const map = new google.maps.Map(document.getElementById('target') as HTMLElement, defaultOptions)
     setGoogleMap(map)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // googleMap?.addListener('click', ()=>console.log('hi'))
   }, [])
-  useEffect(() => {
-    initGoogleMaps()
-  }, [initGoogleMaps])
   const value = {
     googleMap,
     defaultOptions

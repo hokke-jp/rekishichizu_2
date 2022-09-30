@@ -53,7 +53,7 @@ export const EditableAvatar = () => {
         <label htmlFor="file" className="avatar-wrapper relative h-48 w-48">
           <Avatar url={currentUser?.avatar_url} className="h-48 w-48" />
           <div className="absolute bottom-0 flex justify-center items-center  w-48 h-12 bg-neutral-900 opacity-0">
-            <AddPhotoAlternateOutlined color="action" sx={{ fontSize: 40, color: 'white' }} />
+            <AddPhotoAlternateOutlined sx={{ fontSize: 40, color: 'white' }} />
           </div>
         </label>
       </ButtonBase>

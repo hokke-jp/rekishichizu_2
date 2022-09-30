@@ -11,7 +11,7 @@ interface Post {
   content: string
 }
 
-export const Posts = () => {
+export const Tmp = () => {
   const [count, setCount] = useState(0)
   const [posts, setPosts] = useState<Post[]>([])
   console.log('呼ばれた')

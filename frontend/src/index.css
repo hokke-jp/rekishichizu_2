@@ -67,6 +67,7 @@
   top: 40px;
   right: -80px;
   transition: all 0.2s;
+  opacity: 80%;
 }
 #alert-checkbox[type='checkbox']:checked ~ #alert-div {
   right: 20px;
