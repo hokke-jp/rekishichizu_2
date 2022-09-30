@@ -9,7 +9,6 @@ export const Layout = () => {
     <>
       <Alert />
       <div className="flex">
-        <div className="w-[72px]" />
         <Sidebar />
         <div className="grow">
           <Outlet />

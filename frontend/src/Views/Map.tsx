@@ -1,35 +1,38 @@
 import { Loader } from '@googlemaps/js-api-loader'
-import { GoogleMap } from 'Templates/Map/GoogleMap'
+import { CircularProgress } from '@mui/material'
+import { GoogleMapsProvider } from 'Utils/GoogleMapsContext'
 import { VerticalIconBar } from 'Views/VerticalIconBar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const Map = () => {
   const [googleMapsApiLoaded, setGoogleMapsApiLoaded] = useState<boolean>(false)
-  const initGoogleMapsApi = async () => {
-    console.log('called')
-    const loader = new Loader({
-      apiKey: `${process.env.REACT_APP_API_KEY}`,
-      version: 'weekly',
-      region: 'JP',
-      language: 'ja'
-    })
-    await loader.load()
-    setGoogleMapsApiLoaded(true)
-  }
-  initGoogleMapsApi()
-  // const [count, setCount] = useState(0)
+  useEffect(() => {
+    ;(async () => {
+      console.log('called')
+      const loader = new Loader({
+        apiKey: `${process.env.REACT_APP_API_KEY}`,
+        version: 'weekly',
+        region: 'JP',
+        language: 'ja'
+      })
+      await loader.load()
+      setGoogleMapsApiLoaded(true)
+    })()
+  }, [])
 
   return (
     <>
-      {/* <div className="flex flex-row-reverse">
-        count : {count}
-        <button onClick={() => setCount((p) => p + 1)}>btn</button>
-        <button onClick={() => setGoogleMapsApiLoaded(true)}>btn2</button>
-      </div> */}
-      {googleMapsApiLoaded && (
-        <GoogleMap>
-          <VerticalIconBar />
-        </GoogleMap>
+      {googleMapsApiLoaded ? (
+        <>
+          <div id="target" className="h-full" />
+          <GoogleMapsProvider>
+            <VerticalIconBar />
+          </GoogleMapsProvider>
+        </>
+      ) : (
+        <div className="flex justify-center items-center h-full">
+          <CircularProgress size={68} />
+        </div>
       )}
     </>
   )
