@@ -21,7 +21,7 @@ export const useLogin = () => {
         const headers = response.headers
         setCookie([headers.uid, headers.client, headers['access-token']])
         setCurrentUser(response.data.data)
-        navigate(`/`)
+        navigate(`/`, { replace: true })
         setAlertSeverity('info')
         setAlertMessage('ログインしました')
       })

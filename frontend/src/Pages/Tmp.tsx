@@ -2,6 +2,7 @@ import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { axiosInstance } from 'Utils/axios.js'
 import { OutlinedCard } from 'Views/OutlinedCard'
 import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 interface Post {
   id: number
@@ -43,9 +44,12 @@ export const Tmp = () => {
     setAlertSeverity(color)
   }
 
+  const location = useLocation()
+
   return (
     <div className="">
-      count : {count}
+      <p>count : {count}</p>
+      <p>location : {JSON.stringify(location)}</p>
       <div>
         <button onClick={() => setCount((p) => p + 1)}>+</button>
       </div>

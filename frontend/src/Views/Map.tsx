@@ -8,7 +8,6 @@ export const Map = () => {
   const [googleMapsApiLoaded, setGoogleMapsApiLoaded] = useState<boolean>(false)
   useEffect(() => {
     ;(async () => {
-      console.log('called')
       const loader = new Loader({
         apiKey: `${process.env.REACT_APP_API_KEY}`,
         version: 'weekly',
