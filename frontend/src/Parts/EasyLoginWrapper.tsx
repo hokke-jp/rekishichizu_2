@@ -20,7 +20,7 @@ export const EasyLoginWrapper = ({ children }: { children: ReactNode }) => {
         const headers = response.headers
         setCookie([headers.uid, headers.client, headers['access-token']])
         setCurrentUser(response.data.data)
-        navigate(`/${response.data.data.name}`)
+        navigate(`/`, { replace: true })
         setAlertSeverity('info')
         setAlertMessage('ログインしました')
       })
