@@ -13,3 +13,6 @@ module Overrides
     end
   end
 end
+
+# methods: [:avatar_url] を追加するためにオーバーライド
+# その他はデフォルトのまま

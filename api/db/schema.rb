@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_220_909_073_729) do
+ActiveRecord::Schema[7.0].define(version: 20_221_001_043_013) do
   create_table 'active_storage_attachments', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -39,11 +39,36 @@ ActiveRecord::Schema[7.0].define(version: 20_220_909_073_729) do
     t.index %w[blob_id variation_digest], name: 'index_active_storage_variant_records_uniqueness', unique: true
   end
 
+  create_table 'articles', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
+    t.string 'title'
+    t.text 'content'
+    t.float 'lat', null: false
+    t.float 'lng', null: false
+    t.bigint 'user_id'
+    t.bigint 'period_id'
+    t.bigint 'prefecture_id'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['period_id'], name: 'index_articles_on_period_id'
+    t.index ['prefecture_id'], name: 'index_articles_on_prefecture_id'
+    t.index ['user_id'], name: 'index_articles_on_user_id'
+  end
+
+  create_table 'periods', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+  end
+
   create_table 'posts', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
     t.string 'title'
     t.text 'content'
+  end
+
+  create_table 'prefectures', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
   create_table 'users', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
@@ -73,4 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 20_220_909_073_729) do
 
   add_foreign_key 'active_storage_attachments', 'active_storage_blobs', column: 'blob_id'
   add_foreign_key 'active_storage_variant_records', 'active_storage_blobs', column: 'blob_id'
+  add_foreign_key 'articles', 'periods'
+  add_foreign_key 'articles', 'prefectures'
+  add_foreign_key 'articles', 'users'
 end

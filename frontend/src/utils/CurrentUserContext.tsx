@@ -1,20 +1,23 @@
 import { useAlertMessageContext } from './AlertMessageContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken, removeCookie } from 'Utils/handleCookie'
+import { getTokens, getUserCookies, removeCookies } from 'Utils/handleCookie'
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 export interface User {
-  id: number
-  name: string
-  introduction: string | null
-  avatar_url: string | null
+  id: number | undefined
+  name: string | undefined
+  introduction: string | undefined
+  avatar_url: string | undefined
 }
+
+const userCookies: User = getUserCookies()
+const user = userCookies.id ? userCookies : undefined
 
 const CurrentUserContext = createContext(
   {} as {
-    currentUser: User | null
-    setCurrentUser: Dispatch<SetStateAction<User | null>>
+    currentUser: User | undefined
+    setCurrentUser: Dispatch<SetStateAction<User | undefined>>
   }
 )
 
@@ -25,13 +28,13 @@ export const useCurrentUserContext = () => {
 const guestRoutes = ['/login', '/createAccount']
 
 export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null)
+  const [currentUser, setCurrentUser] = useState<User | undefined>(user)
   const location = useLocation()
   const navigate = useNavigate()
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   useEffect(() => {
-    const { uid, client, 'access-token': accessToken } = getToken()
-    // Cookieをチェックし,トークンがあるならログインリクエストを飛ばし,ないならリターン
+    const { uid, client, 'access-token': accessToken } = getTokens()
+    // Cookieをチェックし,トークンがあるなら認証リクエストを飛ばし,ないならリターン
     if (!accessToken) return
     axiosInstance
       .get('/auth/validate_token', {
@@ -46,15 +49,15 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
         setCurrentUser(response.data)
         if (guestRoutes.includes(location.pathname)) {
           navigate('/')
-          setAlertSeverity('warning')
+          setAlertSeverity('info')
           setAlertMessage('ログイン中です')
         }
       })
       .catch((error) => {
         // トークンの期限が切れている等,認証に失敗した場合
         console.error(error)
-        removeCookie()
-        setCurrentUser(null)
+        removeCookies()
+        setCurrentUser(undefined)
       })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

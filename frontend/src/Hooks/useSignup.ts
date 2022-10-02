@@ -1,7 +1,7 @@
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { removeCookie, setCookie } from 'Utils/handleCookie'
+import { removeCookies, setCookies } from 'Utils/handleCookie'
 import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -22,15 +22,16 @@ export const useSignup = () => {
       })
       .then((response) => {
         const headers = response.headers
-        setCookie([headers.uid, headers.client, headers['access-token']])
-        setCurrentUser(response.data.data)
-        navigate(`/${response.data.data.name}`)
+        const user = response.data.data
+        setCookies([headers.uid, headers.client, headers['access-token']], user)
+        setCurrentUser(user)
+        navigate(`/${user.name}`)
         setAlertSeverity('success')
         setAlertMessage('アカウントを作成しました')
       })
       .catch((error) => {
         console.error(error)
-        removeCookie()
+        removeCookies()
         setErrorMessage(error.response.data.errors.full_messages.join('\n'))
       })
   }

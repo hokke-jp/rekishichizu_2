@@ -19,8 +19,6 @@ export const AppRoutes = () => {
         <Route path="createAccount" element={<AuthenticatedGuard component={<CreateAccount />} />} />
         <Route path="post" element={<AuthenticatedRoute component={<Post />} />} />
         <Route path="tmp" element={<Tmp />} />
-        {/* <Route path="login" element={<Login />} />
-        <Route path="createAccount" element={<CreateAccount />} /> */}
         <Route path=":userName" element={<Profile />} />
       </Route>
       <Route path="*" element={<NotFound />} />

@@ -1,11 +1,11 @@
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken, removeCookie } from 'Utils/handleCookie'
+import { getTokens, removeCookies } from 'Utils/handleCookie'
 import { useNavigate } from 'react-router-dom'
 
 export const useLogout = () => {
-  const tokens = getToken()
+  const tokens = getTokens()
   const { setCurrentUser } = useCurrentUserContext()
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const navigate = useNavigate()
@@ -21,8 +21,8 @@ export const useLogout = () => {
         console.error(error)
       })
       .finally(() => {
-        removeCookie()
-        setCurrentUser(null)
+        removeCookies()
+        setCurrentUser(undefined)
         navigate('/')
         setAlertSeverity('info')
         setAlertMessage('ログアウトしました')

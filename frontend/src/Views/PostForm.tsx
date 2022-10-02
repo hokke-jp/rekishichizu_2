@@ -1,24 +1,124 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
 import { ImagePreview } from 'Templates/Post/ImagePreview'
+import { useAlertMessageContext } from 'Utils/AlertMessageContext'
+import { axiosInstance } from 'Utils/axios'
+import { getTokens } from 'Utils/handleCookie'
 import { FormEvent, useState } from 'react'
 
+const prefectures = [
+  '北海道',
+  '青森県',
+  '岩手県',
+  '宮城県',
+  '秋田県',
+  '山形県',
+  '福島県',
+  '茨城県',
+  '栃木県',
+  '群馬県',
+  '埼玉県',
+  '千葉県',
+  '東京都',
+  '神奈川県',
+  '新潟県',
+  '富山県',
+  '石川県',
+  '福井県',
+  '山梨県',
+  '長野県',
+  '岐阜県',
+  '静岡県',
+  '愛知県',
+  '三重県',
+  '滋賀県',
+  '京都府',
+  '大阪府',
+  '兵庫県',
+  '奈良県',
+  '和歌山県',
+  '鳥取県',
+  '島根県',
+  '岡山県',
+  '広島県',
+  '山口県',
+  '徳島県',
+  '香川県',
+  '愛媛県',
+  '高知県',
+  '福岡県',
+  '佐賀県',
+  '長崎県',
+  '熊本県',
+  '大分県',
+  '宮崎県',
+  '鹿児島県',
+  '沖縄県'
+]
+const periods = [
+  '令和',
+  '平成',
+  '昭和',
+  '大正',
+  '明治',
+  '江戸',
+  '安土桃山',
+  '室町',
+  '鎌倉',
+  '平安',
+  '奈良',
+  '飛鳥',
+  '古墳',
+  '弥生',
+  '縄文',
+  '石器',
+  '人類以前'
+]
+
 export const PostForm = () => {
+  const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    console.log(data.get('title'))
-    console.log(data.get('description'))
-    console.log(prefecture)
-    console.log(period)
+    const tokens = getTokens()
+    axiosInstance
+      .post(
+        '/articles',
+        {
+          article: {
+            title: data.get('title'),
+            content: data.get('content'),
+            lat: 1.2,
+            lng: 1000.005,
+            period_id: periodId,
+            prefecture_id: prefectureId
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            ...tokens
+          }
+        }
+      )
+      .then((response) => {
+        setAlertSeverity('info')
+        setAlertMessage('更新しました')
+        console.log(response)
+      })
+      .catch((error) => {
+        // setAlertMessage(error.response.data.errors.full_messages)
+        setAlertSeverity('warning')
+        console.error(error)
+      })
   }
 
-  const [prefecture, setPrefecture] = useState('')
-  const [period, setPeriod] = useState('')
+  const [prefectureId, setPrefectureId] = useState<number | null>(null)
+  const [periodId, setPeriodId] = useState<number | null>(null)
   const handlePrefecture = (event: SelectChangeEvent) => {
-    setPrefecture(event.target.value as string)
+    setPrefectureId(Number(event.target.value))
   }
   const handlePeriod = (event: SelectChangeEvent) => {
-    setPeriod(event.target.value as string)
+    setPeriodId(Number(event.target.value))
   }
 
   return (
@@ -35,21 +135,31 @@ export const PostForm = () => {
             <Select
               labelId="prefecture-label"
               id="prefecture"
-              value={prefecture}
+              value={prefectureId?.toString()}
               label="都道府県"
               onChange={handlePrefecture}
             >
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={30}>30</MenuItem>
+              {prefectures.map((prefecture, index) => (
+                <MenuItem key={index} value={index + 1}>
+                  {prefecture}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="period-label">時代</InputLabel>
-            <Select labelId="period-label" id="period" value={period} label="時代" onChange={handlePeriod}>
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-              <MenuItem value={30}>30</MenuItem>
+            <Select
+              labelId="period-label"
+              id="period"
+              value={periodId?.toString()}
+              label="時代"
+              onChange={handlePeriod}
+            >
+              {periods.map((period, index) => (
+                <MenuItem key={index} value={index + 1}>
+                  {period}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </div>
