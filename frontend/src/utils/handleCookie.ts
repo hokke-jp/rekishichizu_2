@@ -5,28 +5,25 @@ export const setCookies = (tokens: string[], user: User) => {
   Cookies.set('uid', tokens[0])
   Cookies.set('client', tokens[1])
   Cookies.set('accessToken', tokens[2])
-  Cookies.set('id', user.id?.toString() || '')
-  Cookies.set('name', user.name || '')
-  Cookies.set('avatar_url', user.avatar_url || '')
-  Cookies.set('introduction', user.introduction || '')
+  sessionStorage.setItem('id', user.id?.toString() || '')
+  sessionStorage.setItem('name', user.name || '')
+  sessionStorage.setItem('avatar_url', user.avatar_url || '')
+  sessionStorage.setItem('introduction', user.introduction || '')
 }
 
 export const removeCookies = () => {
   Cookies.remove('uid')
   Cookies.remove('client')
   Cookies.remove('accessToken')
-  Cookies.remove('id')
-  Cookies.remove('name')
-  Cookies.remove('avatar_url')
-  Cookies.remove('introduction')
+  sessionStorage.clear()
 }
 
-export const getUserCookies = () => {
+export const getUserSeesionStorage = () => {
   return {
-    id: Number(Cookies.get('id')) || undefined,
-    name: Cookies.get('name') || undefined,
-    introduction: Cookies.get('introduction') || undefined,
-    avatar_url: Cookies.get('avatar_url') || undefined
+    id: Number(sessionStorage.getItem('id')) || undefined,
+    name: sessionStorage.getItem('name') || undefined,
+    introduction: sessionStorage.getItem('introduction') || undefined,
+    avatar_url: sessionStorage.getItem('avatar_url') || undefined
   }
 }
 

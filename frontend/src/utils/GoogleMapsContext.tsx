@@ -52,7 +52,6 @@ export const GoogleMapsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const map = new google.maps.Map(document.getElementById('target') as HTMLElement, defaultOptions)
     setGoogleMap(map)
-    // googleMap?.addListener('click', ()=>console.log('hi'))
   }, [])
   const value = {
     googleMap,

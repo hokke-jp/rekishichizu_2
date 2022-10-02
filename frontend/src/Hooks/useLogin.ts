@@ -18,7 +18,6 @@ export const useLogin = () => {
         password
       })
       .then((response) => {
-        console.log(response)
         const headers = response.headers
         const user = response.data.data
         setCookies([headers.uid, headers.client, headers['access-token']], user)

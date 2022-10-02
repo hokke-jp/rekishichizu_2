@@ -1,7 +1,7 @@
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getTokens } from 'Utils/handleCookie'
+import { getTokens, setCookies } from 'Utils/handleCookie'
 import { useState, FormEvent, Dispatch, SetStateAction } from 'react'
 
 export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLElement>>) => {
@@ -36,7 +36,10 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
       })
       .then((response) => {
         console.log(response)
-        setCurrentUser(response.data)
+        const headers = response.headers
+        const user = response.data
+        setCookies([headers.uid, headers.client, headers['access-token']], user)
+        setCurrentUser(user)
         setOpen(false)
         setAnchorEl && setAnchorEl(null)
         setAlertSeverity('info')
@@ -44,7 +47,6 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
         return response.headers.uid
       })
       .catch((error) => {
-        console.error(error)
         const message = error.response.data.errors?.full_messages || '更新に失敗しました'
         setAlertMessage(message)
         setAlertSeverity('warning')

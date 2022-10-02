@@ -4,9 +4,9 @@ module Overrides
       if @resource
         if @resource.send(resource_update_method, account_update_params)
           yield @resource if block_given?
-          return unless @resource.introduction
 
           if account_update_params.key?(:introduction)
+            return unless @resource.introduction
 
             @resource.introduction.strip_zenkaku!
             @resource.save

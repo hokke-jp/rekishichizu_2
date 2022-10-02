@@ -1,6 +1,6 @@
 import { useAlertMessageContext } from './AlertMessageContext'
 import { axiosInstance } from 'Utils/axios'
-import { getTokens, getUserCookies, removeCookies } from 'Utils/handleCookie'
+import { getTokens, getUserSeesionStorage, removeCookies, setCookies } from 'Utils/handleCookie'
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -11,7 +11,7 @@ export interface User {
   avatar_url: string | undefined
 }
 
-const userCookies: User = getUserCookies()
+const userCookies: User = getUserSeesionStorage()
 const user = userCookies.id ? userCookies : undefined
 
 const CurrentUserContext = createContext(
@@ -33,20 +33,21 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate()
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   useEffect(() => {
-    const { uid, client, 'access-token': accessToken } = getTokens()
+    const tokens = getTokens()
     // Cookieをチェックし,トークンがあるなら認証リクエストを飛ばし,ないならリターン
-    if (!accessToken) return
+    if (!tokens.uid || !tokens.client || !tokens['access-token']) return
     axiosInstance
       .get('/auth/validate_token', {
         headers: {
           'Content-Type': 'application/json',
-          uid,
-          client,
-          'access-token': accessToken
+          ...tokens
         }
       })
       .then((response) => {
-        setCurrentUser(response.data)
+        const headers = response.headers
+        const user = response.data
+        setCookies([headers.uid, headers.client, headers['access-token']], user)
+        setCurrentUser(user)
         if (guestRoutes.includes(location.pathname)) {
           navigate('/')
           setAlertSeverity('info')
@@ -56,6 +57,8 @@ export const CurrentUserProvider = ({ children }: { children: ReactNode }) => {
       .catch((error) => {
         // トークンの期限が切れている等,認証に失敗した場合
         console.error(error)
+        setAlertSeverity('info')
+        setAlertMessage('ログイン中です')
         removeCookies()
         setCurrentUser(undefined)
       })
