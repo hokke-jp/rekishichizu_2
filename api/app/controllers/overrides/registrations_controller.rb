@@ -5,6 +5,7 @@ module Overrides
         if @resource.send(resource_update_method, account_update_params)
           yield @resource if block_given?
           if account_update_params.key?(:introduction)
+            return unless @resource.introduction
             @resource.introduction.strip_zenkaku!
             @resource.save
           end
@@ -18,3 +19,6 @@ module Overrides
     end
   end
 end
+
+# methods: [:avatar_url] と, strip_zenkaku! validation を入れるためにオーバーライド
+# その他はデフォルトのまま

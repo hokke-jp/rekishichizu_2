@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
   include Rails.application.routes.url_helpers
 
   has_one_attached :avatar
+  has_many :articles, dependent: :destroy
 
   validates :email, uniqueness: true
   NAME_REGEX = /\A[a-zA-Z\p{Hiragana}\p{Katakana}\p{Han}\d_ー-]+\z/.freeze

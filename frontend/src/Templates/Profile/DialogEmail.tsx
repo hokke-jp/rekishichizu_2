@@ -15,8 +15,10 @@ import { Dispatch, FormEvent, SetStateAction } from 'react'
 export const DialogEmail = ({ setAnchorEl }: { setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>> }) => {
   const { open, handleOpen, handleClose, update } = useUpdate(setAnchorEl)
   const handleUpdate = (event: FormEvent<HTMLFormElement>) => {
-    update(event).then((response) => {
-      Cookies.set('uid', response.headers.uid)
+    update(event).then((uid) => {
+      if (typeof uid === 'string') {
+        Cookies.set('uid', uid)
+      }
     })
   }
 

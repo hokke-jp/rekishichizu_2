@@ -2,7 +2,7 @@ import { Tooltip, ButtonBase } from '@mui/material'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { setCookie } from 'Utils/handleCookie'
+import { setCookies } from 'Utils/handleCookie'
 import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,9 +17,11 @@ export const EasyLoginWrapper = ({ children }: { children: ReactNode }) => {
         password: 'password'
       })
       .then((response) => {
+        console.log(response)
         const headers = response.headers
-        setCookie([headers.uid, headers.client, headers['access-token']])
-        setCurrentUser(response.data.data)
+        const user = response.data.data
+        setCookies([headers.uid, headers.client, headers['access-token']], user)
+        setCurrentUser(user)
         navigate(`/`, { replace: true })
         setAlertSeverity('info')
         setAlertMessage('ログインしました')

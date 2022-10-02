@@ -1,7 +1,7 @@
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken } from 'Utils/handleCookie'
+import { getTokens } from 'Utils/handleCookie'
 import { useState, FormEvent, Dispatch, SetStateAction } from 'react'
 
 export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLElement>>) => {
@@ -19,7 +19,14 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
     event.preventDefault()
     const data = new FormData(event.currentTarget)
     const params = getParams(data)
-    const tokens = getToken()
+    if (!params) {
+      setAlertMessage('入力してください')
+      setAlertSeverity('warning')
+      return new Promise((resolve, reject) => {
+        reject(new Error('無効な入力'))
+      })
+    }
+    const tokens = getTokens()
     return axiosInstance
       .patch('/auth', params, {
         headers: {
@@ -28,15 +35,18 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
         }
       })
       .then((response) => {
+        console.log(response)
         setCurrentUser(response.data)
         setOpen(false)
         setAnchorEl && setAnchorEl(null)
         setAlertSeverity('info')
         setAlertMessage('更新しました')
-        return response
+        return response.headers.uid
       })
       .catch((error) => {
-        setAlertMessage(error.response.data.errors.full_messages)
+        console.error(error)
+        const message = error.response.data.errors?.full_messages || '更新に失敗しました'
+        setAlertMessage(message)
         setAlertSeverity('warning')
         throw new Error(error)
       })
@@ -46,7 +56,8 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
 }
 const getParams = (data: FormData) => {
   if (data.get('name')) return { name: data.get('name') }
+  if (data.get('introduction')) return { introduction: data.get('introduction') }
   if (data.get('email')) return { email: data.get('email') }
   if (data.get('password')) return { password: data.get('password') }
-  return { introduction: data.get('introduction') }
+  return null
 }

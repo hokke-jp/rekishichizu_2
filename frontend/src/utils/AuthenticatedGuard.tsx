@@ -8,7 +8,7 @@ export const AuthenticatedGuard = ({ component }: { component: ReactNode }) => {
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   useEffect(() => {
     if (currentUser) {
-      setAlertSeverity('warning')
+      setAlertSeverity('info')
       setAlertMessage('ログイン中です')
     }
   })

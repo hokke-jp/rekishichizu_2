@@ -6,7 +6,7 @@ import { User } from 'Utils/CurrentUserContext'
 export const LoggedinIcons = ({ user }: { user: User }) => {
   return (
     <>
-      <IconWrapper path={user.name} tooltip="マイページ">
+      <IconWrapper path={user.name as string} tooltip="マイページ">
         <Avatar url={user.avatar_url} className="h-8 w-8 rounded-full" />
       </IconWrapper>
       <IconWrapper path="post" tooltip="投稿作成">

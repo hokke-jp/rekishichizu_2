@@ -4,14 +4,14 @@ import { Avatar } from 'Templates/Avatar'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'
-import { getToken } from 'Utils/handleCookie'
+import { getTokens } from 'Utils/handleCookie'
 
 export const EditableAvatar = () => {
   const { currentUser, setCurrentUser } = useCurrentUserContext()
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const handleChange = (e: { target: HTMLInputElement | null }) => {
     const target = e.target
-    const tokens = getToken()
+    const tokens = getTokens()
     if (target === null || target.files === null) return
     const sizeInMegabytes = target.files[0].size / 1024 / 1024
     if (sizeInMegabytes > 2) {

@@ -9,3 +9,10 @@ user = User.create!(
   password: 'password'
 )
 user.avatar.attach(io: File.open(Rails.root.join('db/seed_data/avatar_8.jpg')), filename: 'avatar.jpg', content_type: 'image/jpg')
+
+17.times do
+  Period.create!
+end
+47.times do
+  Prefecture.create!
+end
