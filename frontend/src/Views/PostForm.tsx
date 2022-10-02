@@ -112,8 +112,8 @@ export const PostForm = () => {
       })
   }
 
-  const [prefectureId, setPrefectureId] = useState<number | null>(null)
-  const [periodId, setPeriodId] = useState<number | null>(null)
+  const [prefectureId, setPrefectureId] = useState<number | ''>('')
+  const [periodId, setPeriodId] = useState<number | ''>('')
   const handlePrefecture = (event: SelectChangeEvent) => {
     setPrefectureId(Number(event.target.value))
   }
