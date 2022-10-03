@@ -1,8 +1,8 @@
 module V1
   class PostsController < ApplicationController
     def index
-      posts = Post.all
-      render json: posts
+      articles = Article.all
+      render json: articles
     end
   end
 end
