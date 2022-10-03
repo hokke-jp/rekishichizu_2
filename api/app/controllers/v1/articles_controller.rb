@@ -2,7 +2,9 @@ module V1
   class ArticlesController < ApplicationController
     before_action :authenticate_v1_user!, only: %i[show create]
     def index
-      articles = Article.all
+      # articles = Article.all
+      # render json: articles, include: [:user]
+      articles = Article.all.includes(user: :avatar_attachment)
       render json: articles
     end
 
