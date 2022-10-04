@@ -1,4 +1,5 @@
-import { User, useCurrentUserContext } from 'Utils/CurrentUserContext'
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
+import { User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'

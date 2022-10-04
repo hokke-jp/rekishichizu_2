@@ -4,6 +4,8 @@ class Article < ApplicationRecord
   belongs_to :user
   belongs_to :period
   belongs_to :prefecture
+  has_many :likes, dependent: :destroy
+  has_many :liked_user, through: :likes, source: :user
 
   has_one_attached :image
 

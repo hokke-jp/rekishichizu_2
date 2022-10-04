@@ -12,7 +12,7 @@ export const ArticlesDrawer = () => {
       .get('/articles')
       .then((response) => {
         console.log(response)
-        setIsLoading(true)
+        setIsLoading(false)
         setArticles(response.data)
       })
       .catch((error) => {
@@ -20,18 +20,28 @@ export const ArticlesDrawer = () => {
       })
   }, [])
 
+  const updateArticlesList = (updateArticleId: number, newLikedUserIds: number[]): void => {
+    setArticles(
+      articles.map((article: Article): Article => {
+        return article.id === updateArticleId ? { ...article, liked_user_ids: newLikedUserIds } : article
+      })
+    )
+  }
+
   return (
     <>
       <input type="checkbox" defaultChecked={true} id="articles-drawer-checkbox" hidden />
       <div
         id="articles-drawer-div"
         className="flex h-screen rounded-tr-3xl rounded-br-3xl bg-white shadow-md shadow-gray-300 overflow-hidden"
-        onClick={() => setIsLoading((prev) => !prev)}
+        // onClick={() => setIsLoading((prev) => !prev)}
       >
         <ul className="grow flex flex-col items-center gap-y-10 h-screen pt-10 pb-10 overflow-auto">
           {isLoading
             ? [...Array(4)].map((v, i) => <SkeletonCard key={i} />)
-            : articles.map((article, i) => <ArticleCard key={i} article={article} />)}
+            : articles.map((article, i) => (
+                <ArticleCard key={i} article={article} updateArticlesList={updateArticlesList} />
+              ))}
         </ul>
         <label
           id="articles-drawer-label"

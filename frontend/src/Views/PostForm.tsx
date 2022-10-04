@@ -1,78 +1,11 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
+import { PERIODS } from 'Constant/PERIOD'
+import { PREFECTURES } from 'Constant/PREFECTURE'
 import { ImagePreview } from 'Templates/Post/ImagePreview'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { axiosInstance } from 'Utils/axios'
 import { getTokens } from 'Utils/handleCookie'
 import { FormEvent, useState } from 'react'
-
-const prefectures = [
-  '北海道',
-  '青森県',
-  '岩手県',
-  '宮城県',
-  '秋田県',
-  '山形県',
-  '福島県',
-  '茨城県',
-  '栃木県',
-  '群馬県',
-  '埼玉県',
-  '千葉県',
-  '東京都',
-  '神奈川県',
-  '新潟県',
-  '富山県',
-  '石川県',
-  '福井県',
-  '山梨県',
-  '長野県',
-  '岐阜県',
-  '静岡県',
-  '愛知県',
-  '三重県',
-  '滋賀県',
-  '京都府',
-  '大阪府',
-  '兵庫県',
-  '奈良県',
-  '和歌山県',
-  '鳥取県',
-  '島根県',
-  '岡山県',
-  '広島県',
-  '山口県',
-  '徳島県',
-  '香川県',
-  '愛媛県',
-  '高知県',
-  '福岡県',
-  '佐賀県',
-  '長崎県',
-  '熊本県',
-  '大分県',
-  '宮崎県',
-  '鹿児島県',
-  '沖縄県'
-]
-const periods = [
-  '令和',
-  '平成',
-  '昭和',
-  '大正',
-  '明治',
-  '江戸',
-  '安土桃山',
-  '室町',
-  '鎌倉',
-  '平安',
-  '奈良',
-  '飛鳥',
-  '古墳',
-  '弥生',
-  '縄文',
-  '石器',
-  '人類以前'
-]
 
 export const PostForm = () => {
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
@@ -85,17 +18,6 @@ export const PostForm = () => {
     params.append('image', file || '')
     params.append('period_id', periodId.toString())
     params.append('prefecture_id', prefectureId.toString())
-    // const params = {
-    //   article: {
-    //     title: data.get('title'),
-    //     content: data.get('content'),
-    //     lat: 1.2,
-    //     lng: 1000.005,
-    //     image: file,
-    //     period_id: periodId,
-    //     prefecture_id: prefectureId
-    //   }
-    // }
     const tokens = getTokens()
     axiosInstance
       .post('/articles', params, {
@@ -145,7 +67,7 @@ export const PostForm = () => {
               label="都道府県"
               onChange={handlePrefecture}
             >
-              {prefectures.map((prefecture, index) => (
+              {PREFECTURES.map((prefecture, index) => (
                 <MenuItem key={index} value={index + 1}>
                   {prefecture}
                 </MenuItem>
@@ -161,7 +83,7 @@ export const PostForm = () => {
               label="時代"
               onChange={handlePeriod}
             >
-              {periods.map((period, index) => (
+              {PERIODS.map((period, index) => (
                 <MenuItem key={index} value={index + 1}>
                   {period}
                 </MenuItem>

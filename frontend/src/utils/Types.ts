@@ -1,4 +1,13 @@
+export interface User {
+  id: number | undefined
+  name: string | undefined
+  introduction: string | undefined
+  avatar_url: string | undefined
+  liking_article_ids: number[] | undefined
+}
+
 export interface Article {
+  id: number
   title: string
   content: string | undefined
   lat: number
@@ -11,4 +20,5 @@ export interface Article {
     name: string
     avatar_url: string | undefined
   }
+  liked_user_ids: number[]
 }

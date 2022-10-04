@@ -2,7 +2,7 @@ import { Avatar } from 'Templates/Avatar'
 import { Introduction } from 'Templates/Profile/Introduction'
 import { Layout } from 'Templates/Profile/Layout'
 import { Name } from 'Templates/Profile/Name'
-import { User } from 'Utils/CurrentUserContext'
+import { User } from 'Utils/Types'
 
 export const UserProfile = ({ user }: { user: User }) => {
   return (

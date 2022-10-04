@@ -3,7 +3,7 @@ module Overrides
     def validate_token
       if @resource
         yield @resource if block_given?
-        render json: @resource, methods: [:avatar_url]
+        render json: @resource, methods: [:avatar_url, :liking_article_ids]
       else
         render json: {
           success: false,

@@ -1,15 +1,9 @@
 import { useAlertMessageContext } from './AlertMessageContext'
+import { User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 import { getTokens, getUserSeesionStorage, removeCookies, setCookies } from 'Utils/handleCookie'
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-export interface User {
-  id: number | undefined
-  name: string | undefined
-  introduction: string | undefined
-  avatar_url: string | undefined
-}
 
 const userCookies: User = getUserSeesionStorage()
 const user = userCookies.id ? userCookies : undefined

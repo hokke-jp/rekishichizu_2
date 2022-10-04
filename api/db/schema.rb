@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_221_003_025_409) do
+ActiveRecord::Schema[7.0].define(version: 20_221_004_071_105) do
   create_table 'active_storage_attachments', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -54,6 +54,16 @@ ActiveRecord::Schema[7.0].define(version: 20_221_003_025_409) do
     t.index ['user_id'], name: 'index_articles_on_user_id'
   end
 
+  create_table 'likes', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
+    t.bigint 'user_id', null: false
+    t.bigint 'article_id', null: false
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['article_id'], name: 'index_likes_on_article_id'
+    t.index %w[user_id article_id], name: 'index_likes_on_user_id_and_article_id', unique: true
+    t.index ['user_id'], name: 'index_likes_on_user_id'
+  end
+
   create_table 'periods', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
@@ -85,4 +95,6 @@ ActiveRecord::Schema[7.0].define(version: 20_221_003_025_409) do
   add_foreign_key 'articles', 'periods'
   add_foreign_key 'articles', 'prefectures'
   add_foreign_key 'articles', 'users'
+  add_foreign_key 'likes', 'articles'
+  add_foreign_key 'likes', 'users'
 end
