@@ -2,9 +2,8 @@ module V1
   class ArticlesController < ApplicationController
     before_action :authenticate_v1_user!, only: %i[show create]
     def index
-      # articles = Article.all
-      # render json: articles, include: [:user]
-      articles = Article.all.includes(user: :avatar_attachment)
+      articles = Article.with_attached_image.includes(:user)
+      # articles = Article.all.includes(image_attachment: :blob, user: :avatar_attachment)
       render json: articles
     end
 
@@ -14,8 +13,8 @@ module V1
     end
 
     def create
-      # binding.pry
       article = current_v1_user.articles.build(article_params)
+      article.image.attach(article_params[:image]) if article_params[:image]
       if article.save
         # binding.pry
         render json: { article: }
@@ -27,8 +26,7 @@ module V1
     private
 
     def article_params
-      params.require(:article)
-            .permit(:title, :content, :period_id, :prefecture_id, :lat, :lng)
+      params.permit(:title, :content, :lat, :lng, :image, :period_id, :prefecture_id)
     end
   end
 end

@@ -78,28 +78,32 @@ export const PostForm = () => {
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
+    // const data = new FormData(event.currentTarget)
+    const params = new FormData(event.currentTarget)
+    params.append('lat', '1.2')
+    params.append('lng', '1.2')
+    params.append('image', file || '')
+    params.append('period_id', periodId.toString())
+    params.append('prefecture_id', prefectureId.toString())
+    // const params = {
+    //   article: {
+    //     title: data.get('title'),
+    //     content: data.get('content'),
+    //     lat: 1.2,
+    //     lng: 1000.005,
+    //     image: file,
+    //     period_id: periodId,
+    //     prefecture_id: prefectureId
+    //   }
+    // }
     const tokens = getTokens()
     axiosInstance
-      .post(
-        '/articles',
-        {
-          article: {
-            title: data.get('title'),
-            content: data.get('content'),
-            lat: 1.2,
-            lng: 1000.005,
-            period_id: periodId,
-            prefecture_id: prefectureId
-          }
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            ...tokens
-          }
+      .post('/articles', params, {
+        headers: {
+          'Content-Type': 'application/json',
+          ...tokens
         }
-      )
+      })
       .then((response) => {
         setAlertSeverity('info')
         setAlertMessage('更新しました')
@@ -120,6 +124,8 @@ export const PostForm = () => {
   const handlePeriod = (event: SelectChangeEvent) => {
     setPeriodId(Number(event.target.value))
   }
+
+  const [file, setFile] = useState<File | null>(null)
 
   return (
     <Box
@@ -163,9 +169,9 @@ export const PostForm = () => {
             </Select>
           </FormControl>
         </div>
-        <ImagePreview />
+        <ImagePreview file={file} setFile={setFile} />
       </div>
-      <TextField fullWidth label="説明文" name="description" multiline rows={8} />
+      <TextField fullWidth label="説明" name="content" multiline rows={8} />
       <Button type="submit" variant="contained" sx={{ alignSelf: 'flex-end', width: '100px', mt: 2 }}>
         作成
       </Button>
