@@ -1,6 +1,6 @@
 import { AddPhotoAlternateOutlined } from '@mui/icons-material'
 import { ButtonBase } from '@mui/material'
-import { Avatar } from 'Templates/Avatar'
+import { Avatar } from 'Parts/Avatar'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { axiosInstance } from 'Utils/axios'

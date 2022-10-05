@@ -10,9 +10,9 @@ interface Props {
   like: ReactNode
 }
 
-export const CardLayout = ({ handleOpen = undefined, image, title, avatar, userName, createdTime, like }: Props) => {
+export const CardLayout = ({ image, title, avatar, userName, createdTime, like }: Props) => {
   return (
-    <li className="w-52 min-h-[256px] border rounded-md shadow-md overflow-hidden" onDoubleClick={handleOpen}>
+    <div className="w-52 min-h-[256px] border rounded-md shadow-md overflow-hidden">
       {image}
       <div className="pt-4 px-3">
         {title}
@@ -27,6 +27,6 @@ export const CardLayout = ({ handleOpen = undefined, image, title, avatar, userN
           </div>
         </div>
       </div>
-    </li>
+    </div>
   )
 }

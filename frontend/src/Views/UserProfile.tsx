@@ -1,4 +1,4 @@
-import { Avatar } from 'Templates/Avatar'
+import { Avatar } from 'Parts/Avatar'
 import { Introduction } from 'Templates/Profile/Introduction'
 import { Layout } from 'Templates/Profile/Layout'
 import { Name } from 'Templates/Profile/Name'
