@@ -9,7 +9,7 @@ import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { Article, User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
-import { getTokens } from 'Utils/handleCookie'
+import { getTokens, removeCookies } from 'Utils/handleCookie'
 
 const useStyles = makeStyles({
   multiLineEllipsis: {
@@ -54,6 +54,10 @@ export const ArticleCard = ({ article, updateArticlesList }: Props) => {
       })
       .catch((error) => {
         console.error('エラー発生 : ', error)
+        setCurrentUser(undefined)
+        removeCookies()
+        setAlertSeverity('warning')
+        setAlertMessage(error.response.data.errors.join('\n'))
       })
   }
   const handleUnCheck = () => {
@@ -74,6 +78,10 @@ export const ArticleCard = ({ article, updateArticlesList }: Props) => {
       })
       .catch((error) => {
         console.error('エラー発生 : ', error)
+        setCurrentUser(undefined)
+        removeCookies()
+        setAlertSeverity('warning')
+        setAlertMessage(error.response.data.errors.join('\n'))
       })
   }
   const handleSuggest = () => {
