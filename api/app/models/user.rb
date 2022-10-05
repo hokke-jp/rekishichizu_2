@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
 
   has_one_attached :avatar
   has_many :articles, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :liking_article, through: :likes, source: :article
 
   validates :email, uniqueness: true
   NAME_REGEX = /\A[a-zA-Z\p{Hiragana}\p{Katakana}\p{Han}\d_ー-]+\z/.freeze

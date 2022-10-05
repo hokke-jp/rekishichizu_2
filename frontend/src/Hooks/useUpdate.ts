@@ -35,7 +35,6 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
         }
       })
       .then((response) => {
-        console.log(response)
         const headers = response.headers
         const user = response.data
         setCookies([headers.uid, headers.client, headers['access-token']], user)

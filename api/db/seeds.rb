@@ -16,12 +16,13 @@ user = User.create!(
 )
 user.avatar.attach(io: File.open(Rails.root.join('db/seed_data/avatar_8.jpg')), filename: 'avatar.jpg', content_type: 'image/jpg')
 
-Article.create!(
+article = user.articles.create!(
   title: 'seedsからの作成',
   content: 'seeds.rbから作成されました',
   lat: 123.456,
   lng: 78.01,
-  user_id: 1,
   period_id: 3,
   prefecture_id: 20
 )
+
+article.image.attach(io: File.open(Rails.root.join('db/seed_data/avatar_8.jpg')), filename: 'avatar.jpg', content_type: 'image/jpg')

@@ -1,4 +1,4 @@
-import { User } from 'Utils/CurrentUserContext'
+import { User } from 'Utils/Types'
 import Cookies from 'js-cookie'
 
 export const setCookies = (tokens: string[], user: User) => {
@@ -9,6 +9,7 @@ export const setCookies = (tokens: string[], user: User) => {
   sessionStorage.setItem('name', user.name || '')
   sessionStorage.setItem('avatar_url', user.avatar_url || '')
   sessionStorage.setItem('introduction', user.introduction || '')
+  sessionStorage.setItem('liking_article_ids', user.liking_article_ids?.join(',') || '')
 }
 
 export const removeCookies = () => {
@@ -23,7 +24,14 @@ export const getUserSeesionStorage = () => {
     id: Number(sessionStorage.getItem('id')) || undefined,
     name: sessionStorage.getItem('name') || undefined,
     introduction: sessionStorage.getItem('introduction') || undefined,
-    avatar_url: sessionStorage.getItem('avatar_url') || undefined
+    avatar_url: sessionStorage.getItem('avatar_url') || undefined,
+    liking_article_ids:
+      sessionStorage
+        .getItem('liking_article_ids')
+        ?.split(',')
+        .map((id) => {
+          return Number(id)
+        }) || undefined
   }
 }
 

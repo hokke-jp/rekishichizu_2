@@ -1,7 +1,7 @@
 import Post from 'Images/post.svg'
 import { IconWrapper } from 'Parts/IconWrapper'
 import { Avatar } from 'Templates/Avatar'
-import { User } from 'Utils/CurrentUserContext'
+import { User } from 'Utils/Types'
 
 export const LoggedinIcons = ({ user }: { user: User }) => {
   return (
