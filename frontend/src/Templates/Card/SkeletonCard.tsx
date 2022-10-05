@@ -1,6 +1,6 @@
-import { CardLayout } from './CardLayout'
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined'
 import { IconButton, Skeleton } from '@mui/material'
+import { CardLayout } from 'Templates/Card/CardLayout'
 
 export const SkeletonCard = () => {
   return (
@@ -14,7 +14,7 @@ export const SkeletonCard = () => {
       }
       avatar={<Skeleton variant="circular" width={40} height={40} />}
       userName={<Skeleton width="100%" variant="text" sx={{ fontSize: 13 }} />}
-      createdAt={<Skeleton width="60%" variant="text" sx={{ fontSize: 13 }} />}
+      createdTime={<Skeleton width="60%" variant="text" sx={{ fontSize: 13 }} />}
       like={
         <>
           <IconButton aria-label="like" size="small" disabled>
