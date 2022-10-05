@@ -2,6 +2,7 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined'
 import { IconButton, Typography } from '@mui/material'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
+import { useArticlesContext } from 'Utils/ArticlesContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { Article, User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
@@ -9,11 +10,11 @@ import { getTokens, removeCookies } from 'Utils/handleCookie'
 
 interface Props {
   article: Article
-  updateArticlesList: (updateArticleId: number, newLikedUserIds: number[]) => void
 }
-export const Like = ({ article, updateArticlesList }: Props) => {
+export const Like = ({ article }: Props) => {
   const { currentUser, setCurrentUser } = useCurrentUserContext()
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
+  const { updateArticlesList } = useArticlesContext()
   const handleCheck = () => {
     const tokens = getTokens()
     axiosInstance

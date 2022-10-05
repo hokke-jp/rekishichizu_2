@@ -22,7 +22,7 @@ export const EditableIntroduction = () => {
             value={newIntroduction || ''}
             autoFocus
             multiline
-            rows={4}
+            rows={8}
             margin="none"
             fullWidth
             onChange={(e) => setNewIntroduction(e.target.value)}

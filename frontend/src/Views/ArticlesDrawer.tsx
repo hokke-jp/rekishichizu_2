@@ -1,32 +1,9 @@
 import { ArticleCard } from 'Templates/Card/ArticleCard'
 import { SkeletonCard } from 'Templates/Card/SkeletonCard'
-import { Article } from 'Utils/Types'
-import { axiosInstance } from 'Utils/axios'
-import { useEffect, useState } from 'react'
+import { useArticlesContext } from 'Utils/ArticlesContext'
 
 export const ArticlesDrawer = () => {
-  const [isLoading, setIsLoading] = useState(true)
-  const [articles, setArticles] = useState<Article[]>([])
-  useEffect(() => {
-    axiosInstance
-      .get('/articles')
-      .then((response) => {
-        console.log(response)
-        setIsLoading(false)
-        setArticles(response.data)
-      })
-      .catch((error) => {
-        console.error('レスポンスエラー : ', error)
-      })
-  }, [])
-
-  const updateArticlesList = (updateArticleId: number, newLikedUserIds: number[]): void => {
-    setArticles(
-      articles.map((article: Article): Article => {
-        return article.id === updateArticleId ? { ...article, liked_user_ids: newLikedUserIds } : article
-      })
-    )
-  }
+  const { isLoading, articles } = useArticlesContext()
 
   return (
     <>
@@ -34,14 +11,11 @@ export const ArticlesDrawer = () => {
       <div
         id="articles-drawer-div"
         className="flex h-screen rounded-tr-3xl rounded-br-3xl bg-white shadow-md shadow-gray-300 overflow-hidden"
-        // onClick={() => setIsLoading((prev) => !prev)}
       >
         <ul className="grow flex flex-col items-center gap-y-10 h-screen pt-10 pb-10 overflow-auto">
           {isLoading
             ? [...Array(4)].map((v, i) => <SkeletonCard key={i} />)
-            : articles.map((article, i) => (
-                <ArticleCard key={i} article={article} updateArticlesList={updateArticlesList} />
-              ))}
+            : articles.map((article, i) => <ArticleCard key={i} article={article} />)}
         </ul>
         <label
           id="articles-drawer-label"
