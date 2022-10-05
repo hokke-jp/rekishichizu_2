@@ -17,4 +17,8 @@ class Article < ApplicationRecord
   def image_url
     image.attached? ? url_for(image) : nil
   end
+
+  def created_time
+    self.created_at.to_f * 1000
+  end
 end

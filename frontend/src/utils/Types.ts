@@ -13,6 +13,7 @@ export interface Article {
   lat: number
   lng: number
   image_url: string
+  created_time: number
   user_id: number
   period_id: number
   prefecture_id: number

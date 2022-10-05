@@ -1,15 +1,18 @@
-import { CardLayout } from './CardLayout'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined'
 import { IconButton, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import { CreatedAgo } from 'Parts/CreatedAgo'
 import { Avatar } from 'Templates/Avatar'
+import { CardLayout } from 'Templates/Card/CardLayout'
 import { Image } from 'Templates/Image'
+import { SkeltonModal } from 'Templates/Modal/SkeltonModal'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { Article, User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 import { getTokens, removeCookies } from 'Utils/handleCookie'
+import { useState } from 'react'
 
 const useStyles = makeStyles({
   multiLineEllipsis: {
@@ -46,9 +49,12 @@ export const ArticleCard = ({ article, updateArticlesList }: Props) => {
         }
       )
       .then((response) => {
+        console.log(response)
         const data = response.data
         updateArticlesList(article.id, data.new_liked_user_ids)
-        setCurrentUser((prevState) => ({ ...prevState, liking_article_ids: data.new_liking_article_ids } as User))
+        setCurrentUser(
+          (prevState: User | undefined) => ({ ...prevState, liking_article_ids: data.new_liking_article_ids } as User)
+        )
         setAlertSeverity('success')
         setAlertMessage('イイね！')
       })
@@ -72,7 +78,9 @@ export const ArticleCard = ({ article, updateArticlesList }: Props) => {
       .then((response) => {
         const data = response.data
         updateArticlesList(article.id, data.new_liked_user_ids)
-        setCurrentUser((prevState) => ({ ...prevState, liking_article_ids: data.new_liking_article_ids } as User))
+        setCurrentUser(
+          (prevState: User | undefined) => ({ ...prevState, liking_article_ids: data.new_liking_article_ids } as User)
+        )
         setAlertSeverity('info')
         setAlertMessage('イイね！を外しました')
       })
@@ -89,47 +97,55 @@ export const ArticleCard = ({ article, updateArticlesList }: Props) => {
     setAlertMessage('ログインしてください')
   }
 
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+
   return (
-    <CardLayout
-      image={<Image url={article.image_url} className="w-full h-32" />}
-      title={
-        <Typography variant="h6" sx={{ height: 44, fontSize: 14 }} className={classes.multiLineEllipsis}>
-          {article.title}
-        </Typography>
-      }
-      avatar={<Avatar url={article.user.avatar_url} className="w-10 h-10 rounded-full" />}
-      userName={
-        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 13 }} noWrap>
-          {article.user.name}
-        </Typography>
-      }
-      createdAt={
-        <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 13 }}>
-          2.days.ago
-        </Typography>
-      }
-      like={
-        <>
-          {currentUser ? (
-            currentUser.liking_article_ids?.includes(article.id) ? (
-              <IconButton aria-label="like" size="small" onClick={handleUnCheck}>
-                <ThumbUpIcon color="primary" sx={{ fontSize: 18 }} />
-              </IconButton>
+    <>
+      <CardLayout
+        handleOpen={handleOpen}
+        image={<Image url={article.image_url} className="w-full h-32" />}
+        title={
+          <Typography variant="h6" sx={{ height: 44, fontSize: 14 }} className={classes.multiLineEllipsis}>
+            {article.title}
+          </Typography>
+        }
+        avatar={<Avatar url={article.user.avatar_url} className="w-10 h-10 rounded-full" />}
+        userName={
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 13 }} noWrap>
+            {article.user.name}
+          </Typography>
+        }
+        createdTime={
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 13 }}>
+            <CreatedAgo createdTime={article.created_time} />
+          </Typography>
+        }
+        like={
+          <>
+            {currentUser ? (
+              currentUser.liking_article_ids?.includes(article.id) ? (
+                <IconButton size="small" onClick={handleUnCheck}>
+                  <ThumbUpIcon color="primary" sx={{ fontSize: 18 }} />
+                </IconButton>
+              ) : (
+                <IconButton size="small" onClick={handleCheck}>
+                  <ThumbUpOutlinedIcon color="primary" sx={{ fontSize: 18 }} />
+                </IconButton>
+              )
             ) : (
-              <IconButton aria-label="like" size="small" onClick={handleCheck}>
+              <IconButton size="small" onClick={handleSuggest}>
                 <ThumbUpOutlinedIcon color="primary" sx={{ fontSize: 18 }} />
               </IconButton>
-            )
-          ) : (
-            <IconButton aria-label="like" size="small" onClick={handleSuggest}>
-              <ThumbUpOutlinedIcon color="primary" sx={{ fontSize: 18 }} />
-            </IconButton>
-          )}
-          <Typography variant="body2" sx={{ color: 'primary.main', fontSize: 16, pt: '2px' }}>
-            {article.liked_user_ids.length}
-          </Typography>
-        </>
-      }
-    />
+            )}
+            <Typography variant="body2" sx={{ color: 'primary.main', fontSize: 16, pt: '2px' }}>
+              {article.liked_user_ids.length}
+            </Typography>
+          </>
+        }
+      />
+      <SkeltonModal open={open} handleClose={handleClose} />
+    </>
   )
 }

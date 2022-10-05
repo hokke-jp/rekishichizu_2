@@ -1,19 +1,16 @@
-import { SkeltonModal } from 'Templates/Modal/SkeltonModal'
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 interface Props {
+  handleOpen?: () => void
   image: ReactNode
   title: ReactNode
   avatar: ReactNode
   userName: ReactNode
-  createdAt: ReactNode
+  createdTime: ReactNode
   like: ReactNode
 }
 
-export const CardLayout = ({ image, title, avatar, userName, createdAt, like }: Props) => {
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+export const CardLayout = ({ handleOpen = undefined, image, title, avatar, userName, createdTime, like }: Props) => {
   return (
     <li className="w-52 min-h-[256px] border rounded-md shadow-md overflow-hidden" onDoubleClick={handleOpen}>
       {image}
@@ -24,13 +21,12 @@ export const CardLayout = ({ image, title, avatar, userName, createdAt, like }: 
           <div className="grow max-w-[138px]">
             {userName}
             <div className="flex items-center justify-between">
-              {createdAt}
+              {createdTime}
               <div className="flex items-center">{like}</div>
             </div>
           </div>
         </div>
       </div>
-      <SkeltonModal open={open} handleClose={handleClose} />
     </li>
   )
 }
