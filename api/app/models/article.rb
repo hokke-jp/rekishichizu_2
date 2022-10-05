@@ -19,6 +19,6 @@ class Article < ApplicationRecord
   end
 
   def created_time
-    self.created_at.to_f * 1000
+    created_at.to_f * 1000
   end
 end

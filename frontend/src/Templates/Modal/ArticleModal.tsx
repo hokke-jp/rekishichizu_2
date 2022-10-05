@@ -1,6 +1,7 @@
 import { Modal, Skeleton, Typography } from '@mui/material'
 import { AvatarLink } from 'Parts/AvatarLink'
 import { Image } from 'Templates/Image'
+import { Like } from 'Templates/Like'
 import { Article } from 'Utils/Types'
 import { Navigation } from 'swiper'
 import 'swiper/css'
@@ -55,20 +56,23 @@ export const ArticleModal = ({ article, open, handleClose }: Props) => {
             <Skeleton variant="rectangular" width={60} height={30} />
           </div>
           <hr className="w-0 h-2" />
-          <div className="flex items-center justify-between">
+          <div className="flex items-end justify-between">
             <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 13 }}>
               投稿日時 : {date.toLocaleDateString('ja-JP').toString()} {date.toLocaleTimeString('ja-JP').toString()}
             </Typography>
             <div className="flex items-center">
-              <Skeleton variant="circular" width={30} height={30} />
-              <Skeleton width={20} />
+              <Like article={article} />
             </div>
           </div>
           <hr className="mb-10" />
           <div>
-            <Typography variant="body2">
+            <Typography component={'span'} variant="body2">
               {article.content?.split('\n').map((i, key) => {
-                return <p key={key}>{i}</p>
+                return (
+                  <p className="min-h-[21px]" key={key}>
+                    {i}
+                  </p>
+                )
               })}
             </Typography>
           </div>

@@ -21,10 +21,9 @@ const useStyles = makeStyles({
 
 interface Props {
   article: Article
-  updateArticlesList: (updateArticleId: number, newLikedUserIds: number[]) => void
 }
 
-export const ArticleCard = ({ article, updateArticlesList }: Props) => {
+export const ArticleCard = ({ article }: Props) => {
   const classes = useStyles()
 
   const [open, setOpen] = useState(false)
@@ -53,7 +52,7 @@ export const ArticleCard = ({ article, updateArticlesList }: Props) => {
             <CreatedAgo createdTime={Number(article.created_time)} />
           </Typography>
         }
-        like={<Like article={article} updateArticlesList={updateArticlesList} />}
+        like={<Like article={article} />}
       />
       <ArticleModal article={article} open={open} handleClose={handleClose} />
     </li>

@@ -13,11 +13,11 @@ export const Layout = ({
   return (
     <section className="flex flex-col items-center pt-16 px-20">
       {avatar}
-      <hr className="h-10" />
+      <hr className="h-14" />
       {name}
-      <hr className="h-5" />
-      <div className="w-3/4 text-center">{introduction}</div>
-      <hr className="h-20" />
+      <hr className="h-14" />
+      <div className="w-1/2 text-center">{introduction}</div>
+      <hr className="h-24" />
       <Status />
     </section>
   )
