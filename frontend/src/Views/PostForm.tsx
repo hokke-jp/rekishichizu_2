@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
 import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
+import { Alert } from 'Templates/Form/Alert'
 import { ImagePreview } from 'Templates/Post/ImagePreview'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { axiosInstance } from 'Utils/axios'
@@ -10,6 +11,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const PostForm = () => {
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
+  const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -35,9 +37,8 @@ export const PostForm = () => {
         navigate('/')
       })
       .catch((error) => {
-        // setAlertMessage(error.response.data.errors.full_messages)
-        setAlertSeverity('warning')
         console.error(error)
+        setErrorMessage(error.response.data.errors.join('\n'))
       })
   }
 
@@ -55,9 +56,17 @@ export const PostForm = () => {
   return (
     <Box
       component="form"
-      sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', width: '50%', p: 8 }}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '50%',
+        p: 6
+      }}
       onSubmit={handleSubmit}
     >
+      <Alert errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
       <TextField fullWidth label="タイトル" name="title" autoFocus />
       <div className="flex gap-x-12">
         <div className="flex flex-col justify-around w-48">

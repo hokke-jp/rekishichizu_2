@@ -2,17 +2,19 @@ class Article < ApplicationRecord
   include Rails.application.routes.url_helpers
 
   belongs_to :user
-  belongs_to :period
-  belongs_to :prefecture
+  # optional は,アソシエーションによるデフォルトのエラーメッセージが変更できないため,仕方なく記載
+  # 独自に :〇〇_id, presence: { message ... } でメッセージ作成
+  belongs_to :period, optional: true
+  belongs_to :prefecture, optional: true
   has_many :likes, dependent: :destroy
   has_many :liked_user, through: :likes, source: :user
-
   has_one_attached :image
 
-  validates :title, presence: true
+  validates :title, presence: true, length: { maximum: 100 }
   validates :lat, presence: { message: 'を立ててください' }
-  validates :lng, presence: { message: 'を立ててください' }
   validates :user_id, presence: true
+  validates :prefecture_id, presence: { message: 'を選択してください' }
+  validates :period_id, presence: { message: 'を選択してください' }
 
   def image_url
     image.attached? ? url_for(image) : nil

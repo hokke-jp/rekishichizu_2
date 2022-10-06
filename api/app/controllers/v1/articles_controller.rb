@@ -14,20 +14,18 @@ module V1
 
     def create
       article = current_v1_user.articles.build(article_params)
-      article.image.attach(article_params[:image]) if article_params[:image]
       if article.save
-        # binding.pry
-        render :json
-        # render json: { article: }
+        article.image.attach(params[:image]) if params[:image].present?
+        head :created
       else
-        render json: { error: article.errors.full_messages }, status: 404
+        render json: { errors: article.errors.full_messages }, status: 404
       end
     end
 
     private
 
     def article_params
-      params.permit(:title, :content, :lat, :lng, :image, :period_id, :prefecture_id)
+      params.permit(:title, :content, :lat, :lng, :period_id, :prefecture_id)
     end
   end
 end
