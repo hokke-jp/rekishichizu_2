@@ -32,7 +32,7 @@ export const useSignup = () => {
       .catch((error) => {
         console.error(error)
         removeCookies()
-        setErrorMessage(error.response.data.errors.full_messages.join('\n'))
+        setErrorMessage(error.response.data.errors.full_messages.reverse().join('\n'))
       })
   }
   return { errorMessage, setErrorMessage, handleSignup }

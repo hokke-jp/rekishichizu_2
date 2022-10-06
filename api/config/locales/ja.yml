@@ -9,13 +9,16 @@ ja:
       #   password: パスワード
       #   password_confirmation: 確認用パスワード
       #   avatar: アイコン画像
-      # micropost:
-      #   title: タイトル
-      #   content: 説明文
-      #   period_id: 時代
-      #   prefecture_id: 都道府県
-      #   latlng: ピン
-      #   image: 投稿写真
+      article:
+        title: タイトル
+        content: 説明文
+        period: 時代
+        period_id: 時代
+        prefecture: 都道府県
+        prefecture_id: 都道府県
+        lat: ピン
+        lng: ピン
+        image: 投稿写真
   time:
     formats:
       default: "%Y/%m/%d %H:%M:%S"
