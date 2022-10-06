@@ -1,3 +1,4 @@
+import { Follow } from './Follow'
 import { Avatar } from 'Parts/Avatar'
 import { Introduction } from 'Templates/Profile/Introduction'
 import { Layout } from 'Templates/Profile/Layout'
@@ -6,10 +7,13 @@ import { User } from 'Utils/Types'
 
 export const UserProfile = ({ user }: { user: User }) => {
   return (
-    <Layout
-      avatar={<Avatar url={user.avatar_url} className="h-48 w-48 rounded-full" />}
-      name={<Name name={user.name} />}
-      introduction={<Introduction introduction={user.introduction} />}
-    />
+    <>
+      <Follow user={user} />
+      <Layout
+        avatar={<Avatar url={user.avatar_url} className="h-48 w-48 rounded-full" />}
+        name={<Name name={user.name} />}
+        introduction={<Introduction introduction={user.introduction} />}
+      />
+    </>
   )
 }

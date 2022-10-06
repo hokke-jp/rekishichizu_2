@@ -40,7 +40,11 @@ export const ArticleCard = ({ article }: Props) => {
           </Typography>
         }
         avatar={
-          <AvatarLink path={article.user.name} avatarUrl={article.user.avatar_url} className="w-10 h-10 rounded-full" />
+          <AvatarLink
+            path={article.user.name}
+            avatarUrl={article.user.avatar_url}
+            className="w-10 h-10 mb-2 rounded-full"
+          />
         }
         userName={
           <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 13 }} noWrap>

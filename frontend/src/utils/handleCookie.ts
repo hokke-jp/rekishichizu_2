@@ -10,6 +10,7 @@ export const setCookies = (tokens: string[], user: User) => {
   sessionStorage.setItem('avatar_url', user.avatar_url || '')
   sessionStorage.setItem('introduction', user.introduction || '')
   sessionStorage.setItem('liking_article_ids', user.liking_article_ids?.join(',') || '')
+  sessionStorage.setItem('following_ids', user.following_ids?.join(',') || '')
 }
 
 export const removeCookies = () => {
@@ -19,15 +20,21 @@ export const removeCookies = () => {
   sessionStorage.clear()
 }
 
+const getStorage = (key: string) => sessionStorage.getItem(key)
 export const getUserSeesionStorage = () => {
   return {
-    id: Number(sessionStorage.getItem('id')) || undefined,
-    name: sessionStorage.getItem('name') || undefined,
-    introduction: sessionStorage.getItem('introduction') || undefined,
-    avatar_url: sessionStorage.getItem('avatar_url') || undefined,
+    id: Number(getStorage('id')) || undefined,
+    name: getStorage('name') || undefined,
+    introduction: getStorage('introduction') || undefined,
+    avatar_url: getStorage('avatar_url') || undefined,
     liking_article_ids:
-      sessionStorage
-        .getItem('liking_article_ids')
+      getStorage('liking_article_ids')
+        ?.split(',')
+        .map((id) => {
+          return Number(id)
+        }) || undefined,
+    following_ids:
+      getStorage('following_ids')
         ?.split(',')
         .map((id) => {
           return Number(id)

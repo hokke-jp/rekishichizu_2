@@ -6,9 +6,11 @@ import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { axiosInstance } from 'Utils/axios'
 import { getTokens } from 'Utils/handleCookie'
 import { FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const PostForm = () => {
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
+  const navigate = useNavigate()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     // const data = new FormData(event.currentTarget)
@@ -27,9 +29,10 @@ export const PostForm = () => {
         }
       })
       .then((response) => {
-        setAlertSeverity('info')
-        setAlertMessage('更新しました')
         console.log(response)
+        setAlertSeverity('success')
+        setAlertMessage('投稿しました')
+        navigate('/')
       })
       .catch((error) => {
         // setAlertMessage(error.response.data.errors.full_messages)
