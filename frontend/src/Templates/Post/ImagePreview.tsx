@@ -21,7 +21,6 @@ export const ImagePreview = ({ file, setFile }: Props) => {
       }
     }
     reader.readAsDataURL(file)
-    console.log(file)
 
     return () => {
       reader = null

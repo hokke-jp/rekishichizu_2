@@ -7,15 +7,11 @@ import { UserProfile } from 'Views/UserProfile'
 export const Profile = () => {
   const { isLoading, isMypage, user } = useProfile()
 
-  return (
-    <div className="pb-48">
-      {isLoading ? (
-        <div className="flex justify-center items-center w-full h-screen">
-          <CircularProgress size={68} />
-        </div>
-      ) : (
-        <>{isMypage ? <MyProfile /> : <>{user ? <UserProfile user={user} /> : <NotFound />}</>}</>
-      )}
+  return isLoading ? (
+    <div className="flex justify-center items-center w-full h-screen">
+      <CircularProgress size={68} />
     </div>
+  ) : (
+    <>{isMypage ? <MyProfile /> : <>{user ? <UserProfile user={user} /> : <NotFound />}</>}</>
   )
 }

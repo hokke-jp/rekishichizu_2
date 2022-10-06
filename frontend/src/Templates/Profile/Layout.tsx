@@ -11,7 +11,7 @@ export const Layout = ({
   introduction: ReactNode
 }) => {
   return (
-    <section className="flex flex-col items-center pt-16 px-20">
+    <section className="flex flex-col items-center py-16 px-20">
       {avatar}
       <hr className="h-14" />
       {name}

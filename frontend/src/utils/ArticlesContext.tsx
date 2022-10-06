@@ -21,7 +21,6 @@ export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
     axiosInstance
       .get('/articles')
       .then((response) => {
-        console.log(response)
         setIsLoading(false)
         setArticles(response.data)
       })
