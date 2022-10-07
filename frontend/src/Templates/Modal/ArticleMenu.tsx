@@ -1,17 +1,17 @@
-import { Logout } from '@mui/icons-material'
+import { DialogDelete } from './DialogDelete'
+import { DialogEdit } from './DialogEdit'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
-import Box from '@mui/material/Box'
-import Divider from '@mui/material/Divider'
-import IconButton from '@mui/material/IconButton'
-import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
-import { useLogout } from 'Hooks/useLogout'
-import { DialogEmail } from 'Templates/Profile/DialogEmail'
-import { DialogPassword } from 'Templates/Profile/DialogPassword'
-import { ProfileMenuItem } from 'Templates/Profile/ProfileMenuItem'
+import { IconButton, Menu, MenuItem } from '@mui/material'
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
+import { Article } from 'Utils/Types'
 import { MouseEvent, useState } from 'react'
 
-export const ProfileMenu = () => {
+interface Props {
+  article: Article
+}
+
+export const ArticleMenu = ({ article }: Props) => {
+  const { currentUser } = useCurrentUserContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -20,21 +20,18 @@ export const ProfileMenu = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const { logout } = useLogout()
 
-  return (
-    <div className="fixed top-2 right-3">
-      <Box>
-        <IconButton
-          onClick={handleClick}
-          size="small"
-          aria-controls={open ? 'account-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-        >
-          <MoreHorizIcon sx={{ width: 32, height: 32 }}></MoreHorizIcon>
-        </IconButton>
-      </Box>
+  return currentUser && currentUser.article_ids?.includes(article.id) ? (
+    <div className="fixed top-2 right-2">
+      <IconButton
+        onClick={handleClick}
+        size="small"
+        aria-controls={open ? 'account-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+      >
+        <MoreHorizIcon sx={{ width: 32, height: 32 }}></MoreHorizIcon>
+      </IconButton>
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
@@ -70,16 +67,12 @@ export const ProfileMenu = () => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem>
-          <DialogEmail setAnchorEl={setAnchorEl} />
+          <DialogEdit setAnchorEl={setAnchorEl} />
         </MenuItem>
         <MenuItem>
-          <DialogPassword setAnchorEl={setAnchorEl} />
-        </MenuItem>
-        <Divider />
-        <MenuItem>
-          <ProfileMenuItem handleFunction={logout} icon={<Logout fontSize="small" />} text="ログアウト" />
+          <DialogDelete setAnchorEl={setAnchorEl} article={article} />
         </MenuItem>
       </Menu>
     </div>
-  )
+  ) : null
 }

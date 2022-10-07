@@ -6,7 +6,8 @@ const ArticlesContext = createContext(
   {} as {
     isLoading: boolean
     articles: Article[]
-    updateArticlesList: (updateArticleId: number, newLikedUserIds: number[]) => void
+    updateLikedUserIds: (updateArticleId: number, newLikedUserIds: number[]) => void
+    deleteArticleFromList: (id: number) => void
   }
 )
 
@@ -29,7 +30,7 @@ export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
       })
   }, [])
 
-  const updateArticlesList = (updateArticleId: number, newLikedUserIds: number[]): void => {
+  const updateLikedUserIds = (updateArticleId: number, newLikedUserIds: number[]): void => {
     setArticles(
       articles.map((article: Article): Article => {
         return article.id === updateArticleId ? { ...article, liked_user_ids: newLikedUserIds } : article
@@ -37,10 +38,15 @@ export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
     )
   }
 
+  const deleteArticleFromList = (id: number): void => {
+    setArticles(articles.filter((article: Article) => article.id !== id))
+  }
+
   const value = {
     isLoading,
     articles,
-    updateArticlesList
+    updateLikedUserIds,
+    deleteArticleFromList
   }
 
   return <ArticlesContext.Provider value={value}>{children}</ArticlesContext.Provider>

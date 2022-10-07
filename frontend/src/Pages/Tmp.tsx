@@ -1,35 +1,10 @@
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
-import { axiosInstance } from 'Utils/axios.js'
-import { OutlinedCard } from 'Views/OutlinedCard'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-
-interface Post {
-  id: number
-  created_at: Date
-  updated_at: Date
-  title: string
-  content: string
-}
 
 export const Tmp = () => {
   const [count, setCount] = useState(0)
-  const [posts, setPosts] = useState<Post[]>([])
   console.log('呼ばれた')
-  const testFunc = async () => {
-    const res = await axiosInstance.get('/posts')
-    console.log('res : ', res)
-    // setCount((p) => p + 10)
-  }
-  testFunc()
-  useEffect(() => {
-    console.log('useEffect 呼ばれた')
-    const f = async () => {
-      const res = await axiosInstance.get('/posts')
-      setPosts(res.data)
-    }
-    f()
-  }, [])
 
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const handleDelete = () => {
@@ -43,7 +18,6 @@ export const Tmp = () => {
     const color = colors[Math.floor(Math.random() * 4)]
     setAlertSeverity(color)
   }
-
   const location = useLocation()
 
   return (
@@ -51,9 +25,10 @@ export const Tmp = () => {
       <p>count : {count}</p>
       <p>location : {JSON.stringify(location)}</p>
       <div>
-        <button onClick={() => setCount((p) => p + 1)}>+</button>
+        <button className="px-4 py-2 bg-yellow-200 border" onClick={() => setCount((p) => p + 1)}>
+          +
+        </button>
       </div>
-      <OutlinedCard posts={posts} />
       <button className="block px-8 py-4 bg-blue-200 mb-5" onClick={handleCreate}>
         作成
       </button>

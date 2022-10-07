@@ -41,14 +41,14 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
         setCurrentUser(user)
         setOpen(false)
         setAnchorEl && setAnchorEl(null)
-        setAlertSeverity('info')
+        setAlertSeverity('success')
         setAlertMessage('更新しました')
         return response.headers.uid
       })
       .catch((error) => {
         const message = error.response.data.errors?.full_messages || '更新に失敗しました'
-        setAlertMessage(message)
         setAlertSeverity('warning')
+        setAlertMessage(message)
         throw new Error(error)
       })
   }

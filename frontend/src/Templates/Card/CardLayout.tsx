@@ -1,18 +1,18 @@
 import { ReactNode } from 'react'
 
 interface Props {
-  handleOpen?: () => void
   image: ReactNode
   title: ReactNode
   avatar: ReactNode
   userName: ReactNode
   createdTime: ReactNode
   like: ReactNode
+  handleOpen?: () => void
 }
 
-export const CardLayout = ({ image, title, avatar, userName, createdTime, like }: Props) => {
+export const CardLayout = ({ image, title, avatar, userName, createdTime, like, handleOpen }: Props) => {
   return (
-    <div className="w-52 min-h-[256px] border rounded-md shadow-md overflow-hidden">
+    <div onDoubleClick={handleOpen} className="w-52 min-h-[256px] border rounded-md shadow-md overflow-hidden">
       {image}
       <div className="pt-4 px-3">
         {title}
