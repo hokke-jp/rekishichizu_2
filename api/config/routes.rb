@@ -8,12 +8,10 @@ Rails.application.routes.draw do
       sessions: 'overrides/sessions'
     }
     get '/users/:userName', to: 'users#show'
-    get '/articles', to: 'articles#index'
-    post '/articles', to: 'articles#create'
     get '/article', to: 'articles#show'
+    resources :articles, only: %i[index create destroy]
     resources :likes, only: %i[create destroy]
     resources :relationships, only: %i[create destroy]
-    get '/posts', to: 'posts#index'
   end
   get '/health_check', to: 'health_check#index'
 end

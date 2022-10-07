@@ -1,3 +1,4 @@
+import { ArticleMenu } from './ArticleMenu'
 import { Modal, Skeleton, Typography } from '@mui/material'
 import { AvatarLink } from 'Parts/AvatarLink'
 import { Image } from 'Templates/Image'
@@ -25,6 +26,7 @@ export const ArticleModal = ({ article, open, handleClose }: Props) => {
       aria-describedby="modal-modal-description"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex min-w-[80%] w-4/5 min-h-[80%] h-4/5 bg-white outline-none rounded-xl overflow-hidden">
+        <ArticleMenu article={article} />
         <Swiper navigation={true} modules={[Navigation]} className="mySwiper min-w-[40%] w-2/5 h-full bg-gray-200">
           <SwiperSlide>
             <Image url={article.image_url} className="w-full h-full" />

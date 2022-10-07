@@ -1,6 +1,6 @@
 import { Modal, Skeleton } from '@mui/material'
 
-export const SkeltonModal = ({ open, handleClose }: { open: boolean; handleClose: () => void }) => {
+export const SkeletonModal = ({ open, handleClose }: { open: boolean; handleClose: () => void }) => {
   return (
     <Modal
       open={open}

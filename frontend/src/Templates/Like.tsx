@@ -14,7 +14,7 @@ interface Props {
 export const Like = ({ article }: Props) => {
   const { currentUser, setCurrentUser } = useCurrentUserContext()
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
-  const { updateArticlesList } = useArticlesContext()
+  const { updateLikedUserIds } = useArticlesContext()
   const handleCheck = () => {
     const tokens = getTokens()
     axiosInstance
@@ -32,7 +32,7 @@ export const Like = ({ article }: Props) => {
       )
       .then((response) => {
         const data = response.data
-        updateArticlesList(article.id, data.new_liked_user_ids)
+        updateLikedUserIds(article.id, data.new_liked_user_ids)
         setCurrentUser(
           (prevState: User | undefined) => ({ ...prevState, liking_article_ids: data.new_liking_article_ids } as User)
         )
@@ -58,7 +58,7 @@ export const Like = ({ article }: Props) => {
       })
       .then((response) => {
         const data = response.data
-        updateArticlesList(article.id, data.new_liked_user_ids)
+        updateLikedUserIds(article.id, data.new_liked_user_ids)
         setCurrentUser(
           (prevState: User | undefined) => ({ ...prevState, liking_article_ids: data.new_liking_article_ids } as User)
         )

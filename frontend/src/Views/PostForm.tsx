@@ -4,6 +4,8 @@ import { PREFECTURES } from 'Constant/PREFECTURE'
 import { Alert } from 'Templates/Form/Alert'
 import { ImagePreview } from 'Templates/Post/ImagePreview'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
+import { useCurrentUserContext } from 'Utils/CurrentUserContext'
+import { User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 import { getTokens } from 'Utils/handleCookie'
 import { FormEvent, useState } from 'react'
@@ -11,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const PostForm = () => {
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
+  const { setCurrentUser } = useCurrentUserContext()
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -31,7 +34,9 @@ export const PostForm = () => {
         }
       })
       .then((response) => {
-        console.log(response)
+        const articleIds = response.data.article_ids
+        setCurrentUser((prevState: User | undefined) => ({ ...prevState, article_ids: articleIds } as User))
+        sessionStorage.setItem('article_ids', articleIds)
         setAlertSeverity('success')
         setAlertMessage('投稿しました')
         navigate('/')

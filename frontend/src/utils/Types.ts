@@ -3,6 +3,7 @@ export interface User {
   name: string
   introduction: string | undefined
   avatar_url: string | undefined
+  article_ids: number[] | undefined
   liking_article_ids: number[] | undefined
   following_ids: number[] | undefined
 }

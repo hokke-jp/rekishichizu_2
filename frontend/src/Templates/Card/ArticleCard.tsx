@@ -25,13 +25,12 @@ interface Props {
 
 export const ArticleCard = ({ article }: Props) => {
   const classes = useStyles()
-
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   return (
-    <li onDoubleClick={handleOpen}>
+    <>
       <CardLayout
         image={<Image url={article.image_url} className="w-full h-32" />}
         title={
@@ -57,8 +56,9 @@ export const ArticleCard = ({ article }: Props) => {
           </Typography>
         }
         like={<Like article={article} />}
+        handleOpen={handleOpen}
       />
       <ArticleModal article={article} open={open} handleClose={handleClose} />
-    </li>
+    </>
   )
 }
