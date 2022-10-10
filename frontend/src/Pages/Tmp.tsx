@@ -4,6 +4,13 @@ import { useLocation } from 'react-router-dom'
 
 export const Tmp = () => {
   const [count, setCount] = useState(0)
+  const [nums, setNums] = useState<number[]>([])
+  const handleNum = () => {
+    setNums([1, 2, 3])
+  }
+  const handleNums = (index: number) => {
+    setNums(nums.map((num, i) => (i === index ? 100 : num)))
+  }
   console.log('呼ばれた')
 
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
@@ -24,6 +31,10 @@ export const Tmp = () => {
 
   return (
     <div className="">
+      JSON : {JSON.stringify(nums)} <br />
+      input : <input type="text" value={nums.toString()} />
+      <button onClick={handleNum}>btn</button>
+      <button onClick={() => handleNums(0)}>btn</button>
       <p>count : {count}</p>
       <p>location : {JSON.stringify(location)}</p>
       <div>

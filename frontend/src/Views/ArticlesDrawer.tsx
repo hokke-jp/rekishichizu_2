@@ -21,7 +21,7 @@ export const ArticlesDrawer = () => {
               ))
             : articles.map((article, i) => (
                 <li key={i}>
-                  <ArticleCard article={article} />
+                  <ArticleCard article={article} index={i} />
                 </li>
               ))}
         </ul>

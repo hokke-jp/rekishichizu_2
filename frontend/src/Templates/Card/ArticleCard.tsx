@@ -1,13 +1,15 @@
 import { Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
+import { ARTICLE_CLICK_ZOOM } from 'Constant/MAP'
 import { AvatarLink } from 'Parts/AvatarLink'
 import { CreatedAgo } from 'Parts/CreatedAgo'
 import { CardLayout } from 'Templates/Card/CardLayout'
 import { Image } from 'Templates/Image'
 import { Like } from 'Templates/Like'
 import { ArticleModal } from 'Templates/Modal/ArticleModal'
+import { useArticlesContext } from 'Utils/ArticlesContext'
+import { useGoogleMapsContext } from 'Utils/GoogleMapsContext'
 import { Article } from 'Utils/Types'
-import { useState } from 'react'
 
 const useStyles = makeStyles({
   multiLineEllipsis: {
@@ -21,13 +23,20 @@ const useStyles = makeStyles({
 
 interface Props {
   article: Article
+  index: number
 }
 
-export const ArticleCard = ({ article }: Props) => {
+export const ArticleCard = ({ article, index }: Props) => {
+  const { googleMap } = useGoogleMapsContext()
+  const { handleOpen } = useArticlesContext()
   const classes = useStyles()
-  const [open, setOpen] = useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const attentionToPin = () => {
+    googleMap?.panTo({ lat: article.lat, lng: article.lng })
+    googleMap?.setZoom(ARTICLE_CLICK_ZOOM)
+  }
+  const modalOpen = () => {
+    handleOpen(index)
+  }
 
   return (
     <>
@@ -56,9 +65,10 @@ export const ArticleCard = ({ article }: Props) => {
           </Typography>
         }
         like={<Like article={article} />}
-        handleOpen={handleOpen}
+        onDoubleClick={modalOpen}
+        onClick={attentionToPin}
       />
-      <ArticleModal article={article} open={open} handleClose={handleClose} />
+      <ArticleModal article={article} index={index} />
     </>
   )
 }
