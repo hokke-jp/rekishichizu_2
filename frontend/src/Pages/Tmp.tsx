@@ -20,6 +20,8 @@ export const Tmp = () => {
   }
   const location = useLocation()
 
+  const [hello, setHello] = useState('よろしく')
+
   return (
     <div className="">
       <p>count : {count}</p>
@@ -37,6 +39,9 @@ export const Tmp = () => {
       </button>
       <button className="block px-8 py-4 bg-blue-200" onClick={handleDelete}>
         デリート
+      </button>
+      <button className="block px-8 py-4 bg-blue-200" onClick={() => setHello('よろしく')}>
+        {hello}
       </button>
     </div>
   )

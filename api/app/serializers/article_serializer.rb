@@ -1,6 +1,5 @@
 class ArticleSerializer < ActiveModel::Serializer
-  # attributes :id, :title, :content, :lat, :lng, :image_url, :user_id, :period_id, :prefecture_id, :created_at
-  attributes :id, :title, :content, :lat, :lng, :image_url, :user_id, :period_id, :prefecture_id, :created_time, :liked_user_ids
+  attributes :id, :title, :content, :lat, :lng, :created_time, :image_url, :user_id, :period_id, :prefecture_id, :liked_user_ids
   belongs_to :user
   class UserSerializer < ActiveModel::Serializer
     attributes :name, :avatar_url

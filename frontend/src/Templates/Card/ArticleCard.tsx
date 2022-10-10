@@ -40,7 +40,7 @@ export const ArticleCard = ({ article }: Props) => {
         }
         avatar={
           <AvatarLink
-            path={article.user.name}
+            path={`/${article.user.name}`}
             avatarUrl={article.user.avatar_url}
             className="w-10 h-10 mb-2 rounded-full"
           />

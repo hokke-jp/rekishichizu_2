@@ -16,6 +16,11 @@ class Article < ApplicationRecord
   validates :prefecture_id, presence: { message: 'を選択してください' }
   validates :period_id, presence: { message: 'を選択してください' }
 
+  def self.customised_articles
+    # Article.all.includes(image_attachment: :blob, user: :avatar_attachment)
+    with_attached_image.includes(:liked_user, user: { avatar_attachment: :blob })
+  end
+
   def image_url
     image.attached? ? url_for(image) : nil
   end

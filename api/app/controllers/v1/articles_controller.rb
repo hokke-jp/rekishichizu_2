@@ -1,15 +1,14 @@
 module V1
   class ArticlesController < ApplicationController
-    before_action :authenticate_v1_user!, only: %i[show create destroy]
+    before_action :authenticate_v1_user!, only: %i[create destroy]
     def index
-      articles = Article.with_attached_image.includes(:liked_user, user: { avatar_attachment: :blob })
-      # articles = Article.all.includes(image_attachment: :blob, user: :avatar_attachment)
+      # binding.pry
+      if includes_query?
+        articles = Article.customised_articles.where(id: params_ids)
+        return render json: articles
+      end
+      articles = Article.customised_articles
       render json: articles
-    end
-
-    def show
-      article = Article.first
-      render json: article
     end
 
     def create
@@ -31,6 +30,14 @@ module V1
 
     def article_params
       params.permit(:title, :content, :lat, :lng, :period_id, :prefecture_id)
+    end
+
+    def includes_query?
+      !!params[:ids] || !!params[:period_id] || !!params[:prefecture_id]
+    end
+
+    def params_ids
+      params[:ids].split(',').map(&:to_i)
     end
   end
 end

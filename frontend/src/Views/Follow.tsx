@@ -31,7 +31,6 @@ export const Follow = ({ user }: Props) => {
         }
       )
       .then((response) => {
-        console.log(response)
         const data = response.data
         setCurrentUser(
           (prevState: User | undefined) => ({ ...prevState, following_ids: data.new_following_ids } as User)
@@ -57,7 +56,6 @@ export const Follow = ({ user }: Props) => {
         }
       })
       .then((response) => {
-        console.log(response)
         const data = response.data
         setCurrentUser(
           (prevState: User | undefined) => ({ ...prevState, following_ids: data.new_following_ids } as User)

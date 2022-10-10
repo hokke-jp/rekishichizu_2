@@ -28,5 +28,6 @@ export const useProfile = () => {
         setIsLoading(false)
       })
   }, [currentUser, isMypage, params.userName])
+
   return { isLoading, isMypage, user }
 }

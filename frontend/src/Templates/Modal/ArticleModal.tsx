@@ -1,8 +1,8 @@
-import { ArticleMenu } from './ArticleMenu'
 import { Modal, Skeleton, Typography } from '@mui/material'
 import { AvatarLink } from 'Parts/AvatarLink'
 import { Image } from 'Templates/Image'
 import { Like } from 'Templates/Like'
+import { ArticleMenu } from 'Templates/Modal/ArticleMenu'
 import { Article } from 'Utils/Types'
 import { Navigation } from 'swiper'
 import 'swiper/css'
@@ -38,7 +38,7 @@ export const ArticleModal = ({ article, open, handleClose }: Props) => {
         <div className="grow pt-5 px-8 pb-10 overflow-scroll">
           <div className="flex items-center gap-5">
             <AvatarLink
-              path={article.user.name}
+              path={`/${article.user.name}`}
               avatarUrl={article.user.avatar_url}
               className="w-14 h-14 rounded-full"
             />

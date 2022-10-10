@@ -11,7 +11,11 @@ export const Profile = () => {
     <div className="flex justify-center items-center w-full h-screen">
       <CircularProgress size={68} />
     </div>
+  ) : isMypage ? (
+    <MyProfile />
+  ) : user ? (
+    <UserProfile user={user} />
   ) : (
-    <>{isMypage ? <MyProfile /> : <>{user ? <UserProfile user={user} /> : <NotFound />}</>}</>
+    <NotFound />
   )
 }
