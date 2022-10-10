@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react'
 export const Map = () => {
   const [googleMapsApiLoaded, setGoogleMapsApiLoaded] = useState<boolean>(false)
   useEffect(() => {
-    console.log('map call')
     ;(async () => {
       const loader = new Loader({
         apiKey: `${process.env.REACT_APP_API_KEY}`,

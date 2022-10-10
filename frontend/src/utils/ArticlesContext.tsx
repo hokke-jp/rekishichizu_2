@@ -1,13 +1,14 @@
 import { Article } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const ArticlesContext = createContext(
   {} as {
     isLoading: boolean
     articles: Article[]
-    updateLikedUserIds: (updateArticleId: number, newLikedUserIds: number[]) => void
-    deleteArticleFromList: (id: number) => void
+    setIsLoading: Dispatch<SetStateAction<boolean>>
+    setArticles: Dispatch<SetStateAction<Article[]>>
   }
 )
 
@@ -18,7 +19,10 @@ export const useArticlesContext = () => {
 export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [articles, setArticles] = useState<Article[]>([])
+  const location = useLocation()
   useEffect(() => {
+    // ホームページのみレンダリング時に articles を fetch する
+    if (location.pathname !== '/') return
     axiosInstance
       .get('/articles')
       .then((response) => {
@@ -28,25 +32,13 @@ export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
       .catch((error) => {
         console.error('レスポンスエラー : ', error)
       })
-  }, [])
-
-  const updateLikedUserIds = (updateArticleId: number, newLikedUserIds: number[]): void => {
-    setArticles(
-      articles.map((article: Article): Article => {
-        return article.id === updateArticleId ? { ...article, liked_user_ids: newLikedUserIds } : article
-      })
-    )
-  }
-
-  const deleteArticleFromList = (id: number): void => {
-    setArticles(articles.filter((article: Article) => article.id !== id))
-  }
+  }, [location.pathname])
 
   const value = {
     isLoading,
     articles,
-    updateLikedUserIds,
-    deleteArticleFromList
+    setIsLoading,
+    setArticles
   }
 
   return <ArticlesContext.Provider value={value}>{children}</ArticlesContext.Provider>

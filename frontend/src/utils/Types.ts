@@ -8,6 +8,12 @@ export interface User {
   following_ids: number[] | undefined
 }
 
+export interface UserInList {
+  id: number
+  name: string
+  avatar_url: string | undefined
+}
+
 export interface Article {
   id: number
   title: string

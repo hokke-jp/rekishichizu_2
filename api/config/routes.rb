@@ -7,8 +7,8 @@ Rails.application.routes.draw do
       registrations: 'overrides/registrations',
       sessions: 'overrides/sessions'
     }
-    get '/users/:userName', to: 'users#show'
-    get '/article', to: 'articles#show'
+    get '/users', to: 'users#index'
+    get '/users/:user_name', to: 'users#show'
     resources :articles, only: %i[index create destroy]
     resources :likes, only: %i[create destroy]
     resources :relationships, only: %i[create destroy]
