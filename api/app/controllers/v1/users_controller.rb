@@ -1,10 +1,10 @@
 module V1
   class UsersController < ApplicationController
     def index
-      if includes_query?
-        users = User.includes(avatar_attachment: :blob).select(:id, :name).where(id: params_ids)
-        return render json: {users: users}, methods: [:avatar_url]
-      end
+      return unless includes_query?
+
+      users = User.includes(avatar_attachment: :blob).select(:id, :name).where(id: params_ids)
+      render json: { users: }, methods: [:avatar_url]
       # users = User.all
       # render json: users
     end
