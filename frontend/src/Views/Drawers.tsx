@@ -14,7 +14,6 @@ export const Drawers = () => {
       })
       const infoWindow = new google.maps.InfoWindow({
         content: `<img src=${article.image_url} alt="Article Image" style="max-width: 600px; max-height: 200px;" />`
-        // content: `<div style="width: 300px; height: 200px" ><img src=${article.image_url} alt="Article Image" style="object-fit: cover" /></div>`
       })
 
       marker.addListener('mouseover', () => {

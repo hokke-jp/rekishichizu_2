@@ -62,7 +62,6 @@ export const useArticle = () => {
     axiosInstance
       .get(`/users`, { params: { ids: `${ids}` } })
       .then((response) => {
-        console.log(response)
         setUsers(response.data.users as UserInList[])
         scrollToElement(ref)
       })

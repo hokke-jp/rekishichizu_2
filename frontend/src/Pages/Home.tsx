@@ -21,23 +21,19 @@ export const Home = () => {
     })()
   }, [])
 
-  return (
-    <>
-      {googleMapsApiLoaded ? (
-        <GoogleMapsProvider>
-          <ArticlesProvider>
-            <div className="h-screen bg-gray-200">
-              <Drawers />
-              <div id="target" className="h-full" />
-              <VerticalIconBar />
-            </div>
-          </ArticlesProvider>
-        </GoogleMapsProvider>
-      ) : (
-        <div className="flex justify-center items-center h-full bg-gray-200">
-          <CircularProgress size={68} />
+  return googleMapsApiLoaded ? (
+    <GoogleMapsProvider>
+      <ArticlesProvider>
+        <div className="h-screen bg-gray-200">
+          <Drawers />
+          <div id="target" className="h-full" />
+          <VerticalIconBar />
         </div>
-      )}
-    </>
+      </ArticlesProvider>
+    </GoogleMapsProvider>
+  ) : (
+    <div className="flex justify-center items-center h-full bg-gray-200">
+      <CircularProgress size={68} />
+    </div>
   )
 }
