@@ -7,12 +7,17 @@ interface Props {
   userName: ReactNode
   createdTime: ReactNode
   like: ReactNode
-  handleOpen?: () => void
+  onDoubleClick?: () => void
+  onClick?: () => void
 }
 
-export const CardLayout = ({ image, title, avatar, userName, createdTime, like, handleOpen }: Props) => {
+export const CardLayout = ({ image, title, avatar, userName, createdTime, like, onDoubleClick, onClick }: Props) => {
   return (
-    <div onDoubleClick={handleOpen} className="w-52 min-h-[256px] border rounded-md shadow-md overflow-hidden">
+    <div
+      onDoubleClick={onDoubleClick}
+      onClick={onClick}
+      className="w-52 min-h-[256px] border rounded-md shadow-md overflow-hidden"
+    >
       {image}
       <div className="pt-4 px-3">
         {title}

@@ -4,9 +4,9 @@ export const Image = ({ url, className }: { url: string | null | undefined; clas
   return (
     <>
       {url ? (
-        <img src={url} alt="User avatar" className={className.concat(' object-cover')} />
+        <img src={url} alt="Article Image" className={className.concat(' object-cover')} />
       ) : (
-        <img src={NoImage} alt="User avatar" className={className.concat(' object-cover')} />
+        <img src={NoImage} alt="Article Image" className={className.concat(' object-cover')} />
       )}
     </>
   )

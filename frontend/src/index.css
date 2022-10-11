@@ -11,6 +11,23 @@
   opacity: 60%;
 }
 
+/* HTML5でフルスクリーンに入ると、背景/要素が黒くなる 対策 */
+#root {
+  background-color: white;
+}
+
+#alert-div {
+  position: fixed;
+  z-index: 9999;
+  top: 40px;
+  right: -80px;
+  transition: all 0.2s;
+  opacity: 80%;
+}
+#alert-checkbox[type='checkbox']:checked ~ #alert-div {
+  right: 20px;
+}
+
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
@@ -59,18 +76,6 @@
 }
 #articles-drawer-div ul::-webkit-scrollbar {
   display: none;
-}
-
-#alert-div {
-  position: fixed;
-  z-index: 9999;
-  top: 40px;
-  right: -80px;
-  transition: all 0.2s;
-  opacity: 80%;
-}
-#alert-checkbox[type='checkbox']:checked ~ #alert-div {
-  right: 20px;
 }
 
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */

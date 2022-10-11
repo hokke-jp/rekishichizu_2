@@ -5,26 +5,80 @@ import { Alert } from 'Templates/Form/Alert'
 import { ImagePreview } from 'Templates/Post/ImagePreview'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
+import { useGoogleMapsContext } from 'Utils/GoogleMapsContext'
 import { User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 import { getTokens } from 'Utils/handleCookie'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-export const PostForm = () => {
+interface Props {
+  loaded?: boolean
+}
+
+export const PostForm = ({ loaded = false }: Props) => {
+  const { googleMap } = useGoogleMapsContext()
+  const [latlng, setLatlng] = useState<google.maps.LatLng>({ lat: () => 0, lng: () => 0 } as google.maps.LatLng)
+  useEffect(() => {
+    if (!loaded) return
+    if (googleMap) {
+      let marker = new google.maps.Marker()
+      google.maps.event.addListener(googleMap, 'click', (e: google.maps.MapMouseEvent) => {
+        const geocoder = new google.maps.Geocoder()
+        geocoder.geocode({ location: e.latLng }, (results, status) => {
+          if (!e.latLng) return
+          if (status === 'OK' && results && results[0]) {
+            let prefecture = ''
+            let isJapan = false
+            results.forEach((result) => {
+              if (result.types.includes('administrative_area_level_1')) {
+                prefecture = result.address_components[0].long_name
+              }
+              if (result.types.includes('country') && result.formatted_address === '日本') {
+                isJapan = true
+              }
+            })
+
+            if (prefecture && isJapan) {
+              setLatlng(e.latLng)
+              if (marker) {
+                marker.setMap(null)
+              }
+              marker = new google.maps.Marker({
+                position: e.latLng,
+                map: googleMap,
+                animation: google.maps.Animation.DROP
+              })
+
+              const preId = PREFECTURES.indexOf(prefecture) + 1
+              setPrefectureId(preId)
+            }
+          } else if (status === 'ZERO_RESULTS') {
+            alert('不明なアドレスです： ' + status)
+          } else {
+            alert('失敗しました： ' + status)
+          }
+        })
+      })
+    }
+    // return google.maps.event.clearInstanceListeners(googleMap || {})
+  }, [googleMap, loaded])
+
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   const { setCurrentUser } = useCurrentUserContext()
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
+  const latLngZeroCheck = (params: FormData) => {
+    params.get('lat') === '0' && params.append('lat', '')
+    params.get('lng') === '0' && params.append('lng', '')
+  }
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // const data = new FormData(event.currentTarget)
     const params = new FormData(event.currentTarget)
-    params.append('lat', '1.2')
-    params.append('lng', '1.2')
     params.append('image', file || '')
     params.append('period_id', periodId.toString())
     params.append('prefecture_id', prefectureId.toString())
+    latLngZeroCheck(params)
     const tokens = getTokens()
     axiosInstance
       .post('/articles', params, {
@@ -46,7 +100,6 @@ export const PostForm = () => {
         setErrorMessage(error.response.data.errors.join('\n'))
       })
   }
-
   const [prefectureId, setPrefectureId] = useState<number | ''>('')
   const [periodId, setPeriodId] = useState<number | ''>('')
   const handlePrefecture = (event: SelectChangeEvent) => {
@@ -55,7 +108,6 @@ export const PostForm = () => {
   const handlePeriod = (event: SelectChangeEvent) => {
     setPeriodId(Number(event.target.value))
   }
-
   const [file, setFile] = useState<File | null>(null)
 
   return (
@@ -73,6 +125,8 @@ export const PostForm = () => {
     >
       <Alert errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
       <TextField fullWidth label="タイトル" name="title" autoFocus />
+      <TextField type="number" value={latlng?.lat()} name="lat" sx={{ display: 'none' }} />
+      <TextField type="number" value={latlng?.lng()} name="lng" sx={{ display: 'none' }} />
       <div className="flex gap-x-12">
         <div className="flex flex-col justify-around w-48">
           <FormControl>

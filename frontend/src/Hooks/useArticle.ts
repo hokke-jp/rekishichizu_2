@@ -10,7 +10,7 @@ const scrollToElement = (ref: MutableRefObject<HTMLDivElement | null>) => {
 }
 
 export const useArticle = () => {
-  const { articles, setArticles } = useArticlesContext()
+  const { articles, setArticles, setModalOpens } = useArticlesContext()
   const [users, setUsers] = useState<UserInList[]>([])
   const [duringFetchData, setDuringFetchData] = useState<'article' | 'user' | null>(null)
   const [nowLoading, setNowLoading] = useState(true)
@@ -39,7 +39,10 @@ export const useArticle = () => {
     axiosInstance
       .get(`/articles`, { params: { ids: `${ids}` } })
       .then((response) => {
-        setArticles(response.data as Article[])
+        const articles = response.data
+        setArticles(articles as Article[])
+        const nums = articles.length
+        setModalOpens([...Array(nums)].map(() => false))
         scrollToElement(ref)
       })
       .catch((error) => {
@@ -59,7 +62,6 @@ export const useArticle = () => {
     axiosInstance
       .get(`/users`, { params: { ids: `${ids}` } })
       .then((response) => {
-        console.log(response)
         setUsers(response.data.users as UserInList[])
         scrollToElement(ref)
       })

@@ -3,6 +3,7 @@ import { AvatarLink } from 'Parts/AvatarLink'
 import { Image } from 'Templates/Image'
 import { Like } from 'Templates/Like'
 import { ArticleMenu } from 'Templates/Modal/ArticleMenu'
+import { useArticlesContext } from 'Utils/ArticlesContext'
 import { Article } from 'Utils/Types'
 import { Navigation } from 'swiper'
 import 'swiper/css'
@@ -11,16 +12,16 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 interface Props {
   article: Article
-  open: boolean
-  handleClose: () => void
+  index: number
 }
 
-export const ArticleModal = ({ article, open, handleClose }: Props) => {
+export const ArticleModal = ({ article, index }: Props) => {
+  const { modalOpens, handleClose } = useArticlesContext()
   const date = new Date(article.created_time)
 
   return (
     <Modal
-      open={open}
+      open={modalOpens[index]}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
