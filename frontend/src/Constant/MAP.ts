@@ -1,1 +1,1 @@
-export const ARTICLE_CLICK_ZOOM = 10
+export const ARTICLE_CLICK_ZOOM = 9

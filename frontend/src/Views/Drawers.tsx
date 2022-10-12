@@ -1,3 +1,5 @@
+import { SearchDrawer } from './SearchDrawer'
+import NoImage from 'Images/no_image.jpg'
 import { useArticlesContext } from 'Utils/ArticlesContext'
 import { useGoogleMapsContext } from 'Utils/GoogleMapsContext'
 import { ArticlesDrawer } from 'Views/ArticlesDrawer'
@@ -13,7 +15,9 @@ export const Drawers = () => {
         map: googleMap
       })
       const infoWindow = new google.maps.InfoWindow({
-        content: `<img src=${article.image_url} alt="Article Image" style="max-width: 600px; max-height: 200px;" />`
+        content: article.image_url
+          ? `<img src=${article.image_url} alt="Article Image" style="max-width: 600px; max-height: 200px;" />`
+          : `<img src=${NoImage} alt="No Image" style="width: 200px;" />`
       })
 
       marker.addListener('mouseover', () => {
@@ -28,7 +32,9 @@ export const Drawers = () => {
         if (infoWindow) infoWindow.close()
       })
 
-      marker.addListener('click', () => {
+      marker.addListener('click', (e: google.maps.MapMouseEvent) => {
+        if (!e.latLng) return
+        googleMap?.panTo(e.latLng)
         handleOpen(index)
       })
     })
@@ -38,25 +44,7 @@ export const Drawers = () => {
     <>
       <ArticlesDrawer />
 
-      <input type="checkbox" id="search-drawer-checkbox" hidden />
-      <div
-        id="search-drawer-div"
-        className="flex h-screen rounded-tr-3xl rounded-br-3xl bg-white shadow-lg overflow-hidden"
-      >
-        <div className="grow flex flex-col items-center gap-y-3 pt-10">
-          <div className="w-24 h-60 bg-gray-400"></div>
-          <div className="w-24 h-60 bg-gray-400"></div>
-          <div className="w-24 h-60 bg-gray-400"></div>
-          <div className="w-24 h-60 bg-gray-400"></div>
-        </div>
-        <label
-          id="search-drawer-label"
-          htmlFor="search-drawer-checkbox"
-          className="block relative h-screen w-12 hover:bg-gray-100"
-        >
-          <span className="absolute top-1/2 right-3 w-1 h-8 bg-gray-300 rounded-lg"></span>
-        </label>
-      </div>
+      <SearchDrawer />
     </>
   )
 }

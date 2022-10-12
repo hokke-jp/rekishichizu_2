@@ -14,7 +14,7 @@ export const ArticlesDrawer = () => {
       >
         <ul className="grow flex flex-col items-center gap-y-10 h-screen pt-10 pb-10 overflow-auto">
           {isLoading
-            ? [...Array(4)].map((v, i) => (
+            ? [...Array(3)].map((v, i) => (
                 <li key={i}>
                   <SkeletonCard />
                 </li>

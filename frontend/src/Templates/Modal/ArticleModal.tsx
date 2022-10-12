@@ -1,4 +1,6 @@
-import { Modal, Skeleton, Typography } from '@mui/material'
+import { Modal, Typography } from '@mui/material'
+import { PERIODS } from 'Constant/PERIOD'
+import { PREFECTURES } from 'Constant/PREFECTURE'
 import { AvatarLink } from 'Parts/AvatarLink'
 import { Image } from 'Templates/Image'
 import { Like } from 'Templates/Like'
@@ -49,31 +51,48 @@ export const ArticleModal = ({ article, index }: Props) => {
               </Typography>
             </div>
           </div>
-          <hr className="w-0 h-6" />
+          <hr className="w-0 h-7" />
           <div>
             <Typography variant="h5">{article.title}</Typography>
           </div>
-          <hr className="w-0 h-5" />
-          <div className="flex gap-x-2">
-            <Skeleton variant="rectangular" width={60} height={30} />
-            <Skeleton variant="rectangular" width={60} height={30} />
-          </div>
-          <hr className="w-0 h-2" />
-          <div className="flex items-end justify-between">
-            <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 13 }}>
-              投稿日時 : {date.toLocaleDateString('ja-JP').toString()} {date.toLocaleTimeString('ja-JP').toString()}
-            </Typography>
-            <div className="flex items-center">
+          <hr className="w-0 h-7" />
+          <div className="flex items-end gap-x-10">
+            <div className="">
+              <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontSize: 12 }}>
+                時代
+              </Typography>
+              <Typography variant="subtitle2" sx={{ fontSize: 16 }}>
+                {PERIODS[article.period_id - 1]}
+              </Typography>
+            </div>
+            <div className="">
+              <Typography variant="subtitle2" sx={{ color: 'text.secondary', fontSize: 12 }}>
+                都道府県
+              </Typography>
+              <Typography variant="subtitle2" sx={{ fontSize: 16 }}>
+                {PREFECTURES[article.prefecture_id - 1]}
+              </Typography>
+            </div>
+            <div className="flex flex-col gap-y-1">
+              <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: 12 }}>
+                投稿日
+              </Typography>
+              <Typography variant="body2" sx={{ fontSize: 16 }}>
+                {`${date.toLocaleDateString('ja-JP')}`}
+                {/* {`${date.toLocaleDateString('ja-JP')}`} {`${date.toLocaleTimeString('ja-JP')}`} */}
+              </Typography>
+            </div>
+            <div className="flex items-center ml-auto">
               <Like article={article} />
             </div>
           </div>
           <hr className="mb-10" />
           <div>
             <Typography component={'span'} variant="body2">
-              {article.content?.split('\n').map((i, key) => {
+              {article.content?.split('\n').map((text, index) => {
                 return (
-                  <p className="min-h-[21px]" key={key}>
-                    {i}
+                  <p className="min-h-[21px]" key={index}>
+                    {text}
                   </p>
                 )
               })}
