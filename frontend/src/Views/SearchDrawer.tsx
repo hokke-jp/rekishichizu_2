@@ -41,7 +41,7 @@ export const SearchDrawer = () => {
   const [words, setWords] = useState<string>('')
   const [periods, setPeriods] = useState<number[]>([])
   const [prefectures, setPrefecurets] = useState<number[]>([])
-  const { setArticles } = useArticlesContext()
+  const { setIsLoading, setArticles } = useArticlesContext()
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setWords(event.target.value)
@@ -67,6 +67,7 @@ export const SearchDrawer = () => {
   }
 
   const handleSearch = () => {
+    setIsLoading(true)
     const removeSpace = (str: string): string => {
       return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
     }
@@ -82,6 +83,9 @@ export const SearchDrawer = () => {
       .then((response) => {
         console.log('response : ', response)
         setArticles(response.data)
+      })
+      .finally(() => {
+        setIsLoading(false)
       })
   }
 

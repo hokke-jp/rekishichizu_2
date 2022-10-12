@@ -21,6 +21,7 @@ export const useArticlesContext = () => {
 }
 
 export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
+  console.log('更新プロバイダー')
   const [isLoading, setIsLoading] = useState(true)
   const [articles, setArticles] = useState<Article[]>([])
   const [modalOpens, setModalOpens] = useState<boolean[]>([])

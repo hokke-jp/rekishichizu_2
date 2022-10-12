@@ -9,6 +9,7 @@ export const Drawers = () => {
   const { googleMap } = useGoogleMapsContext()
   const { articles, isLoading, handleOpen } = useArticlesContext()
   useEffect(() => {
+    const markers = new google.maps.MVCArray()
     articles.forEach((article, index) => {
       const marker = new google.maps.Marker({
         position: { lat: article.lat, lng: article.lng },
@@ -37,7 +38,14 @@ export const Drawers = () => {
         googleMap?.panTo(e.latLng)
         handleOpen(index)
       })
+
+      markers.push(marker)
     })
+    return function cleanup() {
+      markers.forEach((marker) => {
+        marker.setMap(null)
+      })
+    }
   }, [googleMap, articles, isLoading, handleOpen])
 
   return (
