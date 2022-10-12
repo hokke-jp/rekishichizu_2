@@ -35,7 +35,7 @@
 /* GoogleMapのDrawerのポジション */
 :root {
   --articles-width: 288px;
-  --search-width: 224px;
+  --search-width: 320px;
   --drawer-handle-width: 48px;
   --sidebar-width: 72px;
 }
