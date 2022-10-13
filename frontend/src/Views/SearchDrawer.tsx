@@ -1,3 +1,4 @@
+// import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded'
 import SearchIcon from '@mui/icons-material/Search'
 import {
   Box,
@@ -16,7 +17,7 @@ import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
 import { useArticlesContext } from 'Utils/ArticlesContext'
 import { axiosInstance } from 'Utils/axios'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -37,15 +38,23 @@ const sortByAsc = (ary: number[]): number[] => {
   })
 }
 
+type Radio = 'latest' | 'popular' | 'old' | 'new'
+
 export const SearchDrawer = () => {
+  const [radioCheck, setRadioCheck] = useState<Radio>('latest')
   const [words, setWords] = useState<string>('')
   const [periods, setPeriods] = useState<number[]>([])
-  const [prefectures, setPrefecurets] = useState<number[]>([])
-  const { setIsLoading, setArticles } = useArticlesContext()
+  const [prefectures, setPrefectures] = useState<number[]>([])
+  const { articles, setIsLoading, setArticles } = useArticlesContext()
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setWords(event.target.value)
-  }
+  useEffect(() => {
+    const elem = document.getElementById('period-multiple-chip-label')
+    elem?.focus()
+  })
+
+  const handleRadio = (event: ChangeEvent<HTMLInputElement>) => setRadioCheck(event.target.id as Radio)
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => setWords(event.target.value)
 
   const handlePeriod = (event: SelectChangeEvent<string | string[]>) => {
     const {
@@ -59,11 +68,16 @@ export const SearchDrawer = () => {
     const {
       target: { value }
     } = event
-    setPrefecurets(
+    setPrefectures(
       typeof value === 'string'
         ? [PREFECTURES.indexOf(value) + 1]
         : sortByAsc(value.map((val) => PREFECTURES.indexOf(val) + 1))
     )
+  }
+
+  const handleChipDelete = (target: string, array: string[], setState: Dispatch<SetStateAction<number[]>>) => {
+    const targetIndex = array.indexOf(target) + 1
+    setState((prev) => prev.filter((elem) => elem !== targetIndex))
   }
 
   const handleSearch = () => {
@@ -81,7 +95,25 @@ export const SearchDrawer = () => {
         }
       })
       .then((response) => {
-        console.log('response : ', response)
+        setArticles(response.data)
+      })
+      .finally(() => {
+        setIsLoading(false)
+        setRadioCheck('latest')
+      })
+  }
+
+  const handleSort = (sortBy: string) => {
+    setIsLoading(true)
+    const ids: number[] = articles.map((article) => article.id)
+    axiosInstance
+      .get('/articles', {
+        params: {
+          sort_by: sortBy,
+          ids: `${ids}`
+        }
+      })
+      .then((response) => {
         setArticles(response.data)
       })
       .finally(() => {
@@ -98,38 +130,74 @@ export const SearchDrawer = () => {
       >
         <div className="grow flex flex-col gap-y-10 min-h-screen py-10 pr-2 pl-8 overflow-scroll">
           <div className="grid grid-rows-2 grid-cols-2 min-h-[96px] border border-[#B7B7B7] rounded-2xl overflow-hidden">
-            <ButtonBase>
-              <input type="radio" id="latest" name="drone" value="latest" className="peer" hidden defaultChecked />
+            <ButtonBase onClick={() => handleSort('created_at DESC')}>
+              <input
+                type="radio"
+                id="latest"
+                name="drone"
+                value="latest"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'latest'}
+              />
               <label
                 htmlFor="latest"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r border-b"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r border-b hover:cursor-pointer"
               >
                 <p>最新</p>
               </label>
             </ButtonBase>
-            <ButtonBase>
-              <input type="radio" id="popular" name="drone" value="popular" className="peer" hidden />
+            <ButtonBase onClick={() => handleSort('likes_count DESC')}>
+              <input
+                type="radio"
+                id="popular"
+                name="drone"
+                value="popular"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'popular'}
+              />
               <label
                 htmlFor="popular"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-b"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-b hover:cursor-pointer"
               >
                 <p>人気</p>
               </label>
             </ButtonBase>
-            <ButtonBase>
-              <input type="radio" id="asc" name="drone" value="asc" className="peer" hidden />
+            <ButtonBase onClick={() => handleSort('period_id DESC')}>
+              <input
+                type="radio"
+                id="old"
+                name="drone"
+                value="old"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'old'}
+              />
               <label
-                htmlFor="asc"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r"
+                htmlFor="old"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r hover:cursor-pointer"
               >
                 <p>古い</p>
               </label>
             </ButtonBase>
-            <ButtonBase>
-              <input type="radio" id="desc" name="drone" value="desc" className="peer" hidden />
+            <ButtonBase onClick={() => handleSort('period_id ASC')}>
+              <input
+                type="radio"
+                id="new"
+                name="drone"
+                value="new"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'new'}
+              />
               <label
-                htmlFor="desc"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7]"
+                htmlFor="new"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] hover:cursor-pointer"
               >
                 <p>新しい</p>
               </label>
@@ -157,10 +225,10 @@ export const SearchDrawer = () => {
           </FormControl>
 
           <FormControl>
-            <InputLabel id="demo-multiple-chip-label">時代</InputLabel>
+            <InputLabel id="period-multiple-chip-label">時代</InputLabel>
             <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
+              labelId="period-multiple-chip-label"
+              id="period-multiple-chip"
               multiple
               fullWidth
               value={periods.map((period) => PERIODS[period - 1])}
@@ -169,7 +237,17 @@ export const SearchDrawer = () => {
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {selected.map((value) => (
-                    <Chip key={value} label={value} />
+                    <Chip
+                      key={value}
+                      label={value}
+                      onDelete={() => handleChipDelete(value, PERIODS, setPeriods)}
+                      onMouseDown={(event) => {
+                        if (selected.length === 1) {
+                          return handleChipDelete(value, PERIODS, setPeriods)
+                        }
+                        event.stopPropagation()
+                      }}
+                    />
                   ))}
                 </Box>
               )}
@@ -184,10 +262,10 @@ export const SearchDrawer = () => {
           </FormControl>
 
           <FormControl>
-            <InputLabel id="demo-multiple-chip-label">都道府県</InputLabel>
+            <InputLabel id="prefecture-multiple-chip-label">都道府県</InputLabel>
             <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
+              labelId="prefecture-multiple-chip-label"
+              id="prefecture-multiple-chip"
               multiple
               fullWidth
               value={prefectures.map((prefecture) => PREFECTURES[prefecture - 1])}
@@ -196,7 +274,17 @@ export const SearchDrawer = () => {
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {selected.map((value) => (
-                    <Chip key={value} label={value} />
+                    <Chip
+                      key={value}
+                      label={value}
+                      onDelete={() => handleChipDelete(value, PREFECTURES, setPrefectures)}
+                      onMouseDown={(event) => {
+                        if (selected.length === 1) {
+                          return handleChipDelete(value, PREFECTURES, setPrefectures)
+                        }
+                        event.stopPropagation()
+                      }}
+                    />
                   ))}
                 </Box>
               )}
