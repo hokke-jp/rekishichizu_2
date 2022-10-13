@@ -76,9 +76,9 @@ export const Status = ({ articleIds, likingArticleIds, followingIds }: Props) =>
                   <SkeletonCard />
                 </li>
               ))
-            : articles.map((article, i) => (
-                <li key={i}>
-                  <ArticleCard article={article} index={i} />
+            : articles.map((article) => (
+                <li key={article.id}>
+                  <ArticleCard article={article} />
                 </li>
               ))}
         </ul>

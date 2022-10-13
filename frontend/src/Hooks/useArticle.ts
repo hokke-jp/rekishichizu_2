@@ -10,7 +10,7 @@ const scrollToElement = (ref: MutableRefObject<HTMLDivElement | null>) => {
 }
 
 export const useArticle = () => {
-  const { articles, setArticles, setModalOpens } = useArticlesContext()
+  const { articles, setArticles, setOpenModalId } = useArticlesContext()
   const [users, setUsers] = useState<UserInList[]>([])
   const [duringFetchData, setDuringFetchData] = useState<'article' | 'user' | null>(null)
   const [nowLoading, setNowLoading] = useState(true)
@@ -41,8 +41,7 @@ export const useArticle = () => {
       .then((response) => {
         const articles = response.data
         setArticles(articles as Article[])
-        const nums = articles.length
-        setModalOpens([...Array(nums)].map(() => false))
+        setOpenModalId(undefined)
         scrollToElement(ref)
       })
       .catch((error) => {

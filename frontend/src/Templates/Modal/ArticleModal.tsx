@@ -14,17 +14,16 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 interface Props {
   article: Article
-  index: number
 }
 
-export const ArticleModal = ({ article, index }: Props) => {
-  const { modalOpens, handleClose } = useArticlesContext()
+export const ArticleModal = ({ article }: Props) => {
+  const { openModalId, setOpenModalId } = useArticlesContext()
   const date = new Date(article.created_time)
 
   return (
     <Modal
-      open={modalOpens[index]}
-      onClose={handleClose}
+      open={openModalId === article.id}
+      onClose={() => setOpenModalId(undefined)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >

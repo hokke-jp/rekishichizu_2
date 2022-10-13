@@ -23,19 +23,18 @@ const useStyles = makeStyles({
 
 interface Props {
   article: Article
-  index: number
 }
 
-export const ArticleCard = ({ article, index }: Props) => {
+export const ArticleCard = ({ article }: Props) => {
   const { googleMap } = useGoogleMapsContext()
-  const { handleOpen } = useArticlesContext()
+  const { setOpenModalId } = useArticlesContext()
   const classes = useStyles()
   const attentionToPin = () => {
     googleMap?.panTo({ lat: article.lat, lng: article.lng })
     googleMap?.setZoom(ARTICLE_CLICK_ZOOM)
   }
   const modalOpen = () => {
-    handleOpen(index)
+    setOpenModalId(article.id)
   }
 
   return (
@@ -72,7 +71,7 @@ export const ArticleCard = ({ article, index }: Props) => {
         onDoubleClick={modalOpen}
         onClick={attentionToPin}
       />
-      <ArticleModal article={article} index={index} />
+      <ArticleModal article={article} />
     </>
   )
 }

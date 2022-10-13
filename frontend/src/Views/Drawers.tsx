@@ -7,10 +7,10 @@ import { useEffect } from 'react'
 
 export const Drawers = () => {
   const { googleMap } = useGoogleMapsContext()
-  const { articles, isLoading, handleOpen } = useArticlesContext()
+  const { articles, isLoading, setOpenModalId } = useArticlesContext()
   useEffect(() => {
     const markers = new google.maps.MVCArray()
-    articles.forEach((article, index) => {
+    articles.forEach((article) => {
       const marker = new google.maps.Marker({
         position: { lat: article.lat, lng: article.lng },
         map: googleMap
@@ -36,7 +36,7 @@ export const Drawers = () => {
       marker.addListener('click', (e: google.maps.MapMouseEvent) => {
         if (!e.latLng) return
         googleMap?.panTo(e.latLng)
-        handleOpen(index)
+        setOpenModalId(article.id)
       })
 
       markers.push(marker)
@@ -46,7 +46,7 @@ export const Drawers = () => {
         marker.setMap(null)
       })
     }
-  }, [googleMap, articles, isLoading, handleOpen])
+  }, [googleMap, articles, isLoading, setOpenModalId])
 
   return (
     <>

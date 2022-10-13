@@ -7,12 +7,10 @@ const ArticlesContext = createContext(
   {} as {
     isLoading: boolean
     articles: Article[]
-    modalOpens: boolean[]
+    openModalId: number | undefined
     setIsLoading: Dispatch<SetStateAction<boolean>>
     setArticles: Dispatch<SetStateAction<Article[]>>
-    setModalOpens: Dispatch<SetStateAction<boolean[]>>
-    handleOpen: (index: number | undefined) => void
-    handleClose: () => void
+    setOpenModalId: Dispatch<SetStateAction<number | undefined>>
   }
 )
 
@@ -23,7 +21,7 @@ export const useArticlesContext = () => {
 export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
   const [articles, setArticles] = useState<Article[]>([])
-  const [modalOpens, setModalOpens] = useState<boolean[]>([])
+  const [openModalId, setOpenModalId] = useState<number | undefined>(undefined)
   const location = useLocation()
   useEffect(() => {
     // ホームページのみレンダリング時に articles を fetch する
@@ -34,30 +32,19 @@ export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading(false)
         const articles = response.data
         setArticles(articles)
-        const nums = articles.length
-        setModalOpens([...Array(nums)].map(() => false))
       })
       .catch((error) => {
         console.error('レスポンスエラー : ', error)
       })
   }, [location.pathname])
 
-  const handleOpen = (index: number | undefined) => {
-    typeof index === 'number' && setModalOpens(modalOpens.map((open, i) => (i === index ? true : open)))
-  }
-  const handleClose = () => {
-    setModalOpens([...Array(articles.length)].map(() => false))
-  }
-
   const value = {
     isLoading,
     articles,
-    modalOpens,
+    openModalId,
     setIsLoading,
     setArticles,
-    setModalOpens,
-    handleOpen,
-    handleClose
+    setOpenModalId
   }
 
   return <ArticlesContext.Provider value={value}>{children}</ArticlesContext.Provider>
