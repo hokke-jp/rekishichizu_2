@@ -17,7 +17,7 @@ import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
 import { useArticlesContext } from 'Utils/ArticlesContext'
 import { axiosInstance } from 'Utils/axios'
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -38,24 +38,13 @@ const sortByAsc = (ary: number[]): number[] => {
   })
 }
 
-type Radio = 'latest' | 'popular' | 'old' | 'new'
-
 export const SearchDrawer = () => {
-  const [radioCheck, setRadioCheck] = useState<Radio>('latest')
-  const [words, setWords] = useState<string>('')
+  const [words, setWords] = useState('')
   const [periods, setPeriods] = useState<number[]>([])
   const [prefectures, setPrefectures] = useState<number[]>([])
-  const { articles, setIsLoading, setArticles } = useArticlesContext()
-
-  useEffect(() => {
-    const elem = document.getElementById('period-multiple-chip-label')
-    elem?.focus()
-  })
-
-  const handleRadio = (event: ChangeEvent<HTMLInputElement>) => setRadioCheck(event.target.id as Radio)
+  const { options, setIsLoading, setArticles, setOptions, setHasMore } = useArticlesContext()
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setWords(event.target.value)
-
   const handlePeriod = (event: SelectChangeEvent<string | string[]>) => {
     const {
       target: { value }
@@ -74,7 +63,6 @@ export const SearchDrawer = () => {
         : sortByAsc(value.map((val) => PREFECTURES.indexOf(val) + 1))
     )
   }
-
   const handleChipDelete = (target: string, array: string[], setState: Dispatch<SetStateAction<number[]>>) => {
     const targetIndex = array.indexOf(target) + 1
     setState((prev) => prev.filter((elem) => elem !== targetIndex))
@@ -82,16 +70,20 @@ export const SearchDrawer = () => {
 
   const handleSearch = () => {
     setIsLoading(true)
+    setHasMore(true)
     const removeSpace = (str: string): string => {
       return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
     }
     const removedWords = removeSpace(words)
+    setOptions((prev) => ({ ...prev, words: removedWords, period_ids: `${periods}`, prefecture_ids: `${prefectures}` }))
     axiosInstance
       .get('/articles', {
         params: {
+          page: 1,
           words: removedWords,
           period_ids: `${periods}`,
-          prefecture_ids: `${prefectures}`
+          prefecture_ids: `${prefectures}`,
+          sort_by: options.sort_by
         }
       })
       .then((response) => {
@@ -99,18 +91,21 @@ export const SearchDrawer = () => {
       })
       .finally(() => {
         setIsLoading(false)
-        setRadioCheck('latest')
       })
   }
 
   const handleSort = (sortBy: string) => {
     setIsLoading(true)
-    const ids: number[] = articles.map((article) => article.id)
+    setHasMore(true)
+    setOptions((prev) => ({ ...prev, sort_by: sortBy }))
     axiosInstance
       .get('/articles', {
         params: {
-          sort_by: sortBy,
-          ids: `${ids}`
+          page: 1,
+          words: options.words,
+          period_ids: options.period_ids,
+          prefecture_ids: options.prefecture_ids,
+          sort_by: sortBy
         }
       })
       .then((response) => {
@@ -138,8 +133,8 @@ export const SearchDrawer = () => {
                 value="latest"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'latest'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'created_at DESC' }))}
+                checked={options.sort_by === 'created_at DESC'}
               />
               <label
                 htmlFor="latest"
@@ -156,8 +151,8 @@ export const SearchDrawer = () => {
                 value="popular"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'popular'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'likes_count DESC' }))}
+                checked={options.sort_by === 'likes_count DESC'}
               />
               <label
                 htmlFor="popular"
@@ -174,8 +169,8 @@ export const SearchDrawer = () => {
                 value="old"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'old'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'period_id DESC' }))}
+                checked={options.sort_by === 'period_id DESC'}
               />
               <label
                 htmlFor="old"
@@ -192,8 +187,8 @@ export const SearchDrawer = () => {
                 value="new"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'new'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'period_id ASC' }))}
+                checked={options.sort_by === 'period_id ASC'}
               />
               <label
                 htmlFor="new"
@@ -308,7 +303,7 @@ export const SearchDrawer = () => {
           htmlFor="search-drawer-checkbox"
           className="block relative h-screen min-w-[48px] hover:bg-gray-100"
         >
-          <span className="absolute top-1/2 right-3 w-1 h-8 bg-gray-300 rounded-lg"></span>
+          <span className="absolute top-1/2 right-3 w-1 h-8 bg-gray-300 rounded-lg" />
         </label>
       </div>
     </>

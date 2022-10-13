@@ -110,6 +110,10 @@ USER_LIKINGS = [[1, 2, 3], [2, 3, 4, 5], [5, 6, 7, 8], [1, 2], [6, 7], [2, 3, 4]
   end
 end
 
+12.times do |num|
+  Article.create!(title: "第#{num}回タイトル", content: "第#{num}回説明文", lat: 36, lng: 137, user_id: 9, period_id: 5, prefecture_id: 5)
+end
+
 (1..9).each do |num|
   user = User.find(num)
   user.follow(User.find(USER_FOLLOWINGS[num - 1]))

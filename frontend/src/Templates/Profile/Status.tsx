@@ -1,5 +1,5 @@
 import { ButtonBase } from '@mui/material'
-import { useArticle } from 'Hooks/useArticle'
+import { useStatus } from 'Hooks/useStatus'
 import { ArticleCard } from 'Templates/Card/ArticleCard'
 import { SkeletonCard } from 'Templates/Card/SkeletonCard'
 import { UserListElement } from 'Templates/UserListElement'
@@ -16,11 +16,11 @@ interface Props {
 
 export const Status = ({ articleIds, likingArticleIds, followingIds }: Props) => {
   const { duringFetchData, setDuringFetchData, nowLoading, skeletonNumber, users, fetchArticles, fetchUsers } =
-    useArticle()
+    useStatus()
   const { articles, setArticles } = useArticlesContext()
   const ref = useRef<null | HTMLDivElement>(null)
 
-  // 現在のページから他のユーザーのページへ移った際に articles が更新されずに残り続けるバグの対策
+  // 任意のプロフィールページから他のユーザーのページへ移った際に articles が更新されずに残り続けるバグの対策
   const locatio = useLocation()
   useEffect(() => {
     setArticles([])
@@ -69,7 +69,7 @@ export const Status = ({ articleIds, likingArticleIds, followingIds }: Props) =>
       <div ref={ref} className={duringFetchData ? 'mt-32 mb-32 border-t' : ''}></div>
 
       {duringFetchData === 'article' ? (
-        <ul className="grid gap-8 grid-cols-4 justify-center items-center w-fit mx-auto pb-32">
+        <ul className="grid gap-x-8 gap-y-24 grid-cols-4 justify-center items-center w-fit mx-auto pb-32">
           {nowLoading
             ? [...Array(skeletonNumber)].map((v, i) => (
                 <li key={i}>

@@ -1,6 +1,6 @@
 import { Delete } from '@mui/icons-material'
 import { Dialog, DialogTitle, DialogActions, Button, DialogContent, DialogContentText } from '@mui/material'
-import { useArticle } from 'Hooks/useArticle'
+import { useStatus } from 'Hooks/useStatus'
 import { ProfileMenuItem } from 'Templates/Profile/ProfileMenuItem'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useArticlesContext } from 'Utils/ArticlesContext'
@@ -20,7 +20,7 @@ export const DialogDelete = ({ setAnchorEl, article }: Props) => {
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const { setCurrentUser } = useCurrentUserContext()
   const { setOpenModalId } = useArticlesContext()
-  const { deleteArticleFromList } = useArticle()
+  const { deleteArticleFromList } = useStatus()
   const handleOpen = () => {
     setOpen(true)
   }

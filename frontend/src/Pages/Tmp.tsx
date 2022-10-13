@@ -6,10 +6,7 @@ export const Tmp = () => {
   const [count, setCount] = useState(0)
   const [nums, setNums] = useState<number[]>([])
   const handleNum = () => {
-    setNums([1, 2, 3])
-  }
-  const handleNums = (index: number) => {
-    setNums(nums.map((num, i) => (i === index ? 100 : num)))
+    setNums((prev) => [...prev, 100, 300])
   }
   console.log('呼ばれた')
 
@@ -33,8 +30,8 @@ export const Tmp = () => {
     <div className="">
       JSON : {JSON.stringify(nums)} <br />
       input : <input type="text" value={nums.toString()} />
-      <button onClick={handleNum}>btn</button>
-      <button onClick={() => handleNums(0)}>btn</button>
+      <button onClick={handleNum}>btn left</button>
+      <button onClick={() => setNums([1, 3, 4])}>btn right</button>
       <p>count : {count}</p>
       <p>location : {JSON.stringify(location)}</p>
       <div>

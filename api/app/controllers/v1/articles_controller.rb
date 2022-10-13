@@ -4,15 +4,14 @@ module V1
 
     def index
       if includes_query?
-        if params[:sort_by].present?
-          q = { s: params[:sort_by], 'id_eq_any' => convert_into_array(params[:ids], to_num: true) }
-          articles = Article.customised_articles.ransack(q).result
+        if params[:ids].present?
+          articles = Article.customised_articles.ransack(ids_q).result
           return render json: articles
         end
-        articles = Article.customised_articles.ransack(search_q).result
+        articles = Article.page(params[:page]).customised_articles.ransack(search_q).result
         return render json: articles
       end
-      articles = Article.customised_articles
+      articles = Article.page(params[:page]).customised_articles
       render json: articles
     end
 
@@ -38,20 +37,24 @@ module V1
       end
 
       def includes_query?
-        !!params[:ids] || !!params[:period_ids] || !!params[:prefecture_ids] || !!params[:words] || !!params[:sort_by]
+        params[:ids].present? || params[:words].present? || params[:period_ids].present? || params[:prefecture_ids].present? || params[:sort_by].present?
       end
 
-      def convert_into_array(string_params, to_num: false)
+      def convert_into_array(string_params, conversion: true)
         return [] if string_params.blank?
 
         res = string_params.split(',')
-        res.map!(&:to_i) if to_num
+        res.map!(&:to_i) if conversion
         res
+      end
+
+      def ids_q
+        { 'id_eq_any' => convert_into_array(params[:ids]) }
       end
 
       def search_q
         q_words = {}
-        convert_into_array(params[:words]).each_with_index do |word, index|
+        convert_into_array(params[:words], conversion: false).each_with_index do |word, index|
           q_words.store(index.to_s, {
                           'a' => { '0' => { 'name' => 'title' }, '1' => { 'name' => 'content' }, '2' => { 'name' => 'user_name' } },
                           'p' => 'cont',
@@ -59,16 +62,21 @@ module V1
                           'm' => 'or'
                         })
         end
+        sort_name = params[:sort_by].split[0]
+        sort_dir = params[:sort_by].split[1]
         {
+          's' => {
+            '0' => { 'name' => sort_name,
+                     'dir' => sort_dir }
+          },
           'g' => {
             '0' => {
               'c' => {
                 **q_words
               }
             },
-            '1' => { 'period_id_eq_any' => convert_into_array(params[:period_ids], to_num: true) },
-            '2' => { 'prefecture_id_eq_any' => convert_into_array(params[:prefecture_ids], to_num: true) },
-            '3' => { 'id_eq_any' => convert_into_array(params[:ids], to_num: true) }
+            '1' => { 'period_id_eq_any' => convert_into_array(params[:period_ids]) },
+            '2' => { 'prefecture_id_eq_any' => convert_into_array(params[:prefecture_ids]) }
           },
           'm' => 'and'
         }
