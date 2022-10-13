@@ -1,3 +1,4 @@
+// import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded'
 import SearchIcon from '@mui/icons-material/Search'
 import {
   Box,
@@ -10,13 +11,13 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
-  SelectChangeEvent,
-  Theme,
-  useTheme
+  SelectChangeEvent
 } from '@mui/material'
 import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
-import { useState } from 'react'
+import { useArticlesContext } from 'Utils/ArticlesContext'
+import { axiosInstance } from 'Utils/axios'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -29,29 +30,95 @@ const MenuProps = {
   }
 }
 
-function getStyles(name: string, prefectures: readonly string[], theme: Theme) {
-  return {
-    fontWeight:
-      prefectures.indexOf(name) === -1 ? theme.typography.fontWeightRegular : theme.typography.fontWeightMedium
-  }
+const sortByAsc = (ary: number[]): number[] => {
+  return ary.sort((a, b) => {
+    if (a < b) return -1
+    if (a > b) return 1
+    return 0
+  })
 }
 
-export const SearchDrawer = () => {
-  const theme = useTheme()
-  const [periods, setPeriods] = useState<string[]>([])
-  const [prefectures, setPrefecurets] = useState<string[]>([])
+type Radio = 'latest' | 'popular' | 'old' | 'new'
 
-  const handlePeriod = (event: SelectChangeEvent<typeof prefectures>) => {
+export const SearchDrawer = () => {
+  const [radioCheck, setRadioCheck] = useState<Radio>('latest')
+  const [words, setWords] = useState<string>('')
+  const [periods, setPeriods] = useState<number[]>([])
+  const [prefectures, setPrefectures] = useState<number[]>([])
+  const { articles, setIsLoading, setArticles } = useArticlesContext()
+
+  useEffect(() => {
+    const elem = document.getElementById('period-multiple-chip-label')
+    elem?.focus()
+  })
+
+  const handleRadio = (event: ChangeEvent<HTMLInputElement>) => setRadioCheck(event.target.id as Radio)
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => setWords(event.target.value)
+
+  const handlePeriod = (event: SelectChangeEvent<string | string[]>) => {
     const {
       target: { value }
     } = event
-    setPeriods(typeof value === 'string' ? value.split(',') : value)
+    setPeriods(
+      typeof value === 'string' ? [PERIODS.indexOf(value) + 1] : sortByAsc(value.map((val) => PERIODS.indexOf(val) + 1))
+    )
   }
-  const handlePrefecture = (event: SelectChangeEvent<typeof prefectures>) => {
+  const handlePrefecture = (event: SelectChangeEvent<string | string[]>) => {
     const {
       target: { value }
     } = event
-    setPrefecurets(typeof value === 'string' ? value.split(',') : value)
+    setPrefectures(
+      typeof value === 'string'
+        ? [PREFECTURES.indexOf(value) + 1]
+        : sortByAsc(value.map((val) => PREFECTURES.indexOf(val) + 1))
+    )
+  }
+
+  const handleChipDelete = (target: string, array: string[], setState: Dispatch<SetStateAction<number[]>>) => {
+    const targetIndex = array.indexOf(target) + 1
+    setState((prev) => prev.filter((elem) => elem !== targetIndex))
+  }
+
+  const handleSearch = () => {
+    setIsLoading(true)
+    const removeSpace = (str: string): string => {
+      return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
+    }
+    const removedWords = removeSpace(words)
+    axiosInstance
+      .get('/articles', {
+        params: {
+          words: removedWords,
+          period_ids: `${periods}`,
+          prefecture_ids: `${prefectures}`
+        }
+      })
+      .then((response) => {
+        setArticles(response.data)
+      })
+      .finally(() => {
+        setIsLoading(false)
+        setRadioCheck('latest')
+      })
+  }
+
+  const handleSort = (sortBy: string) => {
+    setIsLoading(true)
+    const ids: number[] = articles.map((article) => article.id)
+    axiosInstance
+      .get('/articles', {
+        params: {
+          sort_by: sortBy,
+          ids: `${ids}`
+        }
+      })
+      .then((response) => {
+        setArticles(response.data)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }
 
   return (
@@ -61,40 +128,76 @@ export const SearchDrawer = () => {
         id="search-drawer-div"
         className="flex h-screen rounded-tr-3xl rounded-br-3xl bg-white shadow-lg overflow-hidden"
       >
-        <div className="grow flex flex-col gap-y-10 pt-10 pr-2 pl-8">
-          <div className="grid grid-rows-2 grid-cols-2 h-24 border border-[#B7B7B7] rounded-2xl overflow-hidden">
-            <ButtonBase>
-              <input type="radio" id="latest" name="drone" value="latest" className="peer" hidden defaultChecked />
+        <div className="grow flex flex-col gap-y-10 min-h-screen py-10 pr-2 pl-8 overflow-scroll">
+          <div className="grid grid-rows-2 grid-cols-2 min-h-[96px] border border-[#B7B7B7] rounded-2xl overflow-hidden">
+            <ButtonBase onClick={() => handleSort('created_at DESC')}>
+              <input
+                type="radio"
+                id="latest"
+                name="drone"
+                value="latest"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'latest'}
+              />
               <label
                 htmlFor="latest"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r border-b"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r border-b hover:cursor-pointer"
               >
                 <p>最新</p>
               </label>
             </ButtonBase>
-            <ButtonBase>
-              <input type="radio" id="popular" name="drone" value="popular" className="peer" hidden />
+            <ButtonBase onClick={() => handleSort('likes_count DESC')}>
+              <input
+                type="radio"
+                id="popular"
+                name="drone"
+                value="popular"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'popular'}
+              />
               <label
                 htmlFor="popular"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-b"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-b hover:cursor-pointer"
               >
                 <p>人気</p>
               </label>
             </ButtonBase>
-            <ButtonBase>
-              <input type="radio" id="old" name="drone" value="old" className="peer" hidden />
+            <ButtonBase onClick={() => handleSort('period_id DESC')}>
+              <input
+                type="radio"
+                id="old"
+                name="drone"
+                value="old"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'old'}
+              />
               <label
                 htmlFor="old"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] border-r hover:cursor-pointer"
               >
                 <p>古い</p>
               </label>
             </ButtonBase>
-            <ButtonBase>
-              <input type="radio" id="new" name="drone" value="new" className="peer" hidden />
+            <ButtonBase onClick={() => handleSort('period_id ASC')}>
+              <input
+                type="radio"
+                id="new"
+                name="drone"
+                value="new"
+                className="peer"
+                hidden
+                onChange={handleRadio}
+                checked={radioCheck === 'new'}
+              />
               <label
                 htmlFor="new"
-                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7]"
+                className="flex items-center justify-center w-full h-full peer-checked:bg-[#1876D3] peer-checked:text-white peer-checked:border-0 border-[#B7B7B7] hover:cursor-pointer"
               >
                 <p>新しい</p>
               </label>
@@ -106,39 +209,52 @@ export const SearchDrawer = () => {
             <OutlinedInput
               id="outlined-adornment-search"
               type="text"
-              // value={values.search}
-              // onChange={handleChange('search')}
+              value={words}
+              onChange={handleChange}
               sx={{ borderRadius: '30px' }}
               endAdornment={
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
+                <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>
                   <SearchIcon />
                 </IconButton>
               }
+              onKeyDown={(e) => {
+                if (e.keyCode === 13) handleSearch()
+              }}
               label="キーワード検索"
             />
           </FormControl>
 
           <FormControl>
-            <InputLabel id="demo-multiple-chip-label">時代</InputLabel>
+            <InputLabel id="period-multiple-chip-label">時代</InputLabel>
             <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
+              labelId="period-multiple-chip-label"
+              id="period-multiple-chip"
               multiple
               fullWidth
-              value={periods}
+              value={periods.map((period) => PERIODS[period - 1])}
               onChange={handlePeriod}
               input={<OutlinedInput id="select-multiple-chip" label="時代" />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {selected.map((value) => (
-                    <Chip key={value} label={value} />
+                    <Chip
+                      key={value}
+                      label={value}
+                      onDelete={() => handleChipDelete(value, PERIODS, setPeriods)}
+                      onMouseDown={(event) => {
+                        if (selected.length === 1) {
+                          return handleChipDelete(value, PERIODS, setPeriods)
+                        }
+                        event.stopPropagation()
+                      }}
+                    />
                   ))}
                 </Box>
               )}
               MenuProps={MenuProps}
             >
               {PERIODS.map((period) => (
-                <MenuItem key={period} value={period} style={getStyles(period, periods, theme)}>
+                <MenuItem key={period} value={period}>
                   {period}
                 </MenuItem>
               ))}
@@ -146,33 +262,43 @@ export const SearchDrawer = () => {
           </FormControl>
 
           <FormControl>
-            <InputLabel id="demo-multiple-chip-label">都道府県</InputLabel>
+            <InputLabel id="prefecture-multiple-chip-label">都道府県</InputLabel>
             <Select
-              labelId="demo-multiple-chip-label"
-              id="demo-multiple-chip"
+              labelId="prefecture-multiple-chip-label"
+              id="prefecture-multiple-chip"
               multiple
               fullWidth
-              value={prefectures}
+              value={prefectures.map((prefecture) => PREFECTURES[prefecture - 1])}
               onChange={handlePrefecture}
               input={<OutlinedInput id="select-multiple-chip" label="都道府県" />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                   {selected.map((value) => (
-                    <Chip key={value} label={value} />
+                    <Chip
+                      key={value}
+                      label={value}
+                      onDelete={() => handleChipDelete(value, PREFECTURES, setPrefectures)}
+                      onMouseDown={(event) => {
+                        if (selected.length === 1) {
+                          return handleChipDelete(value, PREFECTURES, setPrefectures)
+                        }
+                        event.stopPropagation()
+                      }}
+                    />
                   ))}
                 </Box>
               )}
               MenuProps={MenuProps}
             >
               {PREFECTURES.map((prefecture) => (
-                <MenuItem key={prefecture} value={prefecture} style={getStyles(prefecture, prefectures, theme)}>
+                <MenuItem key={prefecture} value={prefecture}>
                   {prefecture}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
 
-          <Button variant="contained" sx={{ width: '100px', mx: 'auto', mt: 3 }}>
+          <Button variant="contained" sx={{ width: '100px', mx: 'auto', mt: 3 }} onClick={handleSearch}>
             検索
           </Button>
         </div>

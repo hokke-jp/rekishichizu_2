@@ -16,12 +16,12 @@ module V1
 
     private
 
-    def includes_query?
-      !!params[:ids]
-    end
+      def includes_query?
+        !!params[:ids]
+      end
 
-    def params_ids
-      params[:ids].split(',').map(&:to_i)
-    end
+      def params_ids
+        params[:ids].split(',').map(&:to_i)
+      end
   end
 end

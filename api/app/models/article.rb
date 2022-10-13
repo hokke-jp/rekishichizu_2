@@ -16,6 +16,12 @@ class Article < ApplicationRecord
   validates :prefecture_id, presence: { message: 'を選択してください' }
   validates :period_id, presence: { message: 'を選択してください' }
 
+  default_scope { order(created_at: :desc) }
+  ransacker :likes_count do
+    query = '(SELECT COUNT(likes.article_id) FROM likes where likes.article_id = articles.id GROUP BY likes.article_id)'
+    Arel.sql(query)
+  end
+
   def self.customised_articles
     # Article.all.includes(image_attachment: :blob, user: :avatar_attachment)
     with_attached_image.includes(:liked_user, user: { avatar_attachment: :blob })

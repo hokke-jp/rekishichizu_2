@@ -1,5 +1,5 @@
 import { DialogDelete } from './DialogDelete'
-import { DialogEdit } from './DialogEdit'
+// import { DialogEdit } from './DialogEdit'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
@@ -66,9 +66,9 @@ export const ArticleMenu = ({ article }: Props) => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
+        {/* <MenuItem>
           <DialogEdit setAnchorEl={setAnchorEl} />
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem>
           <DialogDelete setAnchorEl={setAnchorEl} article={article} />
         </MenuItem>

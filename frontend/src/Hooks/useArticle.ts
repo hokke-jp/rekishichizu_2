@@ -25,7 +25,7 @@ export const useArticle = () => {
   }
 
   const deleteArticleFromList = (id: number): void => {
-    setArticles(articles.filter((article: Article) => article.id !== id))
+    setArticles((prevArticles) => prevArticles.filter((article: Article) => article.id !== id))
   }
 
   const fetchArticles = (ids: number[] | undefined, ref: MutableRefObject<HTMLDivElement | null>) => {
