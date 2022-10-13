@@ -43,7 +43,11 @@ export const ArticleCard = ({ article, index }: Props) => {
       <CardLayout
         image={<Image url={article.image_url} className="w-full h-32" />}
         title={
-          <Typography variant="h6" sx={{ height: 44, fontSize: 14 }} className={classes.multiLineEllipsis}>
+          <Typography
+            variant="h5"
+            sx={{ height: 44, fontSize: 15, lineHeight: '21px' }}
+            className={classes.multiLineEllipsis}
+          >
             {article.title}
           </Typography>
         }

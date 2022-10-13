@@ -3,6 +3,7 @@ import { Dialog, DialogTitle, DialogActions, Button, DialogContent, DialogConten
 import { useArticle } from 'Hooks/useArticle'
 import { ProfileMenuItem } from 'Templates/Profile/ProfileMenuItem'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
+import { useArticlesContext } from 'Utils/ArticlesContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
 import { Article, User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
@@ -18,6 +19,7 @@ export const DialogDelete = ({ setAnchorEl, article }: Props) => {
   const [open, setOpen] = useState(false)
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const { setCurrentUser } = useCurrentUserContext()
+  const { setModalOpens } = useArticlesContext()
   const { deleteArticleFromList } = useArticle()
   const handleOpen = () => {
     setOpen(true)
@@ -40,6 +42,7 @@ export const DialogDelete = ({ setAnchorEl, article }: Props) => {
         setCurrentUser((prevState: User | undefined) => ({ ...prevState, article_ids: articleIds } as User))
         sessionStorage.setItem('article_ids', articleIds)
         deleteArticleFromList(article.id)
+        setModalOpens((prev) => [...Array(prev.length - 1)].map(() => false))
         setAlertSeverity('success')
         setAlertMessage('削除しました')
       })
