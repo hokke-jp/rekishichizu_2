@@ -19,7 +19,7 @@ export const DialogDelete = ({ setAnchorEl, article }: Props) => {
   const [open, setOpen] = useState(false)
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const { setCurrentUser } = useCurrentUserContext()
-  const { setModalOpens } = useArticlesContext()
+  const { setOpenModalId } = useArticlesContext()
   const { deleteArticleFromList } = useArticle()
   const handleOpen = () => {
     setOpen(true)
@@ -42,7 +42,7 @@ export const DialogDelete = ({ setAnchorEl, article }: Props) => {
         setCurrentUser((prevState: User | undefined) => ({ ...prevState, article_ids: articleIds } as User))
         sessionStorage.setItem('article_ids', articleIds)
         deleteArticleFromList(article.id)
-        setModalOpens((prev) => [...Array(prev.length - 1)].map(() => false))
+        setOpenModalId(undefined)
         setAlertSeverity('success')
         setAlertMessage('削除しました')
       })
