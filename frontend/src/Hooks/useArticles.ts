@@ -11,7 +11,6 @@ export const useArticles = () => {
     return axiosInstance
       .get('/articles', { params: { page, ...options } })
       .then((response) => {
-        console.log(response)
         const data = response.data
         if (data.length === 0) {
           setHasMore(false)
@@ -31,7 +30,7 @@ export const useArticles = () => {
       words: '',
       period_ids: '',
       prefecture_ids: '',
-      sort_by: ''
+      sort_by: 'created_at DESC'
     })
   }
 

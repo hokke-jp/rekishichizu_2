@@ -1,14 +1,6 @@
-import { Article } from 'Utils/Types'
-import { axiosInstance } from 'Utils/axios'
-import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } from 'react'
+import { Article, Options } from 'Utils/Types'
+import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-
-interface Options {
-  words: string
-  period_ids: string
-  prefecture_ids: string
-  sort_by: string
-}
 
 const ArticlesContext = createContext(
   {} as {
@@ -29,36 +21,32 @@ export const useArticlesContext = () => {
   return useContext(ArticlesContext)
 }
 
+interface State {
+  state: {
+    optionsKey: 'period_ids' | 'prefecture_ids'
+    optionsValue: number
+  } | null
+}
+
 export const ArticlesProvider = ({ children }: { children: ReactNode }) => {
+  const location = useLocation()
+  const { state } = location as State
   const [isLoading, setIsLoading] = useState(true)
   const [articles, setArticles] = useState<Article[]>([])
   const [openModalId, setOpenModalId] = useState<number | undefined>(undefined)
+  const tagPeriod: string = state ? (state.optionsKey === 'period_ids' ? state.optionsValue.toString() : '') : ''
+  const tagPrefecture: string = state
+    ? state.optionsKey === 'prefecture_ids'
+      ? state.optionsValue.toString()
+      : ''
+    : ''
   const [options, setOptions] = useState<Options>({
     words: '',
-    period_ids: '',
-    prefecture_ids: '',
+    period_ids: tagPeriod,
+    prefecture_ids: tagPrefecture,
     sort_by: 'created_at DESC'
   })
   const [hasMore, setHasMore] = useState(true)
-  const location = useLocation()
-
-  useEffect(() => {
-    // ホームページのみレンダリング時に articles を fetch する
-    if (location.pathname !== '/') return
-    axiosInstance
-      .get('/articles', {
-        params: {
-          page: 1
-        }
-      })
-      .then((response) => {
-        setIsLoading(false)
-        setArticles(response.data)
-      })
-      .catch((error) => {
-        console.error('レスポンスエラー : ', error)
-      })
-  }, [location.pathname])
 
   const value = {
     isLoading,

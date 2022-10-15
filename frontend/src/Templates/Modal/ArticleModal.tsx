@@ -1,12 +1,14 @@
 import { Modal, Typography } from '@mui/material'
 import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
+import { useArticles } from 'Hooks/useArticles'
 import { AvatarLink } from 'Parts/AvatarLink'
 import { Image } from 'Templates/Image'
 import { Like } from 'Templates/Like'
 import { ArticleMenu } from 'Templates/Modal/ArticleMenu'
 import { useArticlesContext } from 'Utils/ArticlesContext'
-import { Article } from 'Utils/Types'
+import { Article, Options } from 'Utils/Types'
+import { useNavigate } from 'react-router-dom'
 import { Navigation } from 'swiper'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -17,8 +19,17 @@ interface Props {
 }
 
 export const ArticleModal = ({ article }: Props) => {
-  const { openModalId, setOpenModalId } = useArticlesContext()
+  const { openModalId, setOpenModalId, setOptions } = useArticlesContext()
+  const { resetOptions } = useArticles()
+  const navigate = useNavigate()
   const date = new Date(article.created_time)
+
+  const handleClick = (optionsKey: keyof Options, optionsValue: number) => {
+    resetOptions()
+    setOptions((prev) => ({ ...prev, [optionsKey]: optionsValue.toString() }))
+    setOpenModalId(undefined)
+    navigate('/', { state: { optionsKey, optionsValue } })
+  }
 
   return (
     <Modal
@@ -61,7 +72,9 @@ export const ArticleModal = ({ article }: Props) => {
                 時代
               </Typography>
               <Typography variant="subtitle2" sx={{ fontSize: 16 }}>
-                {PERIODS[article.period_id - 1]}
+                <button onClick={() => handleClick('period_ids', article.period_id)}>
+                  {PERIODS[article.period_id - 1]}
+                </button>
               </Typography>
             </div>
             <div className="">
@@ -69,7 +82,9 @@ export const ArticleModal = ({ article }: Props) => {
                 都道府県
               </Typography>
               <Typography variant="subtitle2" sx={{ fontSize: 16 }}>
-                {PREFECTURES[article.prefecture_id - 1]}
+                <button onClick={() => handleClick('prefecture_ids', article.prefecture_id)}>
+                  {PREFECTURES[article.prefecture_id - 1]}
+                </button>
               </Typography>
             </div>
             <div className="flex flex-col gap-y-1">

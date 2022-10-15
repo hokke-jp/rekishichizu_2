@@ -16,8 +16,9 @@ import {
 import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
 import { useArticlesContext } from 'Utils/ArticlesContext'
+import { Options, SortBy } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
-import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -38,52 +39,64 @@ const sortByAsc = (ary: number[]): number[] => {
   })
 }
 
-export const SearchDrawer = () => {
-  const [words, setWords] = useState('')
-  const [periods, setPeriods] = useState<number[]>([])
-  const [prefectures, setPrefectures] = useState<number[]>([])
-  const { options, setIsLoading, setArticles, setOptions, setHasMore } = useArticlesContext()
+const convertArrayIndex = (str: string) => {
+  return str.split(',').map((s) => Number(s))
+}
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => setWords(event.target.value)
-  const handlePeriod = (event: SelectChangeEvent<string | string[]>) => {
+const valuesConvertIndexes = (value: string | string[], array: string[]) => {
+  return typeof value === 'string' ? [array.indexOf(value) + 1] : sortByAsc(value.map((val) => array.indexOf(val) + 1))
+}
+
+export const SearchDrawer = () => {
+  const { options, setIsLoading, setArticles, setOptions, setHasMore } = useArticlesContext()
+  const [words, setWords] = useState('')
+  const periods: string[] =
+    options.period_ids === ''
+      ? []
+      : options.period_ids
+          .split(',')
+          .map((elem) => Number(elem))
+          .map((id) => PERIODS[id - 1])
+  const prefectures: string[] =
+    options.prefecture_ids === ''
+      ? []
+      : options.prefecture_ids
+          .split(',')
+          .map((elem) => Number(elem))
+          .map((id) => PREFECTURES[id - 1])
+
+  const handleWord = (event: ChangeEvent<HTMLInputElement>) => {
+    const word = event.target.value
+    setWords(word)
+    const removeSpace = (str: string): string => {
+      return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
+    }
+    const removedWords = removeSpace(word)
+    setOptions((prev) => ({ ...prev, words: removedWords }))
+  }
+  const handleSelect = (event: SelectChangeEvent<string | string[]>, optionsKey: string, array: string[]) => {
     const {
       target: { value }
     } = event
-    setPeriods(
-      typeof value === 'string' ? [PERIODS.indexOf(value) + 1] : sortByAsc(value.map((val) => PERIODS.indexOf(val) + 1))
-    )
+    const ids: number[] = valuesConvertIndexes(value, array)
+    setOptions((prev) => ({ ...prev, [optionsKey]: `${ids}` }))
   }
-  const handlePrefecture = (event: SelectChangeEvent<string | string[]>) => {
-    const {
-      target: { value }
-    } = event
-    setPrefectures(
-      typeof value === 'string'
-        ? [PREFECTURES.indexOf(value) + 1]
-        : sortByAsc(value.map((val) => PREFECTURES.indexOf(val) + 1))
-    )
-  }
-  const handleChipDelete = (target: string, array: string[], setState: Dispatch<SetStateAction<number[]>>) => {
+  const handleChipDelete = (target: string, optionsKey: keyof Options, array: string[]) => {
     const targetIndex = array.indexOf(target) + 1
-    setState((prev) => prev.filter((elem) => elem !== targetIndex))
+    setOptions((prev) => ({
+      ...prev,
+      [optionsKey]: `${convertArrayIndex(prev[optionsKey]).filter((index) => index !== targetIndex)}`
+    }))
   }
 
   const handleSearch = () => {
     setIsLoading(true)
     setHasMore(true)
-    const removeSpace = (str: string): string => {
-      return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
-    }
-    const removedWords = removeSpace(words)
-    setOptions((prev) => ({ ...prev, words: removedWords, period_ids: `${periods}`, prefecture_ids: `${prefectures}` }))
     axiosInstance
       .get('/articles', {
         params: {
           page: 1,
-          words: removedWords,
-          period_ids: `${periods}`,
-          prefecture_ids: `${prefectures}`,
-          sort_by: options.sort_by
+          ...options
         }
       })
       .then((response) => {
@@ -94,7 +107,7 @@ export const SearchDrawer = () => {
       })
   }
 
-  const handleSort = (sortBy: string) => {
+  const handleSort = (sortBy: SortBy) => {
     setIsLoading(true)
     setHasMore(true)
     setOptions((prev) => ({ ...prev, sort_by: sortBy }))
@@ -205,7 +218,7 @@ export const SearchDrawer = () => {
               id="outlined-adornment-search"
               type="text"
               value={words}
-              onChange={handleChange}
+              onChange={handleWord}
               sx={{ borderRadius: '30px' }}
               endAdornment={
                 <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>
@@ -226,8 +239,8 @@ export const SearchDrawer = () => {
               id="period-multiple-chip"
               multiple
               fullWidth
-              value={periods.map((period) => PERIODS[period - 1])}
-              onChange={handlePeriod}
+              value={periods}
+              onChange={(event) => handleSelect(event, 'period_ids', PERIODS)}
               input={<OutlinedInput id="select-multiple-chip" label="時代" />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -235,10 +248,10 @@ export const SearchDrawer = () => {
                     <Chip
                       key={value}
                       label={value}
-                      onDelete={() => handleChipDelete(value, PERIODS, setPeriods)}
+                      onDelete={() => handleChipDelete(value, 'period_ids', PERIODS)}
                       onMouseDown={(event) => {
                         if (selected.length === 1) {
-                          return handleChipDelete(value, PERIODS, setPeriods)
+                          return handleChipDelete(value, 'period_ids', PERIODS)
                         }
                         event.stopPropagation()
                       }}
@@ -263,8 +276,10 @@ export const SearchDrawer = () => {
               id="prefecture-multiple-chip"
               multiple
               fullWidth
-              value={prefectures.map((prefecture) => PREFECTURES[prefecture - 1])}
-              onChange={handlePrefecture}
+              value={prefectures}
+              // value={prefectures.map((prefecture) => PREFECTURES[prefecture - 1])}
+              onChange={(event) => handleSelect(event, 'prefecture_ids', PREFECTURES)}
+              // onChange={handlePrefecture}
               input={<OutlinedInput id="select-multiple-chip" label="都道府県" />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -272,10 +287,10 @@ export const SearchDrawer = () => {
                     <Chip
                       key={value}
                       label={value}
-                      onDelete={() => handleChipDelete(value, PREFECTURES, setPrefectures)}
+                      onDelete={() => handleChipDelete(value, 'prefecture_ids', PREFECTURES)}
                       onMouseDown={(event) => {
                         if (selected.length === 1) {
-                          return handleChipDelete(value, PREFECTURES, setPrefectures)
+                          return handleChipDelete(value, 'prefecture_ids', PREFECTURES)
                         }
                         event.stopPropagation()
                       }}
