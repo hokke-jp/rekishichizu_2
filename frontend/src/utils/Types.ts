@@ -31,3 +31,12 @@ export interface Article {
   prefecture_id: number
   liked_user_ids: number[]
 }
+
+export type SortBy = 'created_at DESC' | 'likes_count DESC' | 'period_id DESC' | 'period_id ASC'
+
+export interface Options {
+  words: string
+  period_ids: string
+  prefecture_ids: string
+  sort_by: SortBy
+}

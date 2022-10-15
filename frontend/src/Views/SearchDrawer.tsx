@@ -16,8 +16,9 @@ import {
 import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
 import { useArticlesContext } from 'Utils/ArticlesContext'
+import { Options, SortBy } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -38,60 +39,64 @@ const sortByAsc = (ary: number[]): number[] => {
   })
 }
 
-type Radio = 'latest' | 'popular' | 'old' | 'new'
+const convertArrayIndex = (str: string) => {
+  return str.split(',').map((s) => Number(s))
+}
+
+const valuesConvertIndexes = (value: string | string[], array: string[]) => {
+  return typeof value === 'string' ? [array.indexOf(value) + 1] : sortByAsc(value.map((val) => array.indexOf(val) + 1))
+}
 
 export const SearchDrawer = () => {
-  const [radioCheck, setRadioCheck] = useState<Radio>('latest')
-  const [words, setWords] = useState<string>('')
-  const [periods, setPeriods] = useState<number[]>([])
-  const [prefectures, setPrefectures] = useState<number[]>([])
-  const { articles, setIsLoading, setArticles } = useArticlesContext()
+  const { options, setIsLoading, setArticles, setOptions, setHasMore } = useArticlesContext()
+  const [words, setWords] = useState('')
+  const periods: string[] =
+    options.period_ids === ''
+      ? []
+      : options.period_ids
+          .split(',')
+          .map((elem) => Number(elem))
+          .map((id) => PERIODS[id - 1])
+  const prefectures: string[] =
+    options.prefecture_ids === ''
+      ? []
+      : options.prefecture_ids
+          .split(',')
+          .map((elem) => Number(elem))
+          .map((id) => PREFECTURES[id - 1])
 
-  useEffect(() => {
-    const elem = document.getElementById('period-multiple-chip-label')
-    elem?.focus()
-  })
-
-  const handleRadio = (event: ChangeEvent<HTMLInputElement>) => setRadioCheck(event.target.id as Radio)
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => setWords(event.target.value)
-
-  const handlePeriod = (event: SelectChangeEvent<string | string[]>) => {
+  const handleWord = (event: ChangeEvent<HTMLInputElement>) => {
+    const word = event.target.value
+    setWords(word)
+    const removeSpace = (str: string): string => {
+      return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
+    }
+    const removedWords = removeSpace(word)
+    setOptions((prev) => ({ ...prev, words: removedWords }))
+  }
+  const handleSelect = (event: SelectChangeEvent<string | string[]>, optionsKey: string, array: string[]) => {
     const {
       target: { value }
     } = event
-    setPeriods(
-      typeof value === 'string' ? [PERIODS.indexOf(value) + 1] : sortByAsc(value.map((val) => PERIODS.indexOf(val) + 1))
-    )
+    const ids: number[] = valuesConvertIndexes(value, array)
+    setOptions((prev) => ({ ...prev, [optionsKey]: `${ids}` }))
   }
-  const handlePrefecture = (event: SelectChangeEvent<string | string[]>) => {
-    const {
-      target: { value }
-    } = event
-    setPrefectures(
-      typeof value === 'string'
-        ? [PREFECTURES.indexOf(value) + 1]
-        : sortByAsc(value.map((val) => PREFECTURES.indexOf(val) + 1))
-    )
-  }
-
-  const handleChipDelete = (target: string, array: string[], setState: Dispatch<SetStateAction<number[]>>) => {
+  const handleChipDelete = (target: string, optionsKey: keyof Options, array: string[]) => {
     const targetIndex = array.indexOf(target) + 1
-    setState((prev) => prev.filter((elem) => elem !== targetIndex))
+    setOptions((prev) => ({
+      ...prev,
+      [optionsKey]: `${convertArrayIndex(prev[optionsKey]).filter((index) => index !== targetIndex)}`
+    }))
   }
 
   const handleSearch = () => {
     setIsLoading(true)
-    const removeSpace = (str: string): string => {
-      return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
-    }
-    const removedWords = removeSpace(words)
+    setHasMore(true)
     axiosInstance
       .get('/articles', {
         params: {
-          words: removedWords,
-          period_ids: `${periods}`,
-          prefecture_ids: `${prefectures}`
+          page: 1,
+          ...options
         }
       })
       .then((response) => {
@@ -99,18 +104,21 @@ export const SearchDrawer = () => {
       })
       .finally(() => {
         setIsLoading(false)
-        setRadioCheck('latest')
       })
   }
 
-  const handleSort = (sortBy: string) => {
+  const handleSort = (sortBy: SortBy) => {
     setIsLoading(true)
-    const ids: number[] = articles.map((article) => article.id)
+    setHasMore(true)
+    setOptions((prev) => ({ ...prev, sort_by: sortBy }))
     axiosInstance
       .get('/articles', {
         params: {
-          sort_by: sortBy,
-          ids: `${ids}`
+          page: 1,
+          words: options.words,
+          period_ids: options.period_ids,
+          prefecture_ids: options.prefecture_ids,
+          sort_by: sortBy
         }
       })
       .then((response) => {
@@ -138,8 +146,8 @@ export const SearchDrawer = () => {
                 value="latest"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'latest'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'created_at DESC' }))}
+                checked={options.sort_by === 'created_at DESC'}
               />
               <label
                 htmlFor="latest"
@@ -156,8 +164,8 @@ export const SearchDrawer = () => {
                 value="popular"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'popular'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'likes_count DESC' }))}
+                checked={options.sort_by === 'likes_count DESC'}
               />
               <label
                 htmlFor="popular"
@@ -174,8 +182,8 @@ export const SearchDrawer = () => {
                 value="old"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'old'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'period_id DESC' }))}
+                checked={options.sort_by === 'period_id DESC'}
               />
               <label
                 htmlFor="old"
@@ -192,8 +200,8 @@ export const SearchDrawer = () => {
                 value="new"
                 className="peer"
                 hidden
-                onChange={handleRadio}
-                checked={radioCheck === 'new'}
+                onChange={() => setOptions((prev) => ({ ...prev, sort_by: 'period_id ASC' }))}
+                checked={options.sort_by === 'period_id ASC'}
               />
               <label
                 htmlFor="new"
@@ -210,7 +218,7 @@ export const SearchDrawer = () => {
               id="outlined-adornment-search"
               type="text"
               value={words}
-              onChange={handleChange}
+              onChange={handleWord}
               sx={{ borderRadius: '30px' }}
               endAdornment={
                 <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>
@@ -231,8 +239,8 @@ export const SearchDrawer = () => {
               id="period-multiple-chip"
               multiple
               fullWidth
-              value={periods.map((period) => PERIODS[period - 1])}
-              onChange={handlePeriod}
+              value={periods}
+              onChange={(event) => handleSelect(event, 'period_ids', PERIODS)}
               input={<OutlinedInput id="select-multiple-chip" label="時代" />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -240,10 +248,10 @@ export const SearchDrawer = () => {
                     <Chip
                       key={value}
                       label={value}
-                      onDelete={() => handleChipDelete(value, PERIODS, setPeriods)}
+                      onDelete={() => handleChipDelete(value, 'period_ids', PERIODS)}
                       onMouseDown={(event) => {
                         if (selected.length === 1) {
-                          return handleChipDelete(value, PERIODS, setPeriods)
+                          return handleChipDelete(value, 'period_ids', PERIODS)
                         }
                         event.stopPropagation()
                       }}
@@ -268,8 +276,10 @@ export const SearchDrawer = () => {
               id="prefecture-multiple-chip"
               multiple
               fullWidth
-              value={prefectures.map((prefecture) => PREFECTURES[prefecture - 1])}
-              onChange={handlePrefecture}
+              value={prefectures}
+              // value={prefectures.map((prefecture) => PREFECTURES[prefecture - 1])}
+              onChange={(event) => handleSelect(event, 'prefecture_ids', PREFECTURES)}
+              // onChange={handlePrefecture}
               input={<OutlinedInput id="select-multiple-chip" label="都道府県" />}
               renderValue={(selected) => (
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -277,10 +287,10 @@ export const SearchDrawer = () => {
                     <Chip
                       key={value}
                       label={value}
-                      onDelete={() => handleChipDelete(value, PREFECTURES, setPrefectures)}
+                      onDelete={() => handleChipDelete(value, 'prefecture_ids', PREFECTURES)}
                       onMouseDown={(event) => {
                         if (selected.length === 1) {
-                          return handleChipDelete(value, PREFECTURES, setPrefectures)
+                          return handleChipDelete(value, 'prefecture_ids', PREFECTURES)
                         }
                         event.stopPropagation()
                       }}
@@ -308,7 +318,7 @@ export const SearchDrawer = () => {
           htmlFor="search-drawer-checkbox"
           className="block relative h-screen min-w-[48px] hover:bg-gray-100"
         >
-          <span className="absolute top-1/2 right-3 w-1 h-8 bg-gray-300 rounded-lg"></span>
+          <span className="absolute top-1/2 right-3 w-1 h-8 bg-gray-300 rounded-lg" />
         </label>
       </div>
     </>
