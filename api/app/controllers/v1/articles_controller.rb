@@ -40,11 +40,11 @@ module V1
         params[:ids].present? || params[:words].present? || params[:period_ids].present? || params[:prefecture_ids].present? || params[:sort_by].present?
       end
 
-      def convert_into_array(string_params, conversion: true)
+      def convert_into_array(string_params, conversion_to_num: true)
         return [] if string_params.blank?
 
         res = string_params.split(',')
-        res.map!(&:to_i) if conversion
+        res.map!(&:to_i) if conversion_to_num
         res
       end
 
@@ -54,7 +54,7 @@ module V1
 
       def search_q
         q_words = {}
-        convert_into_array(params[:words], conversion: false).each_with_index do |word, index|
+        convert_into_array(params[:words], conversion_to_num: false).each_with_index do |word, index|
           q_words.store(index.to_s, {
                           'a' => { '0' => { 'name' => 'title' }, '1' => { 'name' => 'content' }, '2' => { 'name' => 'user_name' } },
                           'p' => 'cont',
