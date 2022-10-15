@@ -19,12 +19,13 @@ interface Props {
 }
 
 export const ArticleModal = ({ article }: Props) => {
-  const { openModalId, setOpenModalId, setOptions } = useArticlesContext()
+  const { openModalId, setIsLoading, setOpenModalId, setOptions } = useArticlesContext()
   const { resetOptions } = useArticles()
   const navigate = useNavigate()
   const date = new Date(article.created_time)
 
   const handleClick = (optionsKey: keyof Options, optionsValue: number) => {
+    setIsLoading(true)
     resetOptions()
     setOptions((prev) => ({ ...prev, [optionsKey]: optionsValue.toString() }))
     setOpenModalId(undefined)

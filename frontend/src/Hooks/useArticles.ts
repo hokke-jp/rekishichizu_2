@@ -12,11 +12,17 @@ export const useArticles = () => {
       .get('/articles', { params: { page, ...options } })
       .then((response) => {
         const data = response.data
+        console.log(data)
         if (data.length === 0) {
           setHasMore(false)
           return
         }
-        setArticles((prev) => [...prev, ...data])
+        setArticles((prev) => {
+          const prevIds = prev.map((pre) => pre.id)
+          const newData = data.filter((d: { id: number }) => !prevIds.includes(d.id))
+          return [...prev, ...newData]
+        })
+        // setArticles((prev) => [...prev, ...data])
       })
       .catch((error) => {
         console.log(error)

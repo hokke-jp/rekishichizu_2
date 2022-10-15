@@ -60,10 +60,3 @@ Style/IfUnlessModifier:
 Style/RedundantFreeze:
   Exclude:
     - 'app/models/user.rb'
-
-# Offense count: 27
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
-# URISchemes: http, https
-Layout/LineLength:
-  Max: 262
