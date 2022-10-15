@@ -122,6 +122,7 @@ export const SearchDrawer = () => {
         }
       })
       .then((response) => {
+        console.log(response.data)
         setArticles(response.data)
       })
       .finally(() => {

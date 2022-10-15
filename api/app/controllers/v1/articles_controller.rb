@@ -8,10 +8,10 @@ module V1
           articles = Article.customised_articles.ransack(ids_q).result
           return render json: articles
         end
-        articles = Article.page(params[:page]).customised_articles.ransack(search_q).result
+        articles = Article.customised_articles.ransack(search_q).result.page(params[:page]).distinct
         return render json: articles
       end
-      articles = Article.page(params[:page]).customised_articles
+      articles = Article.customised_articles.page(params[:page])
       render json: articles
     end
 
