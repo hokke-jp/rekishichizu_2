@@ -46,6 +46,7 @@ export const useUpdate = (setAnchorEl?: Dispatch<SetStateAction<null | HTMLEleme
         return response.headers.uid
       })
       .catch((error) => {
+        console.log(error)
         const message = error.response.data.errors?.full_messages || '更新に失敗しました'
         setAlertSeverity('warning')
         setAlertMessage(message)

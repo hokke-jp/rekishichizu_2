@@ -1,6 +1,8 @@
 module Overrides
   class RegistrationsController < DeviseTokenAuth::RegistrationsController
     def update
+      return render json: { errors: { full_messages: 'サンプルユーザーの編集はできません' } }, status: 403 if current_v1_user.id == 9
+
       if @resource
         if @resource.send(resource_update_method, account_update_params)
           yield @resource if block_given?

@@ -12,9 +12,6 @@ export const LoggedinIcons = ({ user }: { user: User }) => {
       <IconWrapper path="post" tooltip="投稿作成">
         <img src={Post} alt="Post icon" className="h-6 w-6" />
       </IconWrapper>
-      <IconWrapper path="tmp" tooltip="tmp">
-        <p>tmp</p>
-      </IconWrapper>
     </>
   )
 }
