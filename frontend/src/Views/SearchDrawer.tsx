@@ -18,7 +18,6 @@ import { PREFECTURES } from 'Constant/PREFECTURE'
 import { useArticlesContext } from 'Utils/ArticlesContext'
 import { Options, SortBy } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
-import { ChangeEvent, useState } from 'react'
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -49,7 +48,6 @@ const valuesConvertIndexes = (value: string | string[], array: string[]) => {
 
 export const SearchDrawer = () => {
   const { options, setIsLoading, setArticles, setOptions, setHasMore } = useArticlesContext()
-  const [words, setWords] = useState('')
   const periods: string[] =
     options.period_ids === ''
       ? []
@@ -65,15 +63,6 @@ export const SearchDrawer = () => {
           .map((elem) => Number(elem))
           .map((id) => PREFECTURES[id - 1])
 
-  const handleWord = (event: ChangeEvent<HTMLInputElement>) => {
-    const word = event.target.value
-    setWords(word)
-    const removeSpace = (str: string): string => {
-      return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
-    }
-    const removedWords = removeSpace(word)
-    setOptions((prev) => ({ ...prev, words: removedWords }))
-  }
   const handleSelect = (event: SelectChangeEvent<string | string[]>, optionsKey: string, array: string[]) => {
     const {
       target: { value }
@@ -92,11 +81,16 @@ export const SearchDrawer = () => {
   const handleSearch = () => {
     setIsLoading(true)
     setHasMore(true)
+    const removeSpace = (str: string): string => {
+      return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
+    }
+    const removedWords = removeSpace(options.words)
     axiosInstance
       .get('/articles', {
         params: {
           page: 1,
-          ...options
+          ...options,
+          words: removedWords
         }
       })
       .then((response) => {
@@ -122,7 +116,6 @@ export const SearchDrawer = () => {
         }
       })
       .then((response) => {
-        console.log(response.data)
         setArticles(response.data)
       })
       .finally(() => {
@@ -218,8 +211,8 @@ export const SearchDrawer = () => {
             <OutlinedInput
               id="outlined-adornment-search"
               type="text"
-              value={words}
-              onChange={handleWord}
+              value={options.words}
+              onChange={(event) => setOptions((prev) => ({ ...prev, words: event.target.value }))}
               sx={{ borderRadius: '30px' }}
               endAdornment={
                 <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>

@@ -18,7 +18,7 @@ ja:
         prefecture_id: 都道府県
         lat: ピン
         lng: ピン
-        image: 投稿写真
+        image: 写真
   time:
     formats:
       default: "%Y/%m/%d %H:%M:%S"

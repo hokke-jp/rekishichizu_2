@@ -127,7 +127,7 @@ export const PostForm = ({ loaded = false }: Props) => {
       <TextField fullWidth label="タイトル" name="title" autoFocus />
       <TextField type="number" value={latlng?.lat()} name="lat" sx={{ display: 'none' }} />
       <TextField type="number" value={latlng?.lng()} name="lng" sx={{ display: 'none' }} />
-      <div className="flex gap-x-12">
+      <div className="flex justify-between w-full">
         <div className="flex flex-col justify-around w-48">
           <FormControl>
             <InputLabel id="prefecture-label">都道府県</InputLabel>
