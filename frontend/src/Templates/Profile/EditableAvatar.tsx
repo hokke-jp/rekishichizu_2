@@ -35,7 +35,7 @@ export const EditableAvatar = () => {
       })
       .catch((error) => {
         setAlertMessage(error.response.data.errors.full_messages)
-        setAlertSeverity('error')
+        setAlertSeverity('warning')
         console.error(error.response.data)
       })
   }
