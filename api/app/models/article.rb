@@ -15,6 +15,8 @@ class Article < ApplicationRecord
   validates :user_id, presence: true
   validates :prefecture_id, presence: { message: 'を選択してください' }
   validates :period_id, presence: { message: 'を選択してください' }
+  validates :image, content_type: { in: %w[image/jpeg image/png], message: 'にはjpegまたはpngファイルを使用してください' },
+                    size: { less_than: 5.megabytes, message: ' のサイズは5MB以下にしてください' }
 
   default_scope { order(created_at: :desc) }
   ransacker :likes_count do

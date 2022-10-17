@@ -1,6 +1,7 @@
 import { AddPhotoAlternateOutlined } from '@mui/icons-material'
 import CancelIcon from '@mui/icons-material/Cancel'
 import { ButtonBase } from '@mui/material'
+import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useState, useEffect, Dispatch } from 'react'
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const ImagePreview = ({ file, setFile }: Props) => {
+  const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   const [url, setUrl] = useState<string>('')
   useEffect(() => {
     if (!file) return
@@ -29,6 +31,12 @@ export const ImagePreview = ({ file, setFile }: Props) => {
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target?.files
     if (file && file[0]) {
+      const sizeInMegabytes = file[0].size / 1024 / 1024
+      if (sizeInMegabytes > 5) {
+        setAlertMessage('5MB以下のファイルを選択してください')
+        setAlertSeverity('warning')
+        return
+      }
       setFile(file[0])
     }
   }
@@ -37,7 +45,7 @@ export const ImagePreview = ({ file, setFile }: Props) => {
   }
 
   return (
-    <div className="relative grow">
+    <div className="relative">
       <ButtonBase
         style={{
           display: 'block',
@@ -46,7 +54,7 @@ export const ImagePreview = ({ file, setFile }: Props) => {
       >
         <label
           htmlFor="image"
-          className="flex justify-center items-center min-w-[240px] max-w-[400px] h-48 ml-auto bg-gray-200 border-[3px] border-dashed border-gray-300 rounded-md hover:opacity-80 hover:cursor-pointer"
+          className="flex justify-center items-center w-72 h-48 ml-auto bg-gray-200 border-[3px] border-dashed border-gray-300 rounded-md hover:opacity-80 hover:cursor-pointer"
         >
           <input type="file" id="image" accept="image/jpeg,image/png" onChange={handleFile} hidden />
           {file ? (

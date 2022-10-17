@@ -17,8 +17,8 @@ module V1
 
     def create
       article = current_v1_user.articles.build(article_params)
+      article.image.attach(params[:image]) if params[:image].present?
       if article.save
-        article.image.attach(params[:image]) if params[:image].present?
         render json: { article_ids: current_v1_user.article_ids }, status: :created
       else
         render json: { errors: article.errors.full_messages }, status: 404

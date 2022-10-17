@@ -14,5 +14,5 @@ module Overrides
   end
 end
 
-# methods: [:avatar_url] を追加するためにオーバーライド
+# methods: [:avatar_url...] を追加するためにオーバーライド
 # その他はデフォルトのまま

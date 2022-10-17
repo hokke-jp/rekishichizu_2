@@ -14,8 +14,8 @@ export const EditableAvatar = () => {
     const tokens = getTokens()
     if (target === null || target.files === null) return
     const sizeInMegabytes = target.files[0].size / 1024 / 1024
-    if (sizeInMegabytes > 2) {
-      setAlertMessage('2MB以下のファイルを選択してください')
+    if (sizeInMegabytes > 5) {
+      setAlertMessage('5MB以下のファイルを選択してください')
       setAlertSeverity('warning')
       return
     }
