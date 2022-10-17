@@ -6,34 +6,26 @@
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 
-/* 初期画面オーバーレイ */
-.displaycss {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
+/* その他 */
+.avatar-wrapper:hover div {
+  opacity: 60%;
+}
+
+/* HTML5でフルスクリーンに入ると、背景/要素が黒くなる 対策 */
+#root {
   background-color: white;
-  animation: fadeout-anim 5s linear forwards;
 }
-@keyframes fadeout-anim {
-  0% {
-    opacity: 100%;
-  }
-  80% {
-    opacity: 100%;
-  }
-  100% {
-    opacity: 0;
-  }
+
+#alert-div {
+  position: fixed;
+  z-index: 9999;
+  top: 40px;
+  right: -80px;
+  transition: all 0.2s;
+  opacity: 80%;
 }
-.textcss {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3rem;
-  line-height: 1;
+#alert-checkbox[type='checkbox']:checked ~ #alert-div {
+  right: 20px;
 }
 
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
@@ -41,29 +33,49 @@
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
 
 /* GoogleMapのDrawerのポジション */
-#posts-drawer-div {
+:root {
+  --articles-width: 288px;
+  --search-width: 320px;
+  --drawer-handle-width: 48px;
+  --sidebar-width: 72px;
+}
+
+#articles-drawer-div {
   position: fixed;
-  left: -96px;
+  left: calc(0px - var(--articles-width) + var(--sidebar-width) + var(--drawer-handle-width));
   z-index: 20;
   transition: all 0.2s;
-  width: 224px;
+  width: var(--articles-width);
 }
-#posts-drawer-checkbox[type='checkbox']:checked ~ #posts-drawer-div {
-  left: 72px;
+#articles-drawer-checkbox[type='checkbox']:checked ~ #articles-drawer-div {
+  left: var(--sidebar-width);
 }
-#posts-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
-  margin-left: 168px;
+#articles-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
+  margin-left: calc(var(--articles-width) - var(--drawer-handle-width));
 }
 
 #search-drawer-div {
   position: fixed;
-  left: -40px;
+  left: calc(0px - var(--search-width) + var(--sidebar-width) + 2 * var(--drawer-handle-width));
   z-index: 10;
   transition: all 0.2s;
-  width: 224px;
+  width: var(--search-width);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+#search-drawer-div::-webkit-scrollbar {
+  display: none;
 }
 #search-drawer-checkbox[type='checkbox']:checked ~ #search-drawer-div {
-  left: 104px;
+  left: calc(var(--sidebar-width) + var(--drawer-handle-width) - 18px);
+}
+
+#articles-drawer-div ul {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+#articles-drawer-div ul::-webkit-scrollbar {
+  display: none;
 }
 
 /* ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
@@ -72,7 +84,7 @@
 
 /* GoogleMapの右アイコンバー */
 .hover-and-click-effect {
-  @apply hover:bg-gray-100 focus:bg-none focus:outline-none focus:ring-0 active:bg-gray-200 transition duration-150 ease-in-out;
+  @apply transition duration-150 ease-in-out hover:bg-gray-100 focus:bg-none focus:outline-none focus:ring-0 active:bg-gray-200;
 }
 .flash-anime {
   animation: flash 1s linear infinite;
