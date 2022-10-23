@@ -24,8 +24,7 @@ services:
     container_name: pro_api
     environment:
       RAILS_ENV: production
-    # command: bash -c "rm -f /api/tmp/pids/server.pid && DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset && bundle exec rails db:seed && rm -f tmp/pids/unicorn.pid && bundle exec unicorn -p 3000 -c /api/config/unicorn.rb -E production"
-    command: bash -c "bundle exec rails db:create && DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset && bundle exec rails db:seed && rm -f tmp/pids/unicorn.pid && bundle exec unicorn -p 3000 -c /api/config/unicorn.rb -E production"
+    command: bash -c "DISABLE_DATABASE_ENVIRONMENT_CHECK=1 bundle exec rails db:reset && rm -f tmp/pids/unicorn.pid && bundle exec unicorn -p 3000 -c /api/config/unicorn.rb -E production"
     ports:
       - 3000:3000
     depends_on:
