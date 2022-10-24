@@ -32,6 +32,8 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :amazon
+  Rails.application.routes.default_url_options[:host] = 'localhost'
+  Rails.application.routes.default_url_options[:port] = 3000
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
