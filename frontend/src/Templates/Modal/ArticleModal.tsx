@@ -53,8 +53,9 @@ export const ArticleModal = ({ article }: Props) => {
           <div className="flex items-center gap-5">
             <AvatarLink
               path={`/${article.user.name}`}
-              avatarUrl={article.user.avatar_url}
               className="w-14 h-14 rounded-full"
+              avatarUrl={article.user.avatar_url}
+              resetOpenModal={() => setOpenModalId(undefined)}
             />
             <div className="grow">
               <Typography variant="h5" sx={{ fontSize: 22 }} noWrap>
