@@ -335,7 +335,6 @@ USER_LIKINGS = [
 ].freeze
 
 (0..8).each do |num|
-  puts User.count
   user = User.create!(name: USER_NAMES[num], email: USER_EMAILS[num], password: 'password', introduction: USER_INTRODUCTIONS[num])
   user.avatar.attach(io: File.open(Rails.root.join("db/seed_data/avatar_#{num}.jpg")),
                      filename: 'avatar.jpg',
