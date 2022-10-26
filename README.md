@@ -6,30 +6,26 @@ URL ： https://www.rekishichizu.jp
 
 ## 特徴
 <details> 
-  <summary><font size="4">SPAアプリ</font></summary>
+  <summary><h3>SPAアプリ</h3></summary>
   このアプリはフロントエンドで Create React App を使い作成したSPAアプリを、AWS S3 へデプロイし AWS CloudFront で静的コンテンツとして配信しています。<br>
   また、SPAアプリの弱点である初期読み込みの遅さを解消する工夫として、初期読み込みする記事数を減らし、無限スクロールによってデータを追加取得することや、バックエンドの N+1 問題を解消することによってレスポンスを早くするなどの工夫を施しています。
 </details>
-<br>
 <details> 
-  <summary><font size="4">CI / CD 環境</font></summary>
+  <summary><h3>CI / CD 環境</h3></summary>
   開発環境に Docker を使用し、CI / CD ツールとして CircleCI を使用しています。<br>
   CircleCI が GitHub のmainブランチへのpush / mergeを検知して、自動でテストが走り、テストが成功すると自動デプロイが実行される環境を構築しています。<br>
   また、 git commit を実行した際に自動でコード解析、コード整形が行われ、コードの品質を一定に保つようになっています。
 </details>
-<br>
 <details> 
-  <summary><font size="4">ECS Fargate を使用したスケーラブル ・ ポータブルなAWS構成</font></summary>
+  <summary><h3>ECS Fargate 使用によるスケーラビリティ ・ ポータビリティ<h3></summary>
   バックエンドのproduction環境として Fargate を使用することで、拡張が容易で、さらにコンテナ技術により開発環境とproduction環境の差異を吸収し、携帯性の高い環境を構築しています。
 </details>
-<br>
 <details> 
-  <summary><font size="4">Google Map + React</font></summary>
+  <summary><h3>Google Map + React</h3></summary>
   このアプリのメイン機能である地図と記事の表示や扱いについて、Google Maps API と React の豊富なライブラリを活用し、なるべくユーザーが分かりやすく簡単に操作できるようにアプリを作成しました。
 </details>
-<br>
 <details> 
-  <summary><font size="3">RESTful API</font></summary>
+  <summary>RESTful API</summary>
   厳密には RESTful API とは呼べないかもしれませんが、リソースに対してなるべく RESTful API の原則にのっとった仕様を目指しました。<br>
   例)<br>
   &emsp;・ Devise Token Auth を使用したトークン認証によりステートレスな設計<br>
@@ -39,12 +35,12 @@ URL ： https://www.rekishichizu.jp
 </details>
 <br>
 <details> 
-  <summary><font size="3">TypeScript</font></summary>
+  <summary>TypeScript</summary>
   TypeScript により、安全性の高い JavaScript コードとなっています。
 </details>
 <br>
 <details> 
-  <summary><font size="3">フロントエンドのディレクトリ構成</font></summary>
+  <summary>フロントエンドのディレクトリ構成</summary>
   フロントエンドのディレクトリ構成でUIとロジックの切り分けを意識し、また、UIについてもレイアウトと要素の切り分けなどを意識したディレクトリ構成にしました(一部切り分けが終わっていないコードがあります。また下記の定義を厳密に守っているわけではありません)。<br>
   src/<br>
   ├ Hooks&emsp;&emsp; (カスタムフック)<br>
@@ -57,7 +53,7 @@ URL ： https://www.rekishichizu.jp
 </details>
 <br>
 <details> 
-  <summary><font size="3">扱いやすい検索機能</font></summary>
+  <summary>扱いやすい検索機能</summary>
   Ruby の Gem Ransack を使用し、記事のタイトル、説明、またはユーザー名に対する部分一致検索、これら条件にプラスしてソート検索やタグ検索を併用して検索できます。<br>
   また、デモデータを各都道府県に最低1つずつ用意し、様々な条件で検索を試すことができるようにしました。
 </details>
