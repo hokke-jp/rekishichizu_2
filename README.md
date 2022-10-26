@@ -24,6 +24,7 @@ URL ： https://www.rekishichizu.jp
   <summary><h3>Google Map + React</h3></summary>
   このアプリのメイン機能である地図と記事の表示や扱いについて、Google Maps API と React の豊富なライブラリを活用し、なるべくユーザーが分かりやすく簡単に操作できるようにアプリを作成しました。
 </details>
+<br>
 <details> 
   <summary>RESTful API</summary>
   厳密には RESTful API とは呼べないかもしれませんが、リソースに対してなるべく RESTful API の原則にのっとった仕様を目指しました。<br>
