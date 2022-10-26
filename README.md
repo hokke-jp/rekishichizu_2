@@ -1,7 +1,7 @@
 # 歴史地図
 『歴史地図』は、Google Maps API を使用し、地図上に歴史的な出来事を投稿し、それを共有するサービスです。  
 URL ： https://www.rekishichizu.jp
-<img width="auto" alt="WEBページサンプル画像" src="README/WEBページサンプル01.png">
+<img width="auto" alt="WEBページサンプル画像" src="README_images/WEBページサンプル01.png">
 
 
 ## 特徴
@@ -66,11 +66,11 @@ URL ： https://www.rekishichizu.jp
 
 
 ##  AWS構成図
-<img width="auto" alt="AWS構成図" src="README/AWS構成図.png">
+<img width="auto" alt="AWS構成図" src="README_images/AWS構成図.png">
 
 
 ##  ER図
-<img width="auto" alt="ER図" src="README/ER図.png">
+<img width="auto" alt="ER図" src="README_images/ER図.png">
 
 
 ##  使用技術
