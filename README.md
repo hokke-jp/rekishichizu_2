@@ -29,7 +29,7 @@ URL ： https://www.rekishichizu.jp
   厳密には RESTful API とは呼べないかもしれませんが、リソースに対してなるべく RESTful API の原則にのっとった仕様を目指しました。<br>
   例)<br>
   &emsp;・ Devise Token Auth を使用したトークン認証によりステートレスな設計<br>
-  &emsp;・ リソース検索 : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/articles?period_ids=5,6&sort_by=likes_count+DESC<br>
+  &emsp;・ リソース検索 : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/articles?ids=9,35,37&words=神社&period_ids=5,6&sort_by=likes_count+DESC<br>
   &emsp;・ 個別リソース : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/users/{user_name}<br>
   &emsp;・ リソース削除 : [DELETE] https&#58;//api.rekishichizu.jp/v1/articles/{article_id} *ヘッダーに認証トークンが必要
 </details>

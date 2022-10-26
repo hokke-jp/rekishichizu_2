@@ -38,11 +38,11 @@ const sortByAsc = (ary: number[]): number[] => {
   })
 }
 
-const convertArrayIndex = (str: string) => {
+const stringToNumberArray = (str: string) => {
   return str.split(',').map((s) => Number(s))
 }
 
-const valuesConvertIndexes = (value: string | string[], array: string[]) => {
+const indexesOf = (value: string | string[], array: string[]) => {
   return typeof value === 'string' ? [array.indexOf(value) + 1] : sortByAsc(value.map((val) => array.indexOf(val) + 1))
 }
 
@@ -67,14 +67,14 @@ export const SearchDrawer = () => {
     const {
       target: { value }
     } = event
-    const ids: number[] = valuesConvertIndexes(value, array)
+    const ids: number[] = indexesOf(value, array)
     setOptions((prev) => ({ ...prev, [optionsKey]: `${ids}` }))
   }
   const handleChipDelete = (target: string, optionsKey: keyof Options, array: string[]) => {
     const targetIndex = array.indexOf(target) + 1
     setOptions((prev) => ({
       ...prev,
-      [optionsKey]: `${convertArrayIndex(prev[optionsKey]).filter((index) => index !== targetIndex)}`
+      [optionsKey]: `${stringToNumberArray(prev[optionsKey]).filter((index) => index !== targetIndex)}`
     }))
   }
 
