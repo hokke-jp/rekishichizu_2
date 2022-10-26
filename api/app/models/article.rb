@@ -25,7 +25,6 @@ class Article < ApplicationRecord
   end
 
   def self.customised_articles
-    # Article.all.includes(image_attachment: :blob, user: :avatar_attachment)
     with_attached_image.includes(:liked_user, user: { avatar_attachment: :blob })
   end
 

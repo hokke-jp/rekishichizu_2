@@ -3,15 +3,7 @@ module V1
     before_action :authenticate_v1_user!, only: %i[create destroy]
 
     def index
-      if includes_query?
-        if params[:ids].present?
-          articles = Article.customised_articles.ransack(ids_q).result
-          return render json: articles
-        end
-        articles = Article.customised_articles.ransack(search_q).result.page(params[:page]).distinct
-        return render json: articles
-      end
-      articles = Article.customised_articles.page(params[:page])
+      articles = params[:page].present? ? Article.customised_articles.ransack(search_q).result.page(params[:page]) : Article.customised_articles.ransack(search_q).result
       render json: articles
     end
 
@@ -36,25 +28,17 @@ module V1
         params.permit(:title, :content, :lat, :lng, :period_id, :prefecture_id)
       end
 
-      def includes_query?
-        params[:ids].present? || params[:words].present? || params[:period_ids].present? || params[:prefecture_ids].present? || params[:sort_by].present?
-      end
-
-      def convert_into_array(string_params, conversion_to_num: true)
+      def string_to_array(string_params, to_num: true)
         return [] if string_params.blank?
 
         res = string_params.split(',')
-        res.map!(&:to_i) if conversion_to_num
+        res.map!(&:to_i) if to_num
         res
-      end
-
-      def ids_q
-        { 'id_eq_any' => convert_into_array(params[:ids]) }
       end
 
       def search_q
         q_words = {}
-        convert_into_array(params[:words], conversion_to_num: false).each_with_index do |word, index|
+        string_to_array(params[:words], to_num: false).each_with_index do |word, index|
           q_words.store(index.to_s, {
                           'a' => { '0' => { 'name' => 'title' }, '1' => { 'name' => 'content' }, '2' => { 'name' => 'user_name' } },
                           'p' => 'cont',
@@ -62,8 +46,8 @@ module V1
                           'm' => 'or'
                         })
         end
-        sort_name = params[:sort_by].split[0]
-        sort_dir = params[:sort_by].split[1]
+        sort_name = params[:sort_by].present? ? params[:sort_by].split[0] : 'created_at'
+        sort_dir = params[:sort_by].present? ? params[:sort_by].split[1] : 'DESC'
         {
           's' => {
             '0' => { 'name' => sort_name,
@@ -75,8 +59,9 @@ module V1
                 **q_words
               }
             },
-            '1' => { 'period_id_eq_any' => convert_into_array(params[:period_ids]) },
-            '2' => { 'prefecture_id_eq_any' => convert_into_array(params[:prefecture_ids]) }
+            '1' => { 'period_id_eq_any' => string_to_array(params[:period_ids]) },
+            '2' => { 'prefecture_id_eq_any' => string_to_array(params[:prefecture_ids]) },
+            '3' => { 'id_eq_any' => string_to_array(params[:ids]) }
           },
           'm' => 'and'
         }
