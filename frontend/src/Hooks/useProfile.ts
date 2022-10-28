@@ -5,11 +5,12 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 
 export const useProfile = () => {
-  const params = useParams()
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { currentUser } = useCurrentUserContext()
+  const params = useParams()
   const isMypage = currentUser?.name === params.userName
+
   // fetchUser
   useEffect(() => {
     if (isMypage) {

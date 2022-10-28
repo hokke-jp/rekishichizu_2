@@ -6,11 +6,11 @@ import { useState, FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const useLogin = () => {
+  const [errorMessage, setErrorMessage] = useState('')
   const { setCurrentUser } = useCurrentUserContext()
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const navigate = useNavigate()
 
-  const [errorMessage, setErrorMessage] = useState('')
   const login = (email: string | undefined, password: string | undefined) => {
     axiosInstance
       .post('/auth/sign_in', {
@@ -31,6 +31,7 @@ export const useLogin = () => {
         setErrorMessage('メールアドレスもしくはパスワードに誤りがあります')
       })
   }
+
   const handleLogin = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setErrorMessage('')
