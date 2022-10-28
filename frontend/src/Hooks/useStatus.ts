@@ -11,12 +11,12 @@ const scrollToElement = (ref: MutableRefObject<HTMLDivElement | null>) => {
 }
 
 export const useStatus = () => {
-  const { articles, setArticles } = useArticlesContext()
-  const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
   const [users, setUsers] = useState<UserInList[]>([])
   const [duringFetchData, setDuringFetchData] = useState<'article' | 'user' | null>(null)
   const [nowLoading, setNowLoading] = useState(true)
   const [skeletonNumber, setSkeletonNumber] = useState(0)
+  const { articles, setArticles } = useArticlesContext()
+  const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
 
   const updateLikedUserIds = (updateArticleId: number, newLikedUserIds: number[]): void => {
     setArticles(

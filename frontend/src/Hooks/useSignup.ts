@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom'
 
 export const useSignup = () => {
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
-  const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
   const { setCurrentUser } = useCurrentUserContext()
+  const navigate = useNavigate()
+
   const handleSignup = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setErrorMessage('')
@@ -35,5 +36,6 @@ export const useSignup = () => {
         setErrorMessage(error.response.data.errors.full_messages.reverse().join('\n'))
       })
   }
+
   return { errorMessage, setErrorMessage, handleSignup }
 }
