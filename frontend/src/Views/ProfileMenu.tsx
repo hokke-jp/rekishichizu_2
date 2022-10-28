@@ -69,14 +69,14 @@ export const ProfileMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem>
+        <MenuItem sx={{ p: 0 }}>
           <DialogEmail setAnchorEl={setAnchorEl} />
         </MenuItem>
-        <MenuItem>
+        <MenuItem sx={{ p: 0 }}>
           <DialogPassword setAnchorEl={setAnchorEl} />
         </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem sx={{ p: 0 }}>
           <ProfileMenuItem handleFunction={logout} icon={<Logout fontSize="small" />} text="ログアウト" />
         </MenuItem>
       </Menu>
