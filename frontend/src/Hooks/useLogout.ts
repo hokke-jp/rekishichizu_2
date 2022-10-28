@@ -9,6 +9,7 @@ export const useLogout = () => {
   const { setCurrentUser } = useCurrentUserContext()
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const navigate = useNavigate()
+
   const logout = () => {
     axiosInstance
       .delete('/auth/sign_out', {
@@ -28,5 +29,6 @@ export const useLogout = () => {
         setAlertMessage('ログアウトしました')
       })
   }
+
   return { logout }
 }
