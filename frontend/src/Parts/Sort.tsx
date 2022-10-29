@@ -12,8 +12,9 @@ export const Sort = ({ sortState }: Props) => {
   const { options, setOptions } = useArticlesContext()
 
   return (
-    <ButtonBase key={sortState[1]} onClick={() => handleSort(sortState[0])}>
+    <ButtonBase data-testid={sortState[1]} key={sortState[1]} onClick={() => handleSort(sortState[0])}>
       <input
+        data-testid={sortState[1].concat('-input')}
         type="radio"
         id={sortState[1]}
         name="drone"

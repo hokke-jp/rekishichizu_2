@@ -16,6 +16,29 @@ const ArticlesContext = createContext(
     setHasMore: Dispatch<SetStateAction<boolean>>
   }
 )
+// const ArticlesContext = createContext({
+//   isLoading: true,
+//   articles: [],
+//   openModalId: undefined,
+//   options: {
+//     words: '',
+//     period_ids: '',
+//     prefecture_ids: '',
+//     sort_by: 'created_at DESC'
+//   },
+//   hasMore: true
+// } as unknown as {
+//   isLoading: boolean
+//   articles: Article[]
+//   openModalId: number | undefined
+//   options: Options
+//   hasMore: boolean
+//   setIsLoading: Dispatch<SetStateAction<boolean>>
+//   setArticles: Dispatch<SetStateAction<Article[]>>
+//   setOpenModalId: Dispatch<SetStateAction<number | undefined>>
+//   setOptions: Dispatch<SetStateAction<Options>>
+//   setHasMore: Dispatch<SetStateAction<boolean>>
+// })
 
 export const useArticlesContext = () => {
   return useContext(ArticlesContext)
