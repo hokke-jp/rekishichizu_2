@@ -1,17 +1,17 @@
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useArticlesContext } from 'Utils/ArticlesContext'
-import { Article, UserInList } from 'Utils/Types'
+import { Article, UserInfoInArticle } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 import { MutableRefObject, useState } from 'react'
 
-const scrollToElement = (ref: MutableRefObject<HTMLDivElement | null>) => {
-  if (ref.current) {
-    ref.current.scrollIntoView({ behavior: 'smooth' })
+const scrollToElement = (element: MutableRefObject<HTMLDivElement | null>) => {
+  if (element.current) {
+    element.current.scrollIntoView({ behavior: 'smooth' })
   }
 }
 
 export const useStatus = () => {
-  const [users, setUsers] = useState<UserInList[]>([])
+  const [users, setUsers] = useState<UserInfoInArticle[]>([])
   const [duringFetchData, setDuringFetchData] = useState<'article' | 'user' | null>(null)
   const [nowLoading, setNowLoading] = useState(true)
   const [skeletonNumber, setSkeletonNumber] = useState(0)
@@ -63,7 +63,7 @@ export const useStatus = () => {
     axiosInstance
       .get(`/users`, { params: { ids: `${ids}` } })
       .then((response) => {
-        setUsers(response.data.users as UserInList[])
+        setUsers(response.data.users as UserInfoInArticle[])
         scrollToElement(ref)
       })
       .catch((error) => {

@@ -8,7 +8,7 @@ export interface User {
   following_ids: number[] | undefined
 }
 
-export interface UserInList {
+export interface UserInfoInArticle {
   id: number
   name: string
   avatar_url: string | undefined
@@ -23,10 +23,7 @@ export interface Article {
   image_url: string
   created_time: number
   user_id: number
-  user: {
-    name: string
-    avatar_url: string | undefined
-  }
+  user: UserInfoInArticle
   period_id: number
   prefecture_id: number
   liked_user_ids: number[]
@@ -34,7 +31,7 @@ export interface Article {
 
 export type SortBy = 'created_at DESC' | 'likes_count DESC' | 'period_id DESC' | 'period_id ASC'
 
-export interface Options {
+export interface SearchQueries {
   words: string
   period_ids: string
   prefecture_ids: string

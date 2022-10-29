@@ -1,5 +1,5 @@
 // import { useAlertMessageContext } from 'Utils/AlertMessageContext'
-import { Alert } from 'Utils/Alert'
+import { Alert } from 'Templates/Alert'
 import { Sidebar } from 'Views/Sidebar'
 import { Outlet } from 'react-router-dom'
 

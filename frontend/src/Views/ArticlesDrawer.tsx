@@ -2,10 +2,12 @@ import { useArticles } from 'Hooks/useArticles'
 import { ArticleCard } from 'Templates/Card/ArticleCard'
 import { SkeletonCard } from 'Templates/Card/SkeletonCard'
 import { useArticlesContext } from 'Utils/ArticlesContext'
+import { useFetchArticleOptionsContext } from 'Utils/FetchArticleOptionsContext'
 import InfiniteScroll from 'react-infinite-scroller'
 
 export const ArticlesDrawer = () => {
-  const { isLoading, articles, hasMore } = useArticlesContext()
+  const { articles } = useArticlesContext()
+  const { fetchArticleOptions } = useFetchArticleOptionsContext()
   const { fetchArticles } = useArticles()
 
   return (
@@ -15,7 +17,7 @@ export const ArticlesDrawer = () => {
         id="articles-drawer-div"
         className="flex h-screen rounded-tr-3xl rounded-br-3xl bg-white shadow-md shadow-gray-300 overflow-hidden"
       >
-        {isLoading ? (
+        {fetchArticleOptions.isLoading ? (
           <ul className="grow flex flex-col items-center gap-y-10 h-screen pt-10 pb-10 overflow-auto">
             {[...Array(3)].map((v, i) => (
               <li key={i}>
@@ -29,7 +31,7 @@ export const ArticlesDrawer = () => {
               className="flex flex-col items-center gap-y-10"
               pageStart={1}
               loadMore={(page) => fetchArticles(page)}
-              hasMore={hasMore}
+              hasMore={fetchArticleOptions.hasMore}
               loader={
                 <li key={0}>
                   <SkeletonCard />
