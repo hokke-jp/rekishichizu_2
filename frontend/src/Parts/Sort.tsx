@@ -1,6 +1,6 @@
 import { ButtonBase } from '@mui/material'
 import { useSearch } from 'Hooks/useSearch'
-import { useArticlesContext } from 'Utils/ArticlesContext'
+import { useSearchQueriesContext } from 'Utils/SearchQueriesContext'
 import { SortBy } from 'Utils/Types'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 
 export const Sort = ({ sortState }: Props) => {
   const { handleSort } = useSearch()
-  const { options, setOptions } = useArticlesContext()
+  const { searchQueries, setSearchQueries } = useSearchQueriesContext()
 
   return (
     <ButtonBase data-testid={sortState[1]} key={sortState[1]} onClick={() => handleSort(sortState[0])}>
@@ -21,8 +21,8 @@ export const Sort = ({ sortState }: Props) => {
         value={sortState[1]}
         className="peer"
         hidden
-        onChange={() => setOptions((prev) => ({ ...prev, sort_by: sortState[0] }))}
-        checked={options.sort_by === sortState[0]}
+        onChange={() => setSearchQueries((prev) => ({ ...prev, sort_by: sortState[0] }))}
+        checked={searchQueries.sort_by === sortState[0]}
       />
       <label
         htmlFor={sortState[1]}

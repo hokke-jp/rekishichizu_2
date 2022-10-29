@@ -15,5 +15,6 @@ export const AuthenticatedRoute = ({ component }: { component: ReactNode }) => {
   if (!currentUser) {
     return <Navigate to="/login" replace />
   }
+
   return <>{component}</>
 }

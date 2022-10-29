@@ -14,6 +14,7 @@ export const Alert = () => {
       clearTimeout(timeOut)
     }
   }, [alertMessage, setAlertMessage])
+
   return (
     <>
       <input id="alert-checkbox" type="checkbox" checked={check} readOnly hidden />

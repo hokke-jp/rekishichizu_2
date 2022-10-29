@@ -1,13 +1,14 @@
 import { Modal, Typography } from '@mui/material'
 import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
-import { useArticles } from 'Hooks/useArticles'
 import { AvatarLink } from 'Parts/AvatarLink'
 import { Image } from 'Templates/Image'
 import { Like } from 'Templates/Like'
 import { ArticleMenu } from 'Templates/Modal/ArticleMenu'
 import { useArticlesContext } from 'Utils/ArticlesContext'
-import { Article, Options } from 'Utils/Types'
+import { useFetchArticleOptionsContext } from 'Utils/FetchArticleOptionsContext'
+import { useSearchQueriesContext } from 'Utils/SearchQueriesContext'
+import { Article, SearchQueries } from 'Utils/Types'
 import { useNavigate } from 'react-router-dom'
 import { Navigation } from 'swiper'
 import 'swiper/css'
@@ -19,23 +20,41 @@ interface Props {
 }
 
 export const ArticleModal = ({ article }: Props) => {
-  const { openModalId, setIsLoading, setOpenModalId, setOptions } = useArticlesContext()
-  const { resetOptions } = useArticles()
+  const { setArticles } = useArticlesContext()
+  const { fetchArticleOptions, setFetchArticleOptions } = useFetchArticleOptionsContext()
+  const { setSearchQueries } = useSearchQueriesContext()
   const navigate = useNavigate()
   const date = new Date(article.created_time)
 
-  const handleClick = (optionsKey: keyof Options, optionsValue: number) => {
-    setIsLoading(true)
-    resetOptions()
-    setOptions((prev) => ({ ...prev, [optionsKey]: optionsValue.toString() }))
-    setOpenModalId(undefined)
-    navigate('/', { state: { optionsKey, optionsValue } })
+  const modalClose = () => {
+    setFetchArticleOptions((prev) => ({ ...prev, openModalId: undefined }))
+  }
+
+  const handleClick = (searchQueriesKey: keyof SearchQueries, searchQueriesValue: number) => {
+    setArticles([])
+    setFetchArticleOptions({ isLoading: true, openModalId: undefined, hasMore: true })
+    const newOptions: SearchQueries =
+      searchQueriesKey === 'period_ids'
+        ? {
+            words: '',
+            period_ids: searchQueriesValue.toString(),
+            prefecture_ids: '',
+            sort_by: 'created_at DESC'
+          }
+        : {
+            words: '',
+            period_ids: '',
+            prefecture_ids: searchQueriesValue.toString(),
+            sort_by: 'created_at DESC'
+          }
+    setSearchQueries({ ...newOptions })
+    navigate('/', { state: { searchQueriesKey, searchQueriesValue } })
   }
 
   return (
     <Modal
-      open={openModalId === article.id}
-      onClose={() => setOpenModalId(undefined)}
+      open={fetchArticleOptions.openModalId === article.id}
+      onClose={modalClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -55,7 +74,7 @@ export const ArticleModal = ({ article }: Props) => {
               path={`/${article.user.name}`}
               className="w-14 h-14 rounded-full"
               avatarUrl={article.user.avatar_url}
-              resetOpenModal={() => setOpenModalId(undefined)}
+              resetOpenModal={modalClose}
             />
             <div className="grow">
               <Typography variant="h5" sx={{ fontSize: 22 }} noWrap>

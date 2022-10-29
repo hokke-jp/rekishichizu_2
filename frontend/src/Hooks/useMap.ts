@@ -1,32 +1,13 @@
 import NoImage from 'Images/no_image.jpg'
 import { useArticlesContext } from 'Utils/ArticlesContext'
+import { useFetchArticleOptionsContext } from 'Utils/FetchArticleOptionsContext'
 import { useGoogleMapsContext } from 'Utils/GoogleMapsContext'
-import { axiosInstance } from 'Utils/axios'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 
 export const useMap = () => {
   const { googleMap } = useGoogleMapsContext()
-  const { articles, isLoading, options, setArticles, setIsLoading, setOpenModalId } = useArticlesContext()
-  const location = useLocation()
-
-  useEffect(() => {
-    axiosInstance
-      .get('/articles', {
-        params: {
-          page: 1,
-          ...options
-        }
-      })
-      .then((response) => {
-        setIsLoading(false)
-        setArticles(response.data)
-      })
-      .catch((error) => {
-        console.error('レスポンスエラー : ', error)
-      })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state])
+  const { articles } = useArticlesContext()
+  const { fetchArticleOptions, setFetchArticleOptions } = useFetchArticleOptionsContext()
 
   useEffect(() => {
     const markers = new google.maps.MVCArray()
@@ -56,7 +37,7 @@ export const useMap = () => {
       marker.addListener('click', (e: google.maps.MapMouseEvent) => {
         if (!e.latLng) return
         googleMap?.panTo(e.latLng)
-        setOpenModalId(article.id)
+        setFetchArticleOptions((prev) => ({ ...prev, openModalId: article.id }))
       })
 
       markers.push(marker)
@@ -66,5 +47,5 @@ export const useMap = () => {
         marker.setMap(null)
       })
     }
-  }, [googleMap, articles, isLoading, setOpenModalId])
+  }, [googleMap, articles, fetchArticleOptions.isLoading, setFetchArticleOptions])
 }
