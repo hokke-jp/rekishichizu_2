@@ -12,7 +12,11 @@ export const Sort = ({ sortState }: Props) => {
   const { searchQueries, setSearchQueries } = useSearchQueriesContext()
 
   return (
-    <ButtonBase data-testid={sortState[1]} key={sortState[1]} onClick={() => handleSort(sortState[0])}>
+    <ButtonBase
+      data-testid={sortState[1].concat('-button')}
+      key={sortState[1]}
+      onClick={() => handleSort(sortState[0])}
+    >
       <input
         data-testid={sortState[1].concat('-input')}
         type="radio"

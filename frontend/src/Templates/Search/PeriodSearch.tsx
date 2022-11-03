@@ -20,6 +20,7 @@ export const PeriodSearch = () => {
     <FormControl>
       <InputLabel id="period-multiple-chip-label">時代</InputLabel>
       <Select
+        data-testid="period-input"
         labelId="period-multiple-chip-label"
         id="period-multiple-chip"
         multiple
@@ -28,7 +29,7 @@ export const PeriodSearch = () => {
         onChange={(event) => handleSelect(event, 'period_ids', PERIODS)}
         input={<OutlinedInput id="select-multiple-chip" label="時代" />}
         renderValue={(selected) => (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+          <Box data-testid="selected-box" sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map((value) => (
               <Chip
                 key={value}
