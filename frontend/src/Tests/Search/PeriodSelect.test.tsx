@@ -37,7 +37,7 @@ describe('時代タグ検索セレクトボックス動作確認', () => {
     const randomPeriod = screen.getByText(PERIODS[randomPeriodId])
     await user.click(randomPeriod)
 
-    expect(screen.getByTestId('selected-box')).toHaveTextContent(PERIODS[randomPeriodId])
+    expect(screen.getByTestId('period-selected-box')).toHaveTextContent(PERIODS[randomPeriodId])
     expect(screen.getByRole('listbox').querySelector('li[aria-selected=true]')).toHaveTextContent(
       PERIODS[randomPeriodId]
     )
@@ -54,8 +54,8 @@ describe('時代タグ検索セレクトボックス動作確認', () => {
     const prevRandomPeriod = screen.getByText(PERIODS[randomPeriodId - 1])
     await user.click(prevRandomPeriod)
 
-    expect(screen.getByTestId('selected-box')).toHaveTextContent(PERIODS[randomPeriodId])
-    expect(screen.getByTestId('selected-box')).toHaveTextContent(PERIODS[randomPeriodId - 1])
+    expect(screen.getByTestId('period-selected-box')).toHaveTextContent(PERIODS[randomPeriodId])
+    expect(screen.getByTestId('period-selected-box')).toHaveTextContent(PERIODS[randomPeriodId - 1])
     expect(screen.getByDisplayValue(`${PERIODS[randomPeriodId - 1]},${PERIODS[randomPeriodId]}`)).toBeInTheDocument()
   })
 
@@ -69,11 +69,10 @@ describe('時代タグ検索セレクトボックス動作確認', () => {
     const prevRandomPeriod = screen.getByText(PERIODS[randomPeriodId - 1])
     await user.click(prevRandomPeriod)
     const cancelIcon = screen.getAllByTestId('CancelIcon')[0]
-    screen.debug(cancelIcon)
     await user.click(cancelIcon)
 
-    expect(screen.getByTestId('selected-box')).toHaveTextContent(PERIODS[randomPeriodId])
-    expect(screen.getByTestId('selected-box')).not.toHaveTextContent(PERIODS[randomPeriodId - 1])
+    expect(screen.getByTestId('period-selected-box')).toHaveTextContent(PERIODS[randomPeriodId])
+    expect(screen.getByTestId('period-selected-box')).not.toHaveTextContent(PERIODS[randomPeriodId - 1])
     expect(screen.getByDisplayValue(`${PERIODS[randomPeriodId]}`)).toBeInTheDocument()
   })
 })
