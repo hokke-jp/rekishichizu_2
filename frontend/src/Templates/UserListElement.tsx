@@ -1,9 +1,9 @@
 import { Typography } from '@mui/material'
 import { AvatarLink } from 'Parts/AvatarLink'
-import { UserInList } from 'Utils/Types'
+import { UserInfoInArticle } from 'Utils/Types'
 
 interface Props {
-  user: UserInList
+  user: UserInfoInArticle
 }
 export const UserListElement = ({ user }: Props) => {
   return (

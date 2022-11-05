@@ -15,5 +15,6 @@ export const AuthenticatedGuard = ({ component }: { component: ReactNode }) => {
   if (currentUser) {
     return <Navigate to="/" replace />
   }
+
   return <>{component}</>
 }

@@ -20,6 +20,7 @@ export const PrefectureSearch = () => {
     <FormControl>
       <InputLabel id="prefecture-multiple-chip-label">都道府県</InputLabel>
       <Select
+        data-testid="prefecture-input"
         labelId="prefecture-multiple-chip-label"
         id="prefecture-multiple-chip"
         multiple
@@ -28,7 +29,7 @@ export const PrefectureSearch = () => {
         onChange={(event) => handleSelect(event, 'prefecture_ids', PREFECTURES)}
         input={<OutlinedInput id="select-multiple-chip" label="都道府県" />}
         renderValue={(selected) => (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+          <Box data-testid="prefecture-selected-box" sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
             {selected.map((value) => (
               <Chip
                 key={value}

@@ -1,7 +1,9 @@
 import { Loader } from '@googlemaps/js-api-loader'
 import { CircularProgress } from '@mui/material'
 import { ArticlesProvider } from 'Utils/ArticlesContext'
+import { FetchArticleOptionsProvider } from 'Utils/FetchArticleOptionsContext'
 import { GoogleMapsProvider } from 'Utils/GoogleMapsContext'
+import { SearchQueriesContextProvider } from 'Utils/SearchQueriesContext'
 import { Drawers } from 'Views/Drawers'
 import { VerticalIconBar } from 'Views/VerticalIconBar'
 import { useEffect, useState } from 'react'
@@ -24,11 +26,15 @@ export const Home = () => {
   return googleMapsApiLoaded ? (
     <GoogleMapsProvider>
       <ArticlesProvider>
-        <div className="h-screen bg-gray-200">
-          <Drawers />
-          <div id="target" className="h-full" />
-          <VerticalIconBar />
-        </div>
+        <FetchArticleOptionsProvider>
+          <SearchQueriesContextProvider>
+            <div className="h-screen bg-gray-200">
+              <Drawers />
+              <div id="target" className="h-full" />
+              <VerticalIconBar />
+            </div>
+          </SearchQueriesContextProvider>
+        </FetchArticleOptionsProvider>
       </ArticlesProvider>
     </GoogleMapsProvider>
   ) : (

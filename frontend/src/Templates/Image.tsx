@@ -1,6 +1,6 @@
 import NoImage from 'Images/no_image.jpg'
 
-export const Image = ({ url, className }: { url: string | undefined; className: string }) => {
+export const Image = ({ url, className }: { url: string | null; className: string }) => {
   return url ? (
     <img src={url} alt="Article Image" className={className.concat(' object-cover')} />
   ) : (

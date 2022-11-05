@@ -2,7 +2,9 @@ import { SelectChangeEvent } from '@mui/material'
 import { PERIODS } from 'Constant/PERIOD'
 import { PREFECTURES } from 'Constant/PREFECTURE'
 import { useArticlesContext } from 'Utils/ArticlesContext'
-import { SortBy, Options } from 'Utils/Types'
+import { useFetchArticleOptionsContext } from 'Utils/FetchArticleOptionsContext'
+import { useSearchQueriesContext } from 'Utils/SearchQueriesContext'
+import { SortBy, SearchQueries } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 
 const sortByAsc = (array: number[]): number[] => {
@@ -26,39 +28,41 @@ const indexesOf = (value: string | string[], array: string[]): number[] => {
 }
 
 export const useSearch = () => {
-  const { options, setIsLoading, setArticles, setOptions, setHasMore } = useArticlesContext()
-  const periods: string[] = options.period_ids === '' ? [] : searchByIdsFromArray(options.period_ids, PERIODS)
+  const { setArticles } = useArticlesContext()
+  const { searchQueries, setSearchQueries } = useSearchQueriesContext()
+  const { setFetchArticleOptions } = useFetchArticleOptionsContext()
+  const periods: string[] =
+    searchQueries.period_ids === '' ? [] : searchByIdsFromArray(searchQueries.period_ids, PERIODS)
   const prefectures: string[] =
-    options.prefecture_ids === '' ? [] : searchByIdsFromArray(options.prefecture_ids, PREFECTURES)
+    searchQueries.prefecture_ids === '' ? [] : searchByIdsFromArray(searchQueries.prefecture_ids, PREFECTURES)
 
   const handleSelect = (event: SelectChangeEvent<string | string[]>, optionsKey: string, array: string[]) => {
     const {
       target: { value }
     } = event
     const ids: number[] = indexesOf(value, array)
-    setOptions((prev) => ({ ...prev, [optionsKey]: `${ids}` }))
+    setSearchQueries((prev) => ({ ...prev, [optionsKey]: `${ids}` }))
   }
 
-  const handleChipDelete = (target: string, optionsKey: keyof Options, array: string[]) => {
+  const handleChipDelete = (target: string, optionsKey: keyof SearchQueries, array: string[]) => {
     const targetIndex = array.indexOf(target) + 1
-    setOptions((prev) => ({
+    setSearchQueries((prev) => ({
       ...prev,
       [optionsKey]: `${stringIdsToNumberArray(prev[optionsKey]).filter((index) => index !== targetIndex)}`
     }))
   }
 
   const handleSearch = () => {
-    setIsLoading(true)
-    setHasMore(true)
+    setFetchArticleOptions((prev) => ({ ...prev, isLoading: true, hasMore: true }))
     const removeSpace = (str: string): string => {
       return str.replace(/^\s+|\s+$/g, '').replace(/\s+/g, ',')
     }
-    const removedWords = removeSpace(options.words)
+    const removedWords = removeSpace(searchQueries.words)
     axiosInstance
       .get('/articles', {
         params: {
           page: 1,
-          ...options,
+          ...searchQueries,
           words: removedWords
         }
       })
@@ -66,21 +70,20 @@ export const useSearch = () => {
         setArticles(response.data)
       })
       .finally(() => {
-        setIsLoading(false)
+        setFetchArticleOptions((prev) => ({ ...prev, isLoading: false }))
       })
   }
 
   const handleSort = (sortBy: SortBy) => {
-    setIsLoading(true)
-    setHasMore(true)
-    setOptions((prev) => ({ ...prev, sort_by: sortBy }))
+    setFetchArticleOptions((prev) => ({ ...prev, isLoading: true, hasMore: true }))
+    setSearchQueries((prev) => ({ ...prev, sort_by: sortBy }))
     axiosInstance
       .get('/articles', {
         params: {
           page: 1,
-          words: options.words,
-          period_ids: options.period_ids,
-          prefecture_ids: options.prefecture_ids,
+          words: searchQueries.words,
+          period_ids: searchQueries.period_ids,
+          prefecture_ids: searchQueries.prefecture_ids,
           sort_by: sortBy
         }
       })
@@ -88,7 +91,7 @@ export const useSearch = () => {
         setArticles(response.data)
       })
       .finally(() => {
-        setIsLoading(false)
+        setFetchArticleOptions((prev) => ({ ...prev, isLoading: false }))
       })
   }
 

@@ -26,18 +26,18 @@ URL ： https://www.rekishichizu.jp
 </details>
 <br>
 <details> 
+  <summary>TypeScript</summary>
+  TypeScript により、安全性の高い JavaScript コードとなっています。
+</details>
+<br>
+<details> 
   <summary>RESTful API</summary>
-  厳密には RESTful API とは呼べないかもしれませんが、リソースに対してなるべく RESTful API の原則にのっとった仕様を目指しました。<br>
+  厳密には RESTful API とは呼べないかもしれませんが、なるべく RESTful API の原則にのっとった仕様を目指しました。<br>
   例)<br>
   &emsp;・ Devise Token Auth を使用したトークン認証によりステートレスな設計<br>
   &emsp;・ リソース検索 : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/articles?ids=9,35,37&words=神社&period_ids=5,6&sort_by=likes_count+DESC<br>
   &emsp;・ 個別リソース : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/users/{user_name}<br>
   &emsp;・ リソース削除 : [DELETE] https&#58;//api.rekishichizu.jp/v1/articles/{article_id} *ヘッダーに認証トークンが必要
-</details>
-<br>
-<details> 
-  <summary>TypeScript</summary>
-  TypeScript により、安全性の高い JavaScript コードとなっています。
 </details>
 <br>
 <details> 
@@ -57,6 +57,11 @@ URL ： https://www.rekishichizu.jp
   <summary>扱いやすい検索機能</summary>
   Ruby の Gem Ransack を使用し、記事のタイトル、説明、またはユーザー名に対する部分一致検索、これら条件にプラスしてソート検索やタグ検索を併用して検索できます。<br>
   また、デモデータを各都道府県に最低1つずつ用意し、様々な条件で検索を試すことができるようにしました。
+</details>
+<br>
+<details> 
+  <summary>フォロー・イイね機能</summary>
+  多対多のデータ構造を中間テーブルを使い表現しています。
 </details>
 <br>
 <br>

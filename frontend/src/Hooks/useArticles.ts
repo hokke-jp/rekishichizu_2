@@ -1,19 +1,22 @@
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { useArticlesContext } from 'Utils/ArticlesContext'
+import { useFetchArticleOptionsContext } from 'Utils/FetchArticleOptionsContext'
+import { useSearchQueriesContext } from 'Utils/SearchQueriesContext'
 import { axiosInstance } from 'Utils/axios'
 
 export const useArticles = () => {
   const { setAlertMessage, setAlertSeverity } = useAlertMessageContext()
-  const { setHasMore } = useArticlesContext()
-  const { options, setArticles, setOptions } = useArticlesContext()
+  const { setArticles } = useArticlesContext()
+  const { setFetchArticleOptions } = useFetchArticleOptionsContext()
+  const { searchQueries } = useSearchQueriesContext()
 
   const fetchArticles = (page: number) => {
     return axiosInstance
-      .get('/articles', { params: { page, ...options } })
+      .get('/articles', { params: { page, ...searchQueries } })
       .then((response) => {
         const data = response.data
         if (data.length === 0) {
-          setHasMore(false)
+          setFetchArticleOptions((prev) => ({ ...prev, hasMore: false }))
           return
         }
         setArticles((prev) => {
@@ -21,6 +24,7 @@ export const useArticles = () => {
           const newData = data.filter((d: { id: number }) => !prevIds.includes(d.id))
           return [...prev, ...newData]
         })
+        setFetchArticleOptions((prev) => ({ ...prev, isLoading: false }))
       })
       .catch((error) => {
         console.log(error)
@@ -29,14 +33,5 @@ export const useArticles = () => {
       })
   }
 
-  const resetOptions = () => {
-    setOptions({
-      words: '',
-      period_ids: '',
-      prefecture_ids: '',
-      sort_by: 'created_at DESC'
-    })
-  }
-
-  return { fetchArticles, resetOptions }
+  return { fetchArticles }
 }

@@ -3,8 +3,8 @@ import { Dialog, DialogTitle, DialogActions, Button, DialogContent, DialogConten
 import { useStatus } from 'Hooks/useStatus'
 import { ProfileMenuItem } from 'Templates/Profile/ProfileMenuItem'
 import { useAlertMessageContext } from 'Utils/AlertMessageContext'
-import { useArticlesContext } from 'Utils/ArticlesContext'
 import { useCurrentUserContext } from 'Utils/CurrentUserContext'
+import { useFetchArticleOptionsContext } from 'Utils/FetchArticleOptionsContext'
 import { Article, User } from 'Utils/Types'
 import { axiosInstance } from 'Utils/axios'
 import { getTokens } from 'Utils/handleCookie'
@@ -19,7 +19,7 @@ export const DialogDelete = ({ setAnchorEl, article }: Props) => {
   const [open, setOpen] = useState(false)
   const { setAlertSeverity, setAlertMessage } = useAlertMessageContext()
   const { setCurrentUser } = useCurrentUserContext()
-  const { setOpenModalId } = useArticlesContext()
+  const { setFetchArticleOptions } = useFetchArticleOptionsContext()
   const { deleteArticleFromList } = useStatus()
   const handleOpen = () => {
     setOpen(true)
@@ -42,7 +42,7 @@ export const DialogDelete = ({ setAnchorEl, article }: Props) => {
         setCurrentUser((prevState: User | undefined) => ({ ...prevState, article_ids: articleIds } as User))
         sessionStorage.setItem('article_ids', articleIds)
         deleteArticleFromList(article.id)
-        setOpenModalId(undefined)
+        setFetchArticleOptions((prev) => ({ ...prev, openModalId: undefined }))
         setAlertSeverity('success')
         setAlertMessage('削除しました')
       })
