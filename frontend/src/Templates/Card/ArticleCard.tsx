@@ -7,7 +7,7 @@ import { CardLayout } from 'Templates/Card/CardLayout'
 import { Image } from 'Templates/Image'
 import { Like } from 'Templates/Like'
 import { ArticleModal } from 'Templates/Modal/ArticleModal'
-import { useArticlesContext } from 'Utils/ArticlesContext'
+import { useFetchArticleOptionsContext } from 'Utils/FetchArticleOptionsContext'
 import { useGoogleMapsContext } from 'Utils/GoogleMapsContext'
 import { Article } from 'Utils/Types'
 
@@ -27,14 +27,14 @@ interface Props {
 
 export const ArticleCard = ({ article }: Props) => {
   const { googleMap } = useGoogleMapsContext()
-  const { setOpenModalId } = useArticlesContext()
+  const { setFetchArticleOptions } = useFetchArticleOptionsContext()
   const classes = useStyles()
   const attentionToPin = () => {
     googleMap?.panTo({ lat: article.lat, lng: article.lng })
     googleMap?.setZoom(ARTICLE_CLICK_ZOOM)
   }
   const modalOpen = () => {
-    setOpenModalId(article.id)
+    setFetchArticleOptions((prev) => ({ ...prev, openModalId: article.id }))
   }
 
   return (

@@ -1,11 +1,11 @@
 import SearchIcon from '@mui/icons-material/Search'
 import { FormControl, InputLabel, OutlinedInput, IconButton } from '@mui/material'
 import { useSearch } from 'Hooks/useSearch'
-import { useArticlesContext } from 'Utils/ArticlesContext'
+import { useSearchQueriesContext } from 'Utils/SearchQueriesContext'
 
 export const WordSearch = () => {
   const { handleSearch } = useSearch()
-  const { options, setOptions } = useArticlesContext()
+  const { searchQueries, setSearchQueries } = useSearchQueriesContext()
 
   return (
     <FormControl variant="outlined">
@@ -13,8 +13,8 @@ export const WordSearch = () => {
       <OutlinedInput
         id="outlined-adornment-search"
         type="text"
-        value={options.words}
-        onChange={(event) => setOptions((prev) => ({ ...prev, words: event.target.value }))}
+        value={searchQueries.words}
+        onChange={(event) => setSearchQueries((prev) => ({ ...prev, words: event.target.value }))}
         sx={{ borderRadius: '30px' }}
         endAdornment={
           <IconButton type="button" sx={{ p: '10px' }} aria-label="search" onClick={handleSearch}>
