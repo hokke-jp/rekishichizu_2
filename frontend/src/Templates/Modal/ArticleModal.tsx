@@ -124,7 +124,7 @@ export const ArticleModal = ({ article }: Props) => {
           <hr className="mb-10" />
           <div>
             <Typography component={'span'} variant="body2">
-              {article.content?.split('\n').map((text, index) => {
+              {article.content.split('\n').map((text, index) => {
                 return (
                   <p className="min-h-[21px]" key={index}>
                     {text}

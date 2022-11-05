@@ -17,10 +17,10 @@ export interface UserInfoInArticle {
 export interface Article {
   id: number
   title: string
-  content: string | undefined
+  content: string
   lat: number
   lng: number
-  image_url: string
+  image_url: string | null
   created_time: number
   user_id: number
   user: UserInfoInArticle

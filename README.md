@@ -27,7 +27,7 @@ URL ： https://www.rekishichizu.jp
 <br>
 <details> 
   <summary>RESTful API</summary>
-  厳密には RESTful API とは呼べないかもしれませんが、リソースに対してなるべく RESTful API の原則にのっとった仕様を目指しました。<br>
+  厳密には RESTful API とは呼べないかもしれませんが、なるべく RESTful API の原則にのっとった仕様を目指しました。<br>
   例)<br>
   &emsp;・ Devise Token Auth を使用したトークン認証によりステートレスな設計<br>
   &emsp;・ リソース検索 : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/articles?ids=9,35,37&words=神社&period_ids=5,6&sort_by=likes_count+DESC<br>
