@@ -1,10 +1,8 @@
-// import { useAlertMessageContext } from 'Utils/AlertMessageContext'
 import { Alert } from 'Templates/Alert'
 import { Sidebar } from 'Views/Sidebar'
 import { Outlet } from 'react-router-dom'
 
 export const Layout = () => {
-  // const { alertMessage, setAlertMessage } = useAlertMessageContext()
   return (
     <>
       <Alert />
