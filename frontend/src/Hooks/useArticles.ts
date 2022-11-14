@@ -21,8 +21,8 @@ export const useArticles = () => {
         }
         setArticles((prev) => {
           const prevIds = prev.map((pre) => pre.id)
-          const newData = data.filter((d: { id: number }) => !prevIds.includes(d.id))
-          return [...prev, ...newData]
+          const nonDuplicatedData = data.filter((d: { id: number }) => !prevIds.includes(d.id))
+          return [...prev, ...nonDuplicatedData]
         })
         setFetchArticleOptions((prev) => ({ ...prev, isLoading: false }))
       })

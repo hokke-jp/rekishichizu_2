@@ -1,13 +1,11 @@
-module Overrides
-  class SessionsController < DeviseTokenAuth::SessionsController
-    def render_create_success
-      render json: {
-        data: resource_data(resource_json: @resource.token_validation_response).merge(avatar_url: current_v1_user.avatar_url,
-                                                                                      article_ids: current_v1_user.article_ids,
-                                                                                      liking_article_ids: current_v1_user.liking_article_ids,
-                                                                                      following_ids: current_v1_user.following_ids)
-      }
-    end
+class Overrides::SessionsController < DeviseTokenAuth::SessionsController
+  def render_create_success
+    render json: {
+      data: resource_data(resource_json: @resource.token_validation_response).merge(avatar_url: current_v1_user.avatar_url,
+                                                                                    article_ids: current_v1_user.article_ids,
+                                                                                    liking_article_ids: current_v1_user.liking_article_ids,
+                                                                                    following_ids: current_v1_user.following_ids)
+    }
   end
 end
 
