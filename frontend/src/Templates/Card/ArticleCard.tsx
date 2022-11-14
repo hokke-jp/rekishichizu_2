@@ -30,8 +30,8 @@ export const ArticleCard = ({ article }: Props) => {
   const { setFetchArticleOptions } = useFetchArticleOptionsContext()
   const classes = useStyles()
   const attentionToPin = () => {
-    googleMap?.panTo({ lat: article.lat, lng: article.lng })
     googleMap?.setZoom(ARTICLE_CLICK_ZOOM)
+    googleMap?.panTo({ lat: article.lat, lng: article.lng })
   }
   const modalOpen = () => {
     setFetchArticleOptions((prev) => ({ ...prev, openModalId: article.id }))
