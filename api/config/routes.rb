@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'likes/create'
-  get 'likes/destroy'
   namespace :v1, format: 'json' do
     mount_devise_token_auth_for 'User', at: 'auth', controllers: {
       token_validations: 'overrides/token_validations',

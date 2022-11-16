@@ -54,19 +54,19 @@ class User < ActiveRecord::Base
 
   private
 
-    def avatar_type
-      return unless avatar.attached?
-      return if avatar.content_type.in?(%('image/jpeg image/png'))
+  def avatar_type
+    return unless avatar.attached?
+    return if avatar.content_type.in?(%('image/jpeg image/png'))
 
-      avatar.purge
-      errors.add(:avatar, 'にはjpegまたはpngファイルを添付してください')
-    end
+    avatar.purge
+    errors.add(:avatar, 'にはjpegまたはpngファイルを添付してください')
+  end
 
-    def avatar_size
-      return unless avatar.attached?
-      return if avatar.blob.byte_size < 2.megabytes
+  def avatar_size
+    return unless avatar.attached?
+    return if avatar.blob.byte_size < 2.megabytes
 
-      avatar.purge
-      errors.add(:avatar, 'ファイルの大きさは2MB以内にしてください')
-    end
+    avatar.purge
+    errors.add(:avatar, 'ファイルの大きさは2MB以内にしてください')
+  end
 end
