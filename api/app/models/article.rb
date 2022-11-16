@@ -18,12 +18,6 @@ class Article < ApplicationRecord
   validates :image, content_type: { in: %w[image/jpeg image/png], message: 'にはjpegまたはpngファイルを使用してください' },
                     size: { less_than: 5.megabytes, message: ' のサイズは5MB以下にしてください' }
 
-  default_scope { order(created_at: :desc) }
-  ransacker :likes_count do
-    query = '(SELECT COUNT(likes.article_id) FROM likes where likes.article_id = articles.id GROUP BY likes.article_id)'
-    Arel.sql(query)
-  end
-
   def self.customised_articles
     with_attached_image.includes(:liked_user, user: { avatar_attachment: :blob })
   end

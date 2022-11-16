@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 20_221_005_115_450) do
+ActiveRecord::Schema[7.0].define(version: 20_221_115_235_701) do
   create_table 'active_storage_attachments', charset: 'utf8mb4', collation: 'utf8mb4_0900_ai_ci', force: :cascade do |t|
     t.string 'name', null: false
     t.string 'record_type', null: false
@@ -49,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 20_221_005_115_450) do
     t.bigint 'prefecture_id'
     t.datetime 'created_at', null: false
     t.datetime 'updated_at', null: false
+    t.integer 'likes_count', default: 0, null: false
     t.index ['period_id'], name: 'index_articles_on_period_id'
     t.index ['prefecture_id'], name: 'index_articles_on_prefecture_id'
     t.index ['user_id'], name: 'index_articles_on_user_id'

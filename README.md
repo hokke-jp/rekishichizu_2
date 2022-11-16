@@ -4,6 +4,16 @@ URL ： https://www.rekishichizu.jp
 <img width="auto" alt="WEBページサンプル画像" src="README_images/WEBページサンプル01.png">
 
 
+
+##  製作の背景
+私はここ数年で歴史に興味を持ち始めたのですが、歴史を知ると普段気に止めなかった日常の中に、実は歴史に関連したものがたくさんあることに気が付きました。
+
+しかし、そういった歴史的なものを地理と絡めて総合的に見れるサイトはなく、私が身の回りの歴史的なものに気付けたきっかけも、Wikipediaの記事でたまたま発見できたからでした。そういった特定のソースからしかアクセスできないという状態を解消するために、地図上で視覚的に歴史的出来事を総合的に見れるサイトを作ろうと思いました。
+
+このサービスを使うとそれまで知らなかった身の周りにある歴史的なものに気付けるのはもちろんのこと、例えば旅先など出先でその土地について調べてみると、思わぬ発見があるかも知れません。実際、私もこのアプリのサンプルデータの作成過程で、以前訪れたことがある土地に思わぬ発見があり、少し寄り道をして訪れればよかったと後悔したことが何度かありました。
+
+
+
 ## 特徴
 <details> 
   <summary><h3>SPAアプリ</h3></summary>
@@ -26,6 +36,11 @@ URL ： https://www.rekishichizu.jp
 </details>
 <br>
 <details> 
+  <summary>TypeScript</summary>
+  TypeScript により、安全性の高い JavaScript コードとなっています。
+</details>
+<br>
+<details> 
   <summary>RESTful API</summary>
   厳密には RESTful API とは呼べないかもしれませんが、なるべく RESTful API の原則にのっとった仕様を目指しました。<br>
   例)<br>
@@ -33,11 +48,6 @@ URL ： https://www.rekishichizu.jp
   &emsp;・ リソース検索 : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/articles?ids=9,35,37&words=神社&period_ids=5,6&sort_by=likes_count+DESC<br>
   &emsp;・ 個別リソース : [GET]&emsp;&emsp;https&#58;//api.rekishichizu.jp/v1/users/{user_name}<br>
   &emsp;・ リソース削除 : [DELETE] https&#58;//api.rekishichizu.jp/v1/articles/{article_id} *ヘッダーに認証トークンが必要
-</details>
-<br>
-<details> 
-  <summary>TypeScript</summary>
-  TypeScript により、安全性の高い JavaScript コードとなっています。
 </details>
 <br>
 <details> 
@@ -59,15 +69,23 @@ URL ： https://www.rekishichizu.jp
   また、デモデータを各都道府県に最低1つずつ用意し、様々な条件で検索を試すことができるようにしました。
 </details>
 <br>
+<details> 
+  <summary>フォロー・イイね機能</summary>
+  多対多のデータ構造を中間テーブルを使い表現しています。
+</details>
 <br>
+<br>
+
 
 
 ##  AWS構成図
 <img width="auto" alt="AWS構成図" src="README_images/AWS構成図.png">
 
 
+
 ##  ER図
 <img width="auto" alt="ER図" src="README_images/ER図.png">
+
 
 
 ##  使用技術
@@ -141,13 +159,6 @@ URL ： https://www.rekishichizu.jp
 - 簡単ログイン
 - フォロー機能
 
-
-##  製作の背景
-私はここ数年で歴史に興味を持ち始めたのですが、歴史を知ると普段気に止めなかった日常の中に、実は歴史に関連したものがたくさんあることに気が付きました。
-
-しかし、そういった歴史的なものを地理と絡めて総合的に見れるサイトはなく、私が身の回りの歴史的なものに気付けたきっかけも、Wikipediaの記事でたまたま発見できたからでした。そういった特定のソースからしかアクセスできないという状態を解消するために、地図上で視覚的に歴史的出来事を総合的に見れるサイトを作ろうと思いました。
-
-このサービスを使うとそれまで知らなかった身の周りにある歴史的なものに気付けるのはもちろんのこと、例えば旅先など出先でその土地について調べてみると、思わぬ発見があるかも知れません。実際、私もこのアプリのサンプルデータの作成過程で、以前訪れたことがある土地に思わぬ発見があり、少し寄り道をして訪れればよかったと後悔したことが何度かありました。
 
 
 ## 改良予定
