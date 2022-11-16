@@ -2,14 +2,7 @@ class V1::ArticlesController < ApplicationController
   before_action :authenticate_v1_user!, only: %i[create destroy]
 
   def index
-    # if params[:sort_by] == 'likes_count DESC'
-    #   # binding.pry
-    #   return render json: [] if params[:page].to_i > 1
-
-    #   articles = Article.customised_articles.ransack(s: 'likes_count DESC').result.limit(4)
-    #   return render json: articles
-    # end
-    articles = params[:page].present? ? Article.customised_articles.ransack(search_query).result.page(params[:page]) : Article.customised_articles.ransack(search_query).result
+    articles = params[:page].present? ? Article.customised_articles.ransack(search_query).result.distinct.page(params[:page]) : Article.customised_articles.ransack(search_query).result.distinct
     render json: articles
   end
 
@@ -44,6 +37,7 @@ class V1::ArticlesController < ApplicationController
 
   def words_query
     tmp = {}
+    # articleの「タイトル」「説明文」と「ユーザー名」から部分一致検索をするためのquery
     string_to_array(params[:words], to_num: false).each_with_index do |word, index|
       tmp.store(index.to_s, {
                   'a' => { '0' => { 'name' => 'title' }, '1' => { 'name' => 'content' }, '2' => { 'name' => 'user_name' } },
