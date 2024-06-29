@@ -179,19 +179,22 @@ URL ： https://www.rekishichizu.jp
 
 ### Docker
 
-まずは docker-compose でコンテナ起動と下準備
-`docker-compose up`
+まずは docker-compose でコンテナ起動と下準備<br>
+`docker-compose up`<br>
 
 ### フロント (React)
 
-- yarn1 系で Docker コンテナ外でパッケージインストール `yanr`
+- yarn1 系で Docker コンテナ外でパッケージインストール<br>
+  `yanr`<br>
+- なぜかフロント側フォルダのフォルダ名が小文字始まりとなりエラーを吐いている箇所があるため大文字はじめにする<br>
+  `rekishichizu_2/frontend/src/images` → `Images`
 
 ### サーバー (Rails)
 
-- Docker コンテナ内に入る
-  `docker-compose exec api bash`
+- Docker コンテナ内に入る<br>
+  `docker-compose exec api bash`<br>
 
-- Database 作成
-  `bundle exec rails db:create`
-  `bundle exec rails db:migrate`
-  `bundle exec rails db:seed`
+- Database 作成<br>
+  `bundle exec rails db:create`<br>
+  `bundle exec rails db:migrate`<br>
+  `bundle exec rails db:seed`<br>
